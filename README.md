@@ -1,24 +1,24 @@
-## Description
+# Description
 
-## Functionalities
+# Functionalities
 
-# Data Sources and Retrieval
+## Data Sources and Retrieval
 
-# Data Storage and Handling
+## Data Storage and Handling
 
-# User Management
+## User Management
 
-# Interface
+## Interface
 
-# Statistical Analysis
+## Statistical Analysis
 
-# Visualizations
+## Visualizations
 
-## Installation and Usage
+# Installation and Usage
 
-## Timeline
+#Timeline
 
-## Group Details
+# Group Details
 
 Group name: Lank
 Group code: G12
@@ -27,4 +27,4 @@ Tutor responsible: Jonas Rieling
 Group team leader: Leander Fischer
 Group members: Konstantin Kolbek, Erik Schäfer, Nantenaina Razafindraibe
 
-## Acknowledgements
+# Acknowledgements
