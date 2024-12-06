@@ -4,14 +4,14 @@
 
 ## Data Sources and Retrieval
 - Retrieve data from an extensive, high-quality data set from an external source
-  - Option 1 - [MIMIC-IV] (https://www.nature.com/articles/s41597-022-01899-x):
+  - Option 1 - [MIMIC-IV](https://www.nature.com/articles/s41597-022-01899-x):
     - real data sourced from the electronic health record of the Beth Israel Deaconess Medical Center
     - very extensive data set that requires advanced data cleaning and evaluation based on our requirements
     - can be adjusted to our custom database architecture
     - access requires a completed training course in research with human participants and a signed DUA
     - access is provided via PhysioNet
     - additional information (e.g. Billing, Administration, advanced medical information, etc.) allows us to add extra functions and expand the software's functions
-  - Option 2 - [Faker Medical Records Dataset] (https://www.kaggle.com/datasets/cankatsrc/medical-records-dataset):
+  - Option 2 - [Faker Medical Records Dataset](https://www.kaggle.com/datasets/cankatsrc/medical-records-dataset):
     - simulated medical records for a fictional group of patients
     - Patient ID, Name, Date of Birth, Gender, Medical conditions, Medications, Allergies, (Last appointment date)
     - data does not require any advanced data cleaning to use properly
