@@ -24,7 +24,7 @@
 - Store the data from the external source in an SQL database
   - create a concept for the database architecture and necessary information required for the software
 - Store Log-In information by hashing passwords
-  - use built-in library like [hashlib] (https://docs.python.org/3/library/hashlib.html)
+  - use built-in library like [hashlib](https://docs.python.org/3/library/hashlib.html)
   - because our passwords don't need to be moved or send to another server but only stored in our database, hashing is a sensible choice to safeguard sensible information
 
 ## User Management
@@ -63,7 +63,7 @@
     - basic statistics like frequency of specific illnesses or conditions across all patients (or a specific age/gender/etc. group)
 
 ## Visualizations
-- Display the data from [Statistical Analysis] (#statistical_analysis) in an interactive graph
+- Display the data from [Statistical Analysis](#statistical_analysis) in an interactive graph
   - filter for
     - patient profiles (age, gender, etc.)
     - time periods
