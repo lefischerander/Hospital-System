@@ -1,4 +1,5 @@
 # Description
+A web-based project that simulates a hospital and its patients
 
 # Functionalities
 
