@@ -63,7 +63,7 @@
 # Installation and Usage
 
 # Timeline
-
+![screenshot](Timeline.png)
 # Group Details
 
 - Group name: Lank
