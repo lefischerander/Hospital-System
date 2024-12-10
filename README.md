@@ -9,7 +9,7 @@
   - can be adjusted to our custom database architecture
   - access requires a completed training course in research with human participants and a signed DUA
   - access is provided via PhysioNet
-  - additional information (e.g. Billing, Administration, advanced medical information, etc.) allows us to add extra functions and expand the software's functions
+  - additional information (e.g. Billing, Administration, advanced medical information, etc.) allows us to add extra functions and expand the software's functions $${\color{pink}(Low \space priority)}$$
 - Generate a data set for the necessary doctors so patients can be assigned to them accordingly
 
 ## Data Storage and Handling
@@ -55,11 +55,10 @@
 
 ## Visualizations
 - Display the data from [Statistical Analysis](#statistical_analysis) with simple graphs
-  - filter for
+  - add an interactive graph to filter for $${\color{pink}(Low \space priority)}$$
     - patient profiles (age, gender, etc.)
     - time periods
-    - medical conditions, medications, etc.
-  with an interactive graph $${\color{pink}(Low \space priority)}$$
+    - medical conditions, medications, etc. \
 
 # Installation and Usage
 
