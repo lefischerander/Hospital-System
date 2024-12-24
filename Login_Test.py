@@ -1,38 +1,50 @@
 class user:
-    def __init__(self,name, firstName, age, address):
+    def __init__(self, name, firstName, age, userType):
         self.name = name
         self.firstName= firstName
         self.age= age
-        self.address= address
+        self.userType= userType
+        
+   
 
-    def name(self):
-        return self.name
-    
-    def surname(self):
-        return self.firstName
-    
-class admin(user):
-    def hello(self):
-        print("I am the admin ")
 
-class patient(user):
-    def hello(self):
-        print(" I am sick")
-class personal(user):
-    def hello(self):
-        print("I work because i need some money to buy some milk  ")
+         
+        
+class UsersManagement:
+    def __init__(self):
+        self.users= []
     
-a= admin("Chuck", "Notnorris", 24, "Papendiek 2")
-b= patient("Drinkmilk", "Cow", 23, "Müchen-str.2")
-e= personal("Raza", "Nante",22,"Zimmermanstraße 14L")
-c = [a,b,e]
+    def create(self, user):
+        self.users.append(user)
+        return user
+    
+    def printUsers(self):
+        for person in self.users:
+           print(person.name)
+           print(person.age)
 
-name_in = input("Enter your family name: ")
-firstnName_in = input("Then your weird first name: ")
-for human in c:
-    if human.name == name_in and human.firstName == firstnName_in:
-        human.hello()
-print("Btw, I like Orange Juice")        
+
+       
+user1= user("Jackson","Michael", 90,"admin")
+user2= user("Malek", "Rami", 78, "Patient")
+user3= user("Bob", "Bobby", 78, "Doctor")
+
+Manager= UsersManagement()
+
+user1= Manager.create(user1)
+user2= Manager.create(user2)
+user3= Manager.create(user3)
+
+Manager.printUsers()
+        
+        
+
+    
+
+
+    
+    
+      
     
 
 
