@@ -14,10 +14,10 @@ class user:
 class Userservice:
     def __init__(self):
         self.users= []
+
     
-    def create(self, user):
-        self.users.append(user)
-        return user
+    def create(self, creator, user):
+       if creator.userType == 'admin':
            self.users.append(user)
            return user 
        
