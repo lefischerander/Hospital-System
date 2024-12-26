@@ -1,4 +1,7 @@
 class user:
+    def __str__(self):
+        return f"{self.firstName} {self.name} ({self.userType})"
+    
     def __init__(self, name, firstName, age, userType):
         self.name = name
         self.firstName= firstName
@@ -8,34 +11,76 @@ class user:
    
 
 
-         
-        
-class UsersManagement:
+class Userservice:
     def __init__(self):
         self.users= []
     
     def create(self, user):
         self.users.append(user)
         return user
+           self.users.append(user)
+           return user 
+       
+    def Create_admin(self):
+        admin_user= user("Jackson","Michael", 90,"admin")
+        self.users.append(admin_user)
+        return admin_user
+
+    def Get_admin_user(self):
+        for person in self.users:
+            if person.userType == 'admin':
+                return admin_user
+        return None
     
     def printUsers(self):
         for person in self.users:
            print(person.name)
            print(person.age)
+           print(person.userType)
+    
+    def get_users(self):
+        return self.users
+    
+    def hasAdminUser(self):
+        for person in self.users:
+            if person.userType == 'admin':
+                return True
+        return False    
+
+               
+        
+User_service= Userservice()
+if User_service.hasAdminUser():
+    admin_user= User_service.Get_admin_user()
+    print(f"We have an admin: {admin_user}")
+    
+
+else:
+    admin_user= User_service.Create_admin()
+    print(f"Admin created: {admin_user}")
 
 
-       
-user1= user("Jackson","Michael", 90,"admin")
 user2= user("Malek", "Rami", 78, "Patient")
 user3= user("Bob", "Bobby", 78, "Doctor")
 
-Manager= UsersManagement()
 
-user1= Manager.create(user1)
-user2= Manager.create(user2)
-user3= Manager.create(user3)
 
-Manager.printUsers()
+#Manager.create(user2,user3)
+new_user = User_service.create(admin_user,user2)
+if new_user:
+    print(f"New user created: {new_user}")
+else:
+    print(f"Operation failed, {user2.name} cannot be created")    
+
+
+
+
+#Manager.create(user3,user2)
+
+
+
+
+
         
         
 
