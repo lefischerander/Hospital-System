@@ -34,9 +34,8 @@ class Userservice:
     
     def printUsers(self):
         for person in self.users:
-           print(person.name)
-           print(person.age)
-           print(person.userType)
+           print(person)
+         
     
     def get_users(self):
         return self.users
@@ -46,7 +45,11 @@ class Userservice:
             if person.userType == 'admin':
                 return True
         return False    
+    
+    def delete_User(self,user):
+        self.users.remove(user)
 
+        
                
         
 User_service= Userservice()
@@ -67,11 +70,17 @@ user3= user("Bob", "Bobby", 78, "Doctor")
 
 #Manager.create(user2,user3)
 new_user = User_service.create(admin_user,user2)
+print("All users: ")
+User_service.printUsers()
+
 if new_user:
     print(f"New user created: {new_user}")
 else:
-    print(f"Operation failed, {user2.name} cannot be created")    
+    print(f"Operation failed, {user2} cannot be created")    
 
+User_service.delete_User(user=user2)
+print("Updated users: ")
+User_service.printUsers()
 
 
 
