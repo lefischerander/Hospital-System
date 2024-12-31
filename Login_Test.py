@@ -4,15 +4,17 @@ import uuid
 
 class user:
     def __str__(self):
-        return f"{self.firstName} {self.name} ({self.userType}) {self.id}"
+        return f"{self.firstName} {self.name} ({self.userType}) {self._id}"
     
     def __init__(self, name, firstName, age, userType):
         self.name = name
         self.firstName= firstName
         self.age= age
         self.userType= userType
-        self.id= uuid.uuid4()
-        
+        self._id= uuid.uuid4()
+
+    def get_id(self):
+        return self._id    
         
    
 
@@ -57,7 +59,7 @@ class Userservice:
     
     def get_user_by_id(self,id):
         for person in self.users:
-            if person.id == id:
+            if person.get_id() == id:
                 return person 
         return None 
 
@@ -97,7 +99,7 @@ user_service.delete_user(user=user2)
 print("Updated users: ")
 user_service.print_users()
 
-user_with_id = user_service.get_user_by_id(user3.id)
+user_with_id = user_service.get_user_by_id(user3.get_id())
 print(f"User with Id: {user_with_id}")
 
 
