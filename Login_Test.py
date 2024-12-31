@@ -27,18 +27,18 @@ class Userservice:
            self.users.append(user)
            return user 
        
-    def Create_admin(self):
+    def create_admin(self):
         admin_user= user("Jackson","Michael", 90,"admin")
         self.users.append(admin_user)
         return admin_user
 
-    def Get_admin_user(self):
+    def get_admin_user(self):
         for person in self.users:
             if person.userType == 'admin':
                 return admin_user
         return None
     
-    def printUsers(self):
+    def print_users(self):
         for person in self.users:
            print(person)
          
@@ -46,26 +46,34 @@ class Userservice:
     def get_users(self):
         return self.users
     
-    def hasAdminUser(self):
+    def has_admin_user(self):
         for person in self.users:
             if person.userType == 'admin':
                 return True
         return False    
     
-    def delete_User(self,user):
+    def delete_user(self,user):
         self.users.remove(user)
+    
+    def get_user_by_id(self,id):
+        for person in self.users:
+            if person.id == id:
+                return person 
+        return None 
+
+
 
         
                
         
-User_service= Userservice()
-if User_service.hasAdminUser():
-    admin_user= User_service.Get_admin_user()
+user_service= Userservice()
+if user_service.has_admin_user():
+    admin_user= user_service.get_admin_user()
     print(f"We have an admin: {admin_user}")
     
 
 else:
-    admin_user= User_service.Create_admin()
+    admin_user= user_service.create_admin()
     print(f"Admin created: {admin_user}")
 
 
@@ -75,19 +83,22 @@ user3= user("Bob", "Bobby", 78, "Doctor")
 
 
 #Manager.create(user2,user3)
-new_user = User_service.create(admin_user,user2)
+new_user = user_service.create(admin_user,user2)
+other_user= user_service.create(admin_user,user3)
 print("All users: ")
-User_service.printUsers()
+user_service.print_users()
 
 if new_user:
     print(f"New user created: {new_user}")
 else:
     print(f"Operation failed, {user2} cannot be created")    
 
-User_service.delete_User(user=user2)
+user_service.delete_user(user=user2)
 print("Updated users: ")
-User_service.printUsers()
+user_service.print_users()
 
+user_with_id = user_service.get_user_by_id(user3.id)
+print(f"User with Id: {user_with_id}")
 
 
 #Manager.create(user3,user2)
