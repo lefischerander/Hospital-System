@@ -4,13 +4,13 @@ import uuid
 
 class user:
     def __str__(self):
-        return f"{self.firstName} {self.name} ({self.userType}) {self._id}"
+        return f"{self.firstName} {self.name} ({self.user_type}) {self._id}"
     
-    def __init__(self, name, firstName, age, userType):
+    def __init__(self, name, firstName, age, user_type):
         self.name = name
         self.firstName= firstName
         self.age= age
-        self.userType= userType
+        self.user_type= user_type
         self._id= uuid.uuid4()
 
     def get_id(self):
@@ -25,7 +25,7 @@ class Userservice:
 
     
     def create(self, creator, user):
-       if creator.userType == 'admin':
+       if creator.user_type == 'admin':
            self.users.append(user)
            return user 
        
@@ -36,7 +36,7 @@ class Userservice:
 
     def get_admin_user(self):
         for person in self.users:
-            if person.userType == 'admin':
+            if person.user_type == 'admin':
                 return admin_user
         return None
     
@@ -50,19 +50,43 @@ class Userservice:
     
     def has_admin_user(self):
         for person in self.users:
-            if person.userType == 'admin':
+            if person.user_type == 'admin':
                 return True
         return False    
     
     def delete_user(self,user):
         self.users.remove(user)
     
-    def get_user_by_id(self,id):
-        for person in self.users:
+    def get_user_by_id(self,caller_user,id):
+       personWithSpecifiedId = None
+       for person in self.users: 
             if person.get_id() == id:
-                return person 
-        return None 
+               personWithSpecifiedId = person   
+       if personWithSpecifiedId == None:
+          return None 
+       callerUserType = caller_user.user_type
+       if callerUserType == 'admin':
+            if personWithSpecifiedId.get_id() == id:
+                return personWithSpecifiedId
+       elif callerUserType == 'Patient':
+            if caller_user.get_id() == id :
+                return personWithSpecifiedId 
+            elif personWithSpecifiedId.user_type == 'Doctor':
+                return personWithSpecifiedId
+            raise Exception (" A patient can only get its own data")
+       
+ 
 
+
+
+
+
+       
+               
+           
+           
+         
+        
 
 
         
@@ -81,12 +105,13 @@ else:
 
 user2= user("Malek", "Rami", 78, "Patient")
 user3= user("Bob", "Bobby", 78, "Doctor")
-
+user4= user("Harry", "Potter", 54, "Patient")
 
 
 #Manager.create(user2,user3)
 new_user = user_service.create(admin_user,user2)
 other_user= user_service.create(admin_user,user3)
+new_other_user= user_service.create(admin_user,user4)
 print("All users: ")
 user_service.print_users()
 
@@ -95,11 +120,11 @@ if new_user:
 else:
     print(f"Operation failed, {user2} cannot be created")    
 
-user_service.delete_user(user=user2)
+#user_service.delete_user(user=user3)
 print("Updated users: ")
 user_service.print_users()
 
-user_with_id = user_service.get_user_by_id(user3.get_id())
+user_with_id = user_service.get_user_by_id(caller_user= admin_user, id= user4.get_id())
 print(f"User with Id: {user_with_id}")
 
 
