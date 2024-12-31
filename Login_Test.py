@@ -1,12 +1,18 @@
+import uuid 
+
+
+
 class user:
     def __str__(self):
-        return f"{self.firstName} {self.name} ({self.userType})"
+        return f"{self.firstName} {self.name} ({self.userType}) {self.id}"
     
     def __init__(self, name, firstName, age, userType):
         self.name = name
         self.firstName= firstName
         self.age= age
         self.userType= userType
+        self.id= uuid.uuid4()
+        
         
    
 
