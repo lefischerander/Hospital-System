@@ -75,3 +75,7 @@ A web-based project that simulates a hospital and its patients
 - Group members: Konstantin Kolbek, Erik Schäfer, Nantenaina Razafindraibe
 
 # Acknowledgements
+## MIMIC-IV
+- MIMIC-IV Clinical Database Demo https://physionet.org/content/mimic-iv-demo/2.2/
+- Johnson, A., Bulgarelli, L., Pollard, T., Gow, B., Moody, B., Horng, S., Celi, L. A., & Mark, R. (2024). MIMIC-IV (version 3.1). PhysioNet. https://doi.org/10.13026/kpb9-mt58
+- MIMIC Online Documentation https://mimic.mit.edu/
