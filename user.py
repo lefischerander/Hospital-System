@@ -8,7 +8,7 @@ admins = {
     'E.Schaefer': {'password': 'admin123', 'role': 'admin'}
 }
 
-birthday = '01.01.2025'
+birthday = '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69' #'01.01.2025'
 
 users = {
     '10014729': {'password': f'{birthday}', 'role': 'patient'},
