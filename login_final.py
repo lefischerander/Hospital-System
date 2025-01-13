@@ -4,6 +4,7 @@ import getpass
 def login():
     username = input("Username: ")
     password = getpass.getpass("Password: ")
+
     user = users.get(username) or admins.get(username)
 
     if user and user['password'] == password:
