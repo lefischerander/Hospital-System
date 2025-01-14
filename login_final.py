@@ -1,3 +1,6 @@
+
+#from csv import Error
+
 from user import admins, users
 import getpass
 
@@ -28,9 +31,10 @@ def admin_actions():
     print("Your possible actions: ")
     print()
     print("1. View all users")
-    print("2. View a specific user")
-    print("3. Logout")
-    print()
+    print("\n1. View all users")
+    print("\n3. Logout")
+    print("\n4. Change password") ## added by Nantequiou
+
     
     choice = input("Choose an action: ")
     if choice == '1':
@@ -48,8 +52,8 @@ def admin_actions():
 
 def doktor_actions():
     print("Your possible actions: ")
-    print("1. View a patient")
-    print("2. Logout")
+    print("\n2. Logout")
+    print("\n3. Change password") ## added by Nantequiou
     print()
     
     choice = input("Choose an action: ")
@@ -67,13 +71,18 @@ def doktor_actions():
             print("Such patient doesn't exist!")
             print()
         doktor_actions()
+
     elif choice == '2':
         logout()
 
+        reset_password() ## added by Nantequiou
+
 def patient_actions():
     print("Your possible actions: ")
-    print("1. View your medical record")
-    print("2. Logout")
+    print("\n1. View your medical record")
+    print("\n3. Change password") ## added by Nantequiou
+    
+
     print()
     
     choice = input("Choose an action: ")
@@ -83,9 +92,38 @@ def patient_actions():
         patient_actions()
     elif choice == '2':
         logout()
+    
+    elif choice == '3':
+        reset_password() ## added by Nantequiou
+
 
 def logout():
     print("Logged out successfully.")
 
 if __name__ == "__main__":
     login()
+    
+
+
+def reset_password():   ## added by Nantequiou
+    try:
+        username= input ("Please Enter your Username:")
+        if username not in users:
+            raise ValueError("Username not found.")
+        
+        new_password= getpass.getpass("Enter your new password: ")
+        users[username]= new_password
+        print("Your password has been reset successfully!")
+    except ValueError as error:
+        print(error)
+
+def confrm_password():  ## added by Nantequiou
+    try:
+        print("Please confirm your password")
+        password= getpass.getpass("Confirm your new password: ")
+        if password not in users:
+            raise ValueError("Incorrect password.")
+        print("Password confirmed!")
+    except ValueError as error:
+        print(error)       
+
