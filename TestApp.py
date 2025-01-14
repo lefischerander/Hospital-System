@@ -58,6 +58,66 @@ class Doctor(User):
     
     def get_user_by_id(self, caller_user, id):
         return super().get_user_by_id(caller_user, id)
+    
+    def get_department(self):
+        return self.department
+    
+    def add_patient(self, patient):
+        cursor.execute("insert into patients(subject_id) values(?)", patient.get_id())
+    
+    def remove_patient(self, patient):
+        cursor.execute("delete from patients where patients.subject_id = ?", patient.get_id())
+    
+    def add_prescriptions(self, patient, prescription):
+        cursor.execute("insert into prescriptions(prescription) values(?)", prescription)
+    
+    def remove_prescriptions(self, patient, prescription):
+        cursor.execute("delete from prescriptions where prescriptions.prescription = ?", prescription)
+    
+    def add_diagnosis(self, patient, diagnosis):
+        cursor.execute("insert into diagnosis(diagnosis) values(?)", diagnosis)
+    
+    def remove_diagnosis(self, patient, diagnosis):
+        cursor.execute("delete from diagnosis where diagnosis.diagnosis = ?", diagnosis)
+    
+    def yearly_report(self, year):
+        cursor.execute("select * from patients where patients.anchor_year_group = ?", year)
+        rows = cursor.fetchall()
+        return rows
+    
+    def medical_history(self, patient):
+        cursor.execute("select * from diagnosis where diagnosis.subject_id = ?", patient.get_id())
+        rows = cursor.fetchall()
+        return rows
+    
+    def treatment_history(self, patient):
+        cursor.execute("select * from prescriptions where prescriptions.subject_id = ?", patient.get_id())
+        rows = cursor.fetchall()
+        return rows
+    
+    def write_report(self, patient, report):
+        cursor.execute("insert into reports(report) values(?)", report)
+    
+    def get_report(self, patient):
+        cursor.execute("select * from reports where reports.subject_id = ?", patient.get_id())
+        rows = cursor.fetchall()
+        return rows
+    
+    def remove_report(self, patient, report):
+        cursor.execute("delete from reports where reports.report = ?", report)
+    
+    def get_diagnosis(self, patient):
+        cursor.execute("select * from diagnosis where diagnosis.subject_id = ?", patient.get_id())
+        rows = cursor.fetchall()
+        return rows 
+    def get_prescriptions(self, patient):
+        cursor.execute("select * from prescriptions where prescriptions.subject_id = ?", patient.get_id())
+        rows = cursor.fetchall()
+        return rows
+    
+    def admisson(self, patient):
+        cursor.execute("insert into admisson(admisson) values(?)", patient.get_id())
+
 
 class Patient(User):
     def __init__(self, subject_id, gender, anchor_age, anchor_year_group, firstname, lastname, email):
