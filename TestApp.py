@@ -4,6 +4,43 @@ import hashlib
 class User:
     def __init__(self, subject_id):
         self.subject_id = subject_id
+    
+    def get_id(self):
+        return self.subject_id
+    
+    def create(self, creator, user):
+        if creator.user_type == 'admin' or 'doctor':
+            self.users.append(user)
+            return user 
+        ##elif creator.user_type == 'doctor':
+            ##self.users.appends(user)
+            ##return user
+    
+    def create_admin(self):
+        admin_user= user("Kolbek","Konstantin", 29,"admin")
+        self.users.append(admin_user)
+        return admin_user
+    
+    def delete_user(self,user):
+        self.users.remove(user)
+    
+    def get_role_by_id(self, subject_id):
+        cursor.execute("select role from login_data where login_data.subject_id = ?", subject_id)
+        rows = cursor.fetchall()
+        return rows[0].role
+    
+    def get_user_by_id(self, caller_user, id):
+        cursor.execute("select * from login_data where login_data.subject_id = ?", id)
+        rows = cursor.fetchall()
+        user = rows[0]
+        if user.role == 'admin':
+            return Admin(user.subject_id)
+        elif user.role == 'doctor':
+            cursor.execute("select * from patients where patients.subject_id = ?", id)
+            rows = cursor.fetchall()
+            doctor = rows[0]
+            return Doctor(user.subject_id, doctor)
+    
 
 class Doctor(User):
     def __init__(self, subject_id, gender, firstname, lastname, department):
@@ -12,6 +49,15 @@ class Doctor(User):
         self.firstname = firstname
         self.lastname = lastname
         self.department = department
+    
+    def get_role_by_id(self, subject_id):
+        return super().get_role_by_id(subject_id)
+    
+    def get_id(self):
+        return super().get_id()
+    
+    def get_user_by_id(self, caller_user, id):
+        return super().get_user_by_id(caller_user, id)
 
 class Patient(User):
     def __init__(self, subject_id, gender, anchor_age, anchor_year_group, firstname, lastname, email):
@@ -29,7 +75,8 @@ class Patient(User):
 class Admin(User):
     def __init__(self, subject_id):
         super().__init__(subject_id)
-
+    
+    
 
 DRIVER = '{ODBC Driver 18 for SQL Server}'
 SERVER = 'LAPTOP-CC0D63'
@@ -64,6 +111,8 @@ if action == "L":
 elif action == "R":
     userIn = input("Enter Username: ")
     email = input("Enter email: ")
+
+
     
 
 
