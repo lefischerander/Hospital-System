@@ -63,6 +63,14 @@ A web-based project that simulates a hospital and its patients
 
 # Installation and Usage
 
+## SQL-Server
+As it requires a local instance of the relational database server, here's a step-by-step guide to set it up:
+- Install SSMS (SQL Server Management System)
+- Download the Database backup (add link to file)
+- Load the backup onto your server into a new database
+- Add a user with SQL-Authentication to your server (Name: LANK_USER, Password: Lank1.)
+- Adjust <<file-name>> with your server name, user and password.
+
 # Timeline
 ![screenshot](Timeline.png)
 # Group Details
