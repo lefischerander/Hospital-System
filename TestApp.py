@@ -1,3 +1,4 @@
+import re
 import pyodbc
 import hashlib
 
@@ -17,9 +18,45 @@ class User:
             ##return user
     
     def create_admin(self):
-        admin_user= user("Kolbek","Konstantin", 29,"admin")
+        admin_user= user("Kolbek","Konstantin", "admin")
         self.users.append(admin_user)
         return admin_user
+    
+    def get_user_by_name(self, name):
+        try:
+            cursor.execute("select  * from login_data where login_data.surname = ?")
+            rows= cursor.fetchall()
+            if not rows:
+                raise Exception("User not found")
+
+            user = rows[0]
+
+            if user.role == 'admin':
+                cursor.exectue("select * from patients where patients.subject_id = ?", user.subject_id)
+                patient_info = cursor.fetchall()
+                cursor.execute("select * from doctors where doctors.subject_id = ?", user.subject_id)
+                doctor_info = cursor.fetchall()
+                return Admin(user.subject_id, patient_info, doctor_info)
+            elif user.role == 'doctor':
+                cursor.execute("select * from patients where patients.subject_id = ?", user.subject_id)
+                rows = cursor.fetchall()
+                doctor = rows[0]
+                return Doctor(user.subject_id, doctor)
+            elif user.role == 'patient':
+                cursor.execute("select * from patients where patients.subject_id = ?", user.subject_id)
+                rows = cursor.fetchall()
+                doctor = rows[0]
+                return Patient(user.subject_id, doctor)
+        
+        except Exception as Error:
+            print("User not found: ", Error)
+            return None
+    
+    
+    
+    
+    
+    
     
     def delete_user(self,user):
         self.users.remove(user)
@@ -30,16 +67,33 @@ class User:
         return rows[0].role
     
     def get_user_by_id(self, caller_user, id):
+        #Fetch user information from the database
         cursor.execute("select * from login_data where login_data.subject_id = ?", id)
         rows = cursor.fetchall()
         user = rows[0]
+        
         if user.role == 'admin':
-            return Admin(user.subject_id)
+            cursor.execute("select *from patients where patients.subject_id= ?", id)
+            patient_info = cursor.fetchall()
+            cursor.execute("select * from doctors where doctors.subject_id = ?", id)
+            doctor_info= cursor.fetchall()
+            return Admin(user.subject_id, patient_info, doctor_info)
+        
         elif user.role == 'doctor':
             cursor.execute("select * from patients where patients.subject_id = ?", id)
             rows = cursor.fetchall()
             doctor = rows[0]
             return Doctor(user.subject_id, doctor)
+        
+        elif user.role == 'patient':
+            if caller_user.get_id() != id:
+                raise Exception("Patients can only access their own information")
+
+            cursor.execute("selct * from patients where patients.subject_id= ?", id)
+            rows = cursor.fetchall()
+            doctor = rows[0]
+            return Patient(user.subject_id, doctor)
+
     
 
 class Doctor(User):
@@ -58,6 +112,12 @@ class Doctor(User):
     
     def get_user_by_id(self, caller_user, id):
         return super().get_user_by_id(caller_user, id)
+            
+                
+       
+                
+        
+        ##return super().get_user_by_id(caller_user, id)
     
     def get_department(self):
         return self.department
@@ -117,7 +177,11 @@ class Doctor(User):
     
     def admisson(self, patient):
         cursor.execute("insert into admisson(admisson) values(?)", patient.get_id())
-
+    
+    def transfer(self, patient, department):
+        cursor.execute("update patients set department = ? where patients.subject_id = ?", department, patient.get_id())
+    
+    
 
 class Patient(User):
     def __init__(self, subject_id, gender, anchor_age, anchor_year_group, firstname, lastname, email):
@@ -136,7 +200,8 @@ class Admin(User):
     def __init__(self, subject_id):
         super().__init__(subject_id)
     
-    
+
+
 
 DRIVER = '{ODBC Driver 18 for SQL Server}'
 SERVER = 'LAPTOP-CC0D63'
