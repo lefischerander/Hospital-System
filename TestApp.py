@@ -1,5 +1,9 @@
+##import re
+from sqlite3 import connect
 import pyodbc
 import hashlib
+
+connection_string = 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES'
 
 class User:
     def __init__(self, subject_id):
@@ -8,7 +12,7 @@ class User:
     def get_id(self):
         return self.subject_id
     
-    def create(self, creator, user):
+    def create_user(self, creator, user):
         if creator.user_type == 'admin' or 'doctor':
             self.users.append(user)
             return user 
@@ -17,9 +21,109 @@ class User:
             ##return user
     
     def create_admin(self):
-        admin_user= user("Kolbek","Konstantin", 29,"admin")
+        admin_user= user("Kolbek","Konstantin", "admin")
         self.users.append(admin_user)
         return admin_user
+    
+    def get_user_by_name(self, firstname, surname):
+        try:
+            connection= pyodbc.connect(connection_string)
+            cursor= connection.cursor()
+            
+            
+            cursor.execute("select  * from login_data where login_data.surname = ?")
+            rows= cursor.fetchall()
+            if not rows:
+                raise Exception("User not found")
+
+            user = rows[0]
+
+            if user.role == 'admin':
+                cursor.exectue("select * from patients where patients.subject_id = ?", user.subject_id)
+                patient_info = cursor.fetchall()
+                cursor.execute("select * from doctors where doctors.subject_id = ?", user.subject_id)
+                doctor_info = cursor.fetchall()
+                return Admin(user.subject_id, patient_info, doctor_info)
+            elif user.role == 'doctor':
+                cursor.execute("select * from patients where patients.subject_id = ?", user.subject_id)
+                rows = cursor.fetchall()
+                doctor = rows[0]
+                return Doctor(user.subject_id, doctor)
+            elif user.role == 'patient':
+                cursor.execute("select * from patients where patients.subject_id = ?", user.subject_id)
+                rows = cursor.fetchall()
+                patient = rows[0]
+                return Patient(user.subject_id, patient)
+        
+        except Exception as Error:
+            print("User not found: ", Error)
+            return None
+    
+    def create_department(self, department_name):
+        try:
+            if user.get_role_by_id(user.get_id()) != 'admin': #Role Check
+                raise PermissionError("Only admins can create departments") 
+            
+            
+            connection= pyodbc.connect(connection_string)  #Database connection
+            cursor = connection.cursor()                   
+
+            cursor.execute("insert into departements(name) values(?)", (department_name))#Prepare the SQL querey to insert  a new departmets table
+
+            connection.commit() #Commit the changes to the database
+
+            cursor.close()
+            connection.close()
+
+            print(f"Department {department_name} created succesfully.")
+        except PermissionError as pe:
+            print( pe)  
+        except Exception as Error:
+            print("Error creating department: ", Error)
+
+    def delete_department(self, department_name):
+        try:
+            if user.get_role_by_id(user.get_id()) != 'admin':
+                raise PermissionError("Only admins can delte departments")
+        
+            connection= pyodbc.connect(connection_string)
+            cursor = connection.cursor()
+
+            cursor.execute("delete from departments where departments.name = ?", department_name)
+
+        except PermissionError as pe:
+           print(pe)
+        except Exception as Error:
+            print("Error deleting department: ", Error)
+    
+
+        
+        
+            
+            
+
+
+    def create_role(self, role_name):
+        try:
+            if user.get_role_by_id(user.get_id()) != 'admin':
+                raise Exception("Only admins can create roles")
+            
+            connection= pyodbc.connect(connection_string)
+            cursor = connection.cursor()
+
+            cursor.execute("insert into roles(name) values(?)", (role_name))
+
+            connection.commit()
+
+            cursor.close()
+            connection.close()
+
+            print(f"Role {role_name} created succesfully.")
+        except Exception as Error:
+            print("Error creating role: ", Error)
+    
+    
+    
     
     def delete_user(self,user):
         self.users.remove(user)
@@ -30,16 +134,45 @@ class User:
         return rows[0].role
     
     def get_user_by_id(self, caller_user, id):
+        #Fetch user information from the database
         cursor.execute("select * from login_data where login_data.subject_id = ?", id)
         rows = cursor.fetchall()
         user = rows[0]
+        
         if user.role == 'admin':
-            return Admin(user.subject_id)
+            cursor.execute("select *from patients where patients.subject_id= ?", id)
+            patient_info = cursor.fetchall()
+            cursor.execute("select * from doctors where doctors.subject_id = ?", id)
+            doctor_info= cursor.fetchall()
+            return Admin(user.subject_id, patient_info, doctor_info)
+        
         elif user.role == 'doctor':
             cursor.execute("select * from patients where patients.subject_id = ?", id)
             rows = cursor.fetchall()
             doctor = rows[0]
             return Doctor(user.subject_id, doctor)
+        
+        elif user.role == 'patient':
+            if caller_user.get_id() != id:
+                raise Exception("Patients can only access their own information")
+
+            cursor.execute("selct * from patients where patients.subject_id= ?", id)
+            rows = cursor.fetchall()
+            doctor = rows[0]
+            return Patient(user.subject_id, doctor)
+    
+    def transfer(self, patient, department):
+        try: 
+            if user.get_role_by_id(user.get_id()) != 'admin' and user.get_role_by_id(user.get_id()) != 'doctor':
+                raise Exception("Only admins and doctors can transfer patients")
+        
+            connection= pyodbc.connect(connection_string)
+            cursor= connection.cursor()
+        except Exception as Error:
+            print("Error transferring patient: ", Error)
+        
+        cursor.execute("update patients set department= ? where patients.subject_id = ?", department, patient.get_id())
+
     
 
 class Doctor(User):
@@ -58,6 +191,12 @@ class Doctor(User):
     
     def get_user_by_id(self, caller_user, id):
         return super().get_user_by_id(caller_user, id)
+            
+                
+       
+                
+        
+        ##return super().get_user_by_id(caller_user, id)
     
     def get_department(self):
         return self.department
@@ -117,7 +256,11 @@ class Doctor(User):
     
     def admisson(self, patient):
         cursor.execute("insert into admisson(admisson) values(?)", patient.get_id())
-
+    
+    def transfer(self, patient, department):
+        cursor.execute("update patients set department = ? where patients.subject_id = ?", department, patient.get_id())
+    
+    
 
 class Patient(User):
     def __init__(self, subject_id, gender, anchor_age, anchor_year_group, firstname, lastname, email):
@@ -136,7 +279,8 @@ class Admin(User):
     def __init__(self, subject_id):
         super().__init__(subject_id)
     
-    
+
+
 
 DRIVER = '{ODBC Driver 18 for SQL Server}'
 SERVER = 'LAPTOP-CC0D63'
@@ -144,7 +288,7 @@ DATABASE = 'lank'
 USERNAME = 'Nante'
 PASSWORD = 'lank1.'
 
-conn = pyodbc.connect('DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=lank;UID=Nante;PWD=lank1.;TrustServerCertificate=YES')
+conn = pyodbc.connect('DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES')
 
 cursor = conn.cursor()
 
@@ -171,12 +315,4 @@ if action == "L":
 elif action == "R":
     userIn = input("Enter Username: ")
     email = input("Enter email: ")
-
-
-    
-
-
-
-
-
 
