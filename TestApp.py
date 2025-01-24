@@ -1,7 +1,10 @@
 ##import re
+from operator import ge
 from sqlite3 import connect
 import pyodbc
 import hashlib
+from datetime import datetime
+import re
 
 connection_string = 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES'
 
@@ -9,7 +12,7 @@ class User:
     def __init__(self, subject_id):
         self.subject_id = subject_id
     
-    def get_id(self):
+    def get_id(self):        
         return self.subject_id
     
     def create_user(self, creator, user):
@@ -21,17 +24,16 @@ class User:
             ##return user
     
     def create_admin(self):
-        admin_user= user("Kolbek","Konstantin", "admin")
+        admin_user= User("Kolbek","Konstantin", "admin")
         self.users.append(admin_user)
         return admin_user
     
-    def get_user_by_name(self, firstname, surname):
+    def get_user_by_name(self, firstname, surname, subject_id):
         try:
             connection= pyodbc.connect(connection_string)
             cursor= connection.cursor()
             
-            
-            cursor.execute("select  * from login_data where login_data.surname = ?")
+            cursor.execute("select  * from login_data where login_data.subject_id = ?", subject_id)
             rows= cursor.fetchall()
             if not rows:
                 raise Exception("User not found")
@@ -61,7 +63,7 @@ class User:
     
     def create_department(self, department_name):
         try:
-            if user.get_role_by_id(user.get_id()) != 'admin': #Role Check
+            if self.get_role_by_id(self.get_id()) != 'admin': #Role Check
                 raise PermissionError("Only admins can create departments") 
             
             
@@ -83,7 +85,7 @@ class User:
 
     def delete_department(self, department_name):
         try:
-            if user.get_role_by_id(user.get_id()) != 'admin':
+            if self.get_role_by_id(self.get_id()) != 'admin': #Role Check
                 raise PermissionError("Only admins can delte departments")
         
             connection= pyodbc.connect(connection_string)
@@ -105,7 +107,7 @@ class User:
 
     def create_role(self, role_name):
         try:
-            if user.get_role_by_id(user.get_id()) != 'admin':
+            if self.get_role_by_id(self.get_id()) != 'admin':
                 raise Exception("Only admins can create roles")
             
             connection= pyodbc.connect(connection_string)
@@ -139,20 +141,20 @@ class User:
         rows = cursor.fetchall()
         user = rows[0]
         
-        if user.role == 'admin':
+        if user.role == 'admin': #Check if the user is an admin(The admin has the right to see all the information)
             cursor.execute("select *from patients where patients.subject_id= ?", id)
             patient_info = cursor.fetchall()
             cursor.execute("select * from doctors where doctors.subject_id = ?", id)
             doctor_info= cursor.fetchall()
             return Admin(user.subject_id, patient_info, doctor_info)
         
-        elif user.role == 'doctor':
+        elif user.role == 'doctor': #Check if the user is a doctor(The doctor has the right to see only the information of patients)
             cursor.execute("select * from patients where patients.subject_id = ?", id)
             rows = cursor.fetchall()
             doctor = rows[0]
             return Doctor(user.subject_id, doctor)
         
-        elif user.role == 'patient':
+        elif user.role == 'patient':# Check if the user is a patient(The patient has the right to see only his/her information)
             if caller_user.get_id() != id:
                 raise Exception("Patients can only access their own information")
 
@@ -163,7 +165,7 @@ class User:
     
     def transfer(self, patient, department):
         try: 
-            if user.get_role_by_id(user.get_id()) != 'admin' and user.get_role_by_id(user.get_id()) != 'doctor':
+            if self.get_role_by_id(self.get_id()) != 'admin' and self.get_role_by_id(self.get_id()) != 'doctor':
                 raise Exception("Only admins and doctors can transfer patients")
         
             connection= pyodbc.connect(connection_string)
@@ -278,8 +280,16 @@ class Patient(User):
 class Admin(User):
     def __init__(self, subject_id):
         super().__init__(subject_id)
-    
 
+
+def validate_email(email): #Function to validate email
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email): #check if the email is valid
+        return False
+
+def validate_password(password):
+    if not re.match(r"[A-Za-z0-9@#$%^&+=]{8,}", password):
+        return False
+    return True  
 
 
 DRIVER = '{ODBC Driver 18 for SQL Server}'
@@ -292,27 +302,94 @@ conn = pyodbc.connect('DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D
 
 cursor = conn.cursor()
 
-action = input("Enter action: ") 
-if action == "L":
-    userIn = input("Enter Username: ")
-    passwordIn = input("Enter password: ")
 
-    cursor.execute("select password from login_data where login_data.subject_id = ?", userIn)
+action = input("Enter action: (Use R/r for registration or L/l to log in) ") .strip() .lower()
 
-    rows = cursor.fetchall()
-
-    user = rows[0]
-
-    if hashlib.sha1(passwordIn.encode()).hexdigest() == user.password:
-        print("Welcome")
-        cursor.execute("select * from patients inner join login_data On patients.subject_id = login_data.subject_id where patients.subject_id = ?", userIn) 
+    
+    
+if action == "L" or action == "l": ## Login 
+    try:
+        userIn = input("Enter Username: ").strip()
+        passwordIn = input("Enter password: ").strip()
+        
+       
+    
+        cursor.execute("select password from login_data where login_data.subject_id = ?", userIn)
         rows = cursor.fetchall()
-        user = rows[0]
-        active_user = Patient(user.subject_id, user.gender, user.anchor_age, user.anchor_year_group, user.firstname, user.surname, user.email)
-    else:  
-        print("tschüss")
+    
+        if not rows:
+            raise ValueError("User not found")
+    ## Validate the password
+        stored_password = rows[0].password
+        if stored_password != hashlib.sha1(passwordIn.encode()).hexdigest(): # Compare the password with the stored password
+            raise ValueError("Invalid password")
+    
+        cursor.execute("select * from patients where patients.subject_id = ?", userIn)
+        user_details = cursor.fetchone()
+        if not user_details:
+            raise ValueError("User details not found")
 
-elif action == "R":
-    userIn = input("Enter Username: ")
-    email = input("Enter email: ")
+        active_user = Patient(user_details.subject_id, user_details.gender, user_details.anchor_age, user_details.anchor_year_group, user_details.firstname, user_details.surname, user_details.email)
+        print("Welcome " + user_details.firstname + " " + user_details.surname)
+    
+    except ValueError as ve:
+      print(ve)
+    
+    except pyodbc.Error as e:
+        print(f"Database error: {e}")
 
+    
+    
+    
+elif action == "R" or action =="r": ## Registration
+    try:
+        email_in = input("Enter email: ")
+        if not validate_email(email_in):
+            raise ValueError("Please enteer a valid email") 
+    
+    
+    
+        password_in = input("Enter password: ")
+        if not validate_password(password_in):
+            raise ValueError("Password must be at least 8 characters long and contain at least one special character")
+    
+    
+    
+        firstname_in = input("Enter firstname: ")
+        if firstname_in == "":
+            raise ValueError("Please enter your firstname")
+    
+    
+        surname_in = input("Enter surname: ")
+        if surname_in == "":
+            raise ValueError("Please enter your surname")
+    
+    
+        gender_in = input("Enter gender: ")
+        if gender_in not in [ "M" , "F" , "D"]:
+            raise ValueError("Please enter a valid Gender (M/F/D)")
+    
+    
+    
+        age_in = input("Enter age: ")
+        if  not age_in.isdigit(): #The input is a digit
+            raise ValueError("Please enter a valid age")
+        
+        age = int(age_in) #Convert the age input to an integer
+        
+
+        if not (0 <= age <= 120): #The age must be between 0 and 120
+            raise ValueError("Please enter a valid age")
+    
+    except ValueError as ve:
+        print(ve)
+    
+    anchor_year_dict = {"2017-2019": 2160, "2018 - 2020": 2161, "2019 - 2021": 2162, "2020 - 2022": 2163, "2021 - 2023": 2164, "2022 - 2024": 2165, "2023 - 2025": 2166, "2024 - 2026": 2167}
+    ## No clue what anchor_year and anchor_year_group is supposed to be and how it's calculated but it's not 
+    ## required for our use-cases
+    anchor_year = anchor_year_dict["" + str(datetime.now().year-1) + " - " + str(datetime.now().year + 1)] 
+    anchor_year_group = str(datetime.now().year-1) + " - " + str(datetime.now().year + 1)
+    subject_id = cursor.execute("select top 1 subject_id from patients order by subject_id desc").fetchall()[0].subject_id + 1
+    cursor.execute("insert into patients (subject_id, gender, anchor_age, anchor_year, anchor_year_group, firstname, surname) values (?,?,?,?,?,?,?)", subject_id, gender_in, age_in, anchor_year, anchor_year_group, firstname_in, surname_in)
+    cursor.execute("insert into login_data (subject_id, email, password, role) values (?,?,?, 'U')", subject_id, email_in, hashlib.sha1(password_in.encode()).hexdigest())
+    cursor.commit()
