@@ -1,6 +1,3 @@
-import hashlib
-import hmac
-
 admins = {
     'K.Kolbek': {'password': 'admin123', 'role': 'admin'},
     'L.Fischer': {'password': 'admin123', 'role': 'admin'},
