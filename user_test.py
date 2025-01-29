@@ -1,7 +1,7 @@
 import hashlib
 
 class User:
-    def __init__(self, username, password, role='user', department=None):
+    def __init__(self, username, password, role= 'role', department=None):
         self.username = username
         self.password = self.hash_password(password)
         self.role = role
@@ -21,4 +21,4 @@ class Patient(User):
 
 class Doctor(User):
     def __init__(self, username, password, department):
-        super().__init__(username, password, role='doktor', department=department)
+        super().__init__(username, password, role='doctor', department=department)

@@ -1,22 +1,39 @@
 import getpass
 from test_class_login import AuthSystem
+import sys
+from test_class_actions import Actions
 
 def main():
     auth = AuthSystem()
-    while True:
-        action = input("Möchten Sie sich anmelden oder abmelden? (login = 1, logout = 2, exit = 3): ").strip().lower()
+    #while True:
+    action = input("1:login 2:reset password 3:exit: ").strip().lower()
+    
+    if action == "3":
+        print("Goodbye!")
+        sys.exit()
+    elif action == "1":
+        user = input("Username: ").strip()
+        pw = getpass.getpass("Password: ")
+        auth.login(user, pw)
 
-        if action == "3":
+        while True:
+            user_role = auth.users[user].role
+            if user_role == 'doctor':
+                Actions.doktor_actions()
+            elif user_role == 'patient':
+                Actions.patient_actions()
+            elif user_role == 'admin': 
+                Actions.admin_actions()
+            else:
+                print("Error 404\n")
             break
-        elif action == "1":
-            username = input("Benutzername: ").strip()
-            password = getpass.getpass("Passwort: ").strip()
-            auth.login(username, password)
-        elif action == "2":
-            auth.logout(username)
-            break
-        else:
-            print("Ungültige Eingabe. Bitte versuchen Sie es erneut.")
+
+            
+    elif action == "2":
+        auth.reset_password()
+    else:
+        print("\nInvalid input. Please try again.\n")
+        main()
 
 
     
