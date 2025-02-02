@@ -2,6 +2,15 @@ from test_class_login import AuthSystem
 import getpass
 from user_test import User, Admin, Patient, Doctor
 import hashlib
+import pyodbc
+import Service_Database
+
+
+connection_string = 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES'
+
+user_service= Service_Database.User_service()
+
+
 
 class Actions:
     def admin_actions():
@@ -9,7 +18,8 @@ class Actions:
         print("Your possible actions: ")
         print()
         print("1. View all users")
-        print("2. Delete an account")
+        print("2. View patient data")
+        print("3. View doctor data")
         print("3. Creating a new account")
         print("4. Change your password") 
         print("5. Logout")
@@ -20,16 +30,26 @@ class Actions:
             print()
             Actions.admin_actions() # Return to admin actions
         elif choice == '2':
-            username = input("Username: ")
-            user = AuthSystem.self.users[username]  # pick specific user
-            kill_acc = input(f"Are you sure you want to delete {username}? \n1. YES 2. NO \n") # asking befor detliting
-            if kill_acc == '1':
-                print("Platzhalter Zeile: 26")
-                print(f"{username} is now deleted")
-            elif kill_acc == '2':
-                print(f"The {username} will be not deleted")
-            print()
-            Actions.admin_actions() # Return to admin actions
+            subject_id = input("Pleaser enter the patient ID: ")
+
+
+            
+            
+            
+            
+            
+            
+            
+            
+            #user = AuthSystem.self.users[subject_id]  # pick specific user
+            #kill_acc = input(f"Are you sure you want to delete {subject_id}? \n1. YES 2. NO \n") # asking befor detliting
+            #if kill_acc == '1':
+                ##print("Platzhalter Zeile: 26")
+                #print(f"{username} is now deleted")
+            #elif kill_acc == '2':
+             #print(f"The {username} will be not deleted")
+            #print()
+            #Actions.admin_actions() # Return to admin actions
         elif choice == '3':
             print("Platzhalter Zeile: 33")
             print()
@@ -41,7 +61,7 @@ class Actions:
         elif choice == '5':
             AuthSystem.logout()    # Logout
 
-    def doktor_actions():
+    def doctor_actions():
     # Actions for the doctor
         print("Your possible actions: ")
         print("1. View a patient")
