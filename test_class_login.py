@@ -1,29 +1,25 @@
 from user_test import User, Admin, Patient, Doctor
 import getpass
 import sys
+import pyodbc
+
+connection_string = 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES'
 
 class AuthSystem:
     def __init__(self):
-        self.users = {
-            '123': Admin('123','3eb3fe66b31e3b4d10fa70b5cad49c7112294af6ae4e476a1c405155d45aa121', 'Konstantin', 'Kolbek',), # admin123 Admin123!  
-            # 'L.Fischer': Admin('L.Fischer', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9'),
-            # 'N.Razafindraibe': Admin('N.Razafindraibe', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9'),
-            # 'E.Schaefer': Admin('E.Schaefer', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9'),
-            # '1.1': Patient('1.1', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'), # 01.01.2025
-            # '10003400': Patient('10003400', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10002428': Patient('10002428', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10032725': Patient('10032725', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10027445': Patient('10027445', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10022281': Patient('10022281', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10035631': Patient('10035631', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10024043': Patient('10024043', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10025612': Patient('10025612', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10003046': Patient('10003046', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # 'D.Paris': Doctor('D.Paris', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'radiology'), # test
-            # 'M.Maier': Doctor('M.Maier', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'gastroenterology'),
-            # 'A.Mueller': Doctor('A.Mueller', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'oncology')
-        }
-        #self.logged_in = False
+        self.users=[]
+    
+    
+    
+    
+    def data_base_log(self, subject_id, password):
+        connection = pyodbc.connect(connection_string)
+        cursor = connection.cursor()
+        cursor.execute("select firstname, surname from  from New_login_data where subject_id = ? and password = ?", subject_id, password)
+        self.users = cursor.fetchall()
+        cursor.close()
+        connection.close()
+
 
     def login(self, subject_id, password):
         password = User.hash_password(password) #hashlib.sha256(password.encode()).hexdigest()
@@ -32,7 +28,7 @@ class AuthSystem:
         elif self.users[subject_id].password != User.hash_password(password):
             print("\nInvalid password.\n")
         else:
-            with open('logged_in_users.txt', 'w+') as file:
+            with open('logged_in_users.txt', 'w+') as file:  ##Not useful (added by Nanteqiou)
                 if subject_id in file.read():
                     print(f"\nUser {subject_id} already logged in.\n")          
                 else:
