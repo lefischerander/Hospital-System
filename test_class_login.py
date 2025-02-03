@@ -23,7 +23,7 @@ class AuthSystem:
             # 'M.Maier': Doctor('M.Maier', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'gastroenterology'),
             # 'A.Mueller': Doctor('A.Mueller', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'oncology')
         }
-        self.logged_in = []
+        #self.logged_in = False
 
     def login(self, subject_id, password):
         password = User.hash_password(password) #hashlib.sha256(password.encode()).hexdigest()
@@ -31,28 +31,31 @@ class AuthSystem:
             print(f"\nUsername {subject_id} not found.")
         elif self.users[subject_id].password != User.hash_password(password):
             print("\nInvalid password.\n")
-        elif subject_id in self.logged_in:
-            print(f"\nUser {subject_id} already logged in.\n")
         else:
-            self.logged_in.append(subject_id)
-            print(f"\nLogin successful! Welcome, {subject_id}.")
-            print(self.logged_in)
-            user_role = self.users[subject_id].role
-            if user_role == 'doctor':
-                print(f"You are {user_role} in this hospital")
-                print(f"Your department: {self.users[subject_id].department}\n")
-            else:
-                print(f"You are {user_role} in this hospital\n")
+            with open('logged_in_users.txt', 'w+') as file:
+                if subject_id in file.read():
+                    print(f"\nUser {subject_id} already logged in.\n")          
+                else:
+                    file.write(f"{subject_id}\n")
+                    print(f"\nLogin successful! Welcome, {subject_id}.")
+                    user_role = self.users[subject_id].role
+                    if user_role == 'doctor':
+                        print(f"You are {user_role} in this hospital")
+                        print(f"Your department: {self.users[subject_id].department}\n")
+                    else:
+                        print(f"You are {user_role} in this hospital\n")
 
     def logout(self, subject_id):
-        print(subject_id)
-        print(self.logged_in)
-        if subject_id in self.logged_in:
-            self.logged_in.remove(subject_id)
-            print(f"User {subject_id} logged out seccesful. Thank you for using our services.")
-            sys.exit()
-        else:
-            print("Error: User isn't logged in")
+        with open('logged_in_users.txt', 'r+') as file:
+            for i in file:
+
+                if subject_id != i.strip():
+                    print(f"\nUser {subject_id} isn't logged in.\n")
+                else:
+                    with open('logged_in_users.txt', 'w') as file:
+                        file.write(f"{0}\n")
+                        print(f"\nUser {subject_id} logged out successfully. Thank you for using our services.\n")
+                        sys.exit()
 
     def reset_password(self):
         try:

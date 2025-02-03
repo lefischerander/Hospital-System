@@ -16,8 +16,8 @@ def main():
             user = input("Username: ").strip()
             pw = getpass.getpass("Password: ")
             auth.login(user, pw)
-            if user not in auth.logged_in:
-                main()
+            # if auth.logged_in == False:
+            #     main()
             while True:
                 user_role = auth.users[user].role
                 if user_role == 'doctor':
