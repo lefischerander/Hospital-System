@@ -39,7 +39,7 @@ class User_service:
         try:
             connection = pyodbc.connect(connection_string)
             cursor = connection.cursor()
-            cursor.execute("select subject_id from New_login_data where username = ?", self.username)
+            cursor.execute("select subject_id from New_login_data where surname = ?", self.surname)
             id = cursor.fetchone()[0]
             cursor.close()
             connection.close()
@@ -47,11 +47,11 @@ class User_service:
         except Exception as e:
             print("Error: ", e)
 
-    def get_doctor_by_name(self, lastname ):
+    def get_doctor_by_name(self, surname ):
         try:
             connection = pyodbc.connect(connection_string)
             cursor = connection.cursor()
-            cursor.execute("select firstname, lastname, department_name, age from doctors where surname = ?", lastname)
+            cursor.execute("select firstname, lastname, department_name, age from doctors where surname = ?", surname)
             doctor = cursor.fetchone()
             cursor.close()
             connection.close()
@@ -163,6 +163,45 @@ class User_service:
         except Exception as e:
             print("Error fetching most recent weight: ", e)
             return None
+        
+    def get_most_recent_height(self, subject_id):
+        try:
+            connection = pyodbc.connect(connection_string)
+            cursor = connection.cursor()
+            query = """
+                SELECT TOP 1 * 
+                FROM omr
+                WHERE subject_id = ? AND result_name LIKE 'Height%'
+                ORDER BY chartdate DESC
+            """
+            cursor.execute(query, subject_id)
+            result = cursor.fetchone()
+            cursor.close()
+            connection.close()
+            return result
+        except Exception as e:
+            print("Error fetching most recent height: ", e)
+            return None
+    
+    def get_most_recent_bmi(self, subject_id):
+        try:
+            connection = pyodbc.connect(connection_string)
+            cursor = connection.cursor()
+            query = """
+                SELECT TOP 1 * 
+                FROM omr
+                WHERE subject_id = ? AND result_name LIKE 'BMI%'
+                ORDER BY chartdate DESC
+            """
+            cursor.execute(query, subject_id)
+            result = cursor.fetchone()
+            cursor.close()
+            connection.close()
+            return result
+        except Exception as e:
+            print("Error fetching most recent BMI: ", e)
+            return None
+    
 
 
     
