@@ -2,7 +2,6 @@ from test_class_login import AuthSystem
 import getpass
 from user_test import User, Admin, Patient, Doctor
 import hashlib
-import pyodbc
 import Service_Database
 
 
@@ -20,9 +19,9 @@ class Actions:
         print("1. View all users")
         print("2. View patient data")
         print("3. View doctor data")
-        print("3. Creating a new account")
         print("4. Change your password") 
-        print("5. Logout")
+        print("5. Delete a user")
+        print("6. Logout")
         
         choice = input("Choose an action: ")
         if choice == '1':
@@ -31,6 +30,16 @@ class Actions:
             Actions.admin_actions() # Return to admin actions
         elif choice == '2':
             subject_id = input("Pleaser enter the patient ID: ")
+
+        if choice == '5':
+           try:
+               user_to_delete = input("Please enter the user you want to delete (subject_id): ")
+               user_service.delete_user(user_to_delete)
+           except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+
+               
+              
 
 
             
