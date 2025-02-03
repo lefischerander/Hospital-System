@@ -31,6 +31,7 @@ def main():
                 break         
         elif action == "2":
             auth.reset_password()
+            main()
         else:
             print("\nInvalid input. Please try again.\n")
             main()

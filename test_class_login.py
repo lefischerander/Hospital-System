@@ -45,7 +45,6 @@ class AuthSystem:
                 print(f"You are {user_role} in this hospital\n")
 
     def logout(self, subject_id):
-        # subject_id = input("Enter your username: ")
         print(subject_id)
         print(self.logged_in)
         if subject_id in self.logged_in:
@@ -57,9 +56,13 @@ class AuthSystem:
 
     def reset_password(self):
         try:
-            username = input("Enter your username: ").strip()
-            if username not in self.users:
+            subject_id = input("Enter your username: ").strip()
+            if subject_id not in self.users:
                 raise ValueError("Invalid username.\n")
+
+            password = getpass.getpass("Enter your current password: ")
+            if self.users[subject_id].password != User.hash_password(password):
+                raise ValueError("\nInvalid password.\n")
             
             while True:
                 try:
@@ -82,7 +85,7 @@ class AuthSystem:
                         raise ValueError("\nPasswords do not match!\n")
                     
                     h_new_password = User.hash_password(new_password)
-                    if self.users[username].password == User.hash_password(h_new_password):
+                    if self.users[subject_id].password == User.hash_password(h_new_password):
                         raise ValueError("\nNew password must be different from the old password.\n")
                     
                     #with open('test_class_login.py', 'w') as file:
