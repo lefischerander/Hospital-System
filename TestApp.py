@@ -124,11 +124,35 @@ class User:
         except Exception as Error:
             print("Error creating role: ", Error)
     
+    def view_user(self):
+        try:
+            if self.get_role_by_id(self.get_id())='admin':
+                connection= pyodbc.connect(connection_string)
+                cursor= connection.cursor()
+
     
+
     
     
     def delete_user(self,user):
-        self.users.remove(user)
+        try:
+            if self.get_role_by_id(self.get_id()) != 'admin':
+                raise Exception("Only admins can delete users")
+            
+            connection= pyodbc.connect(connection_string)
+            cursor = connection.cursor()
+            cursor.execute("delete from New_login_data where New_login_data.subject_id = ?", user.get_id())
+            
+            connection.commit()
+            
+            cursor.close()
+            connection.close()
+            
+            print(f"User {user.get_id()} deleted succesfully.")
+        except Exception as Error:
+            print("Error deleting user: ", Error)
+
+        
     
     def get_role_by_id(self, subject_id):
         cursor.execute("select role from login_data where login_data.subject_id = ?", subject_id)
@@ -384,12 +408,12 @@ elif action == "R" or action =="r": ## Registration
     except ValueError as ve:
         print(ve)
     
-    anchor_year_dict = {"2017-2019": 2160, "2018 - 2020": 2161, "2019 - 2021": 2162, "2020 - 2022": 2163, "2021 - 2023": 2164, "2022 - 2024": 2165, "2023 - 2025": 2166, "2024 - 2026": 2167}
+    anchor_year_dict = {"2017 - 2019": 2160, "2018 - 2020": 2161, "2019 - 2021": 2162, "2020 - 2022": 2163, "2021 - 2023": 2164, "2022 - 2024": 2165, "2023 - 2025": 2166, "2024 - 2026": 2167}
     ## No clue what anchor_year and anchor_year_group is supposed to be and how it's calculated but it's not 
     ## required for our use-cases
     anchor_year = anchor_year_dict["" + str(datetime.now().year-1) + " - " + str(datetime.now().year + 1)] 
     anchor_year_group = str(datetime.now().year-1) + " - " + str(datetime.now().year + 1)
     subject_id = cursor.execute("select top 1 subject_id from patients order by subject_id desc").fetchall()[0].subject_id + 1
     cursor.execute("insert into patients (subject_id, gender, anchor_age, anchor_year, anchor_year_group, firstname, surname) values (?,?,?,?,?,?,?)", subject_id, gender_in, age_in, anchor_year, anchor_year_group, firstname_in, surname_in)
-    cursor.execute("insert into login_data (subject_id, email, password, role) values (?,?,?, 'U')", subject_id, email_in, hashlib.sha1(password_in.encode()).hexdigest())
+    cursor.execute("insert into New_login_data (subject_id, email, password, role) values (?,?,?, 'U')", subject_id, email_in, hashlib.sha1(password_in.encode()).hexdigest())
     cursor.commit()
