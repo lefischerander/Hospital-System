@@ -1,5 +1,5 @@
 #from operator import ge
-from sqlite3 import connect
+#from sqlite3 import connect
 #import pyodbc
 import hashlib
 #from datetime import datetime
@@ -35,6 +35,6 @@ class Patient(User):
         super().__init__(subject_id, password, firstname, lastname, role='patient')
 
 class Doctor(User):
-    def __init__(self, subject_id, firstname, lastname, password, department):
+    def __init__(self, subject_id, password, firstname, lastname, department):
         super().__init__(subject_id, password, firstname, lastname, role='doctor', department=department)
 

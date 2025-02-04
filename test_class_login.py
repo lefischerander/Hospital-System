@@ -1,55 +1,62 @@
 from user_test import User, Admin, Patient, Doctor
-import getpass
 import sys
+import getpass
+#import users_data
 
 class AuthSystem:
     def __init__(self):
         self.users = {
-            '123': Admin('123','3eb3fe66b31e3b4d10fa70b5cad49c7112294af6ae4e476a1c405155d45aa121', 'Konstantin', 'Kolbek',), # admin123 Admin123!  
-            # 'L.Fischer': Admin('L.Fischer', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9'),
-            # 'N.Razafindraibe': Admin('N.Razafindraibe', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9'),
-            # 'E.Schaefer': Admin('E.Schaefer', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9'),
-            # '1.1': Patient('1.1', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'), # 01.01.2025
-            # '10003400': Patient('10003400', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10002428': Patient('10002428', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10032725': Patient('10032725', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10027445': Patient('10027445', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10022281': Patient('10022281', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10035631': Patient('10035631', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10024043': Patient('10024043', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10025612': Patient('10025612', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # '10003046': Patient('10003046', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69'),
-            # 'D.Paris': Doctor('D.Paris', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'radiology'), # test
-            # 'M.Maier': Doctor('M.Maier', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'gastroenterology'),
-            # 'A.Mueller': Doctor('A.Mueller', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'oncology')
+            '123': Admin('K.Kolbek','3eb3fe66b31e3b4d10fa70b5cad49c7112294af6ae4e476a1c405155d45aa121', 'Konstantin', 'Kolbek',), # admin123 Admin123!  
+            '234': Admin('L.Fischer', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'Leander', 'Fischer'),
+            '345': Admin('N.Razafindraibe', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'Nante', 'Razafindraibe'),
+            '456': Admin('E.Schaefer', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'Erik', 'Schaefer'),
+            '10000001': Patient('10000001', '3eb3fe66b31e3b4d10fa70b5cad49c7112294af6ae4e476a1c405155d45aa121', 'ATest', 'TestA'), # 01.01.2025
+            '10003400': Patient('10003400', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'BTest', 'TestB'),
+            '10002428': Patient('10002428', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'CTest', 'TestC'),
+            '10032725': Patient('10032725', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'DTest', 'TestD'),
+            '10027445': Patient('10027445', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'ETest', 'TestE'),
+            '10022281': Patient('10022281', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'FTest', 'TestF'),
+            '10035631': Patient('10035631', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'GTest', 'TestG'),
+            '10024043': Patient('10024043', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'HTest', 'TestH'),
+            '10025612': Patient('10025612', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'ITest', 'TestI'),
+            '10003046': Patient('10003046', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'JTest', 'TestJ'),
+            '110': Doctor('110', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'Doom', 'Paris', 'radiology'), # test
+            '111': Doctor('111', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'Maik', 'Maier','gastroenterology'),
+            '112': Doctor('112', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'Anja', 'Mueller','oncology')
         }
-        #self.logged_in = False
+        self.logged_in = False
 
     def login(self, subject_id, password):
-        password = User.hash_password(password) #hashlib.sha256(password.encode()).hexdigest()
         if subject_id not in self.users:
             print(f"\nUsername {subject_id} not found.")
-        elif self.users[subject_id].password != User.hash_password(password):
+        elif User.hash_password(password) != self.users[subject_id].password:
             print("\nInvalid password.\n")
         else:
-            with open('logged_in_users.txt', 'w+') as file:
-                if subject_id in file.read():
-                    print(f"\nUser {subject_id} already logged in.\n")          
-                else:
-                    file.write(f"{subject_id}\n")
-                    print(f"\nLogin successful! Welcome, {subject_id}.")
-                    user_role = self.users[subject_id].role
-                    if user_role == 'doctor':
-                        print(f"You are {user_role} in this hospital")
-                        print(f"Your department: {self.users[subject_id].department}\n")
+            with open('logged_in_users.txt', 'r') as file:
+                line = file.readline()
+                while line:
+                    if subject_id == line.strip():
+                        print(f"\nUser {subject_id} already logged in.\n")
+                        break
                     else:
-                        print(f"You are {user_role} in this hospital\n")
+                        line = file.readline()
+                if not line:    
+                    with open('logged_in_users.txt', 'a') as file:
+                        file.write(f"{subject_id}\n")
+                        print(f"\nLogin successful! Welcome, {subject_id}.")
+                        self.logged_in = True
+                        user_role = self.users[subject_id].role
+                        if user_role == 'doctor':
+                            print(f"You are {user_role} in this hospital")
+                            print(f"Your department: {self.users[subject_id].department}\n")
+                        else:
+                            print(f"You are {user_role} in this hospital\n")       
+
 
     def logout(self, subject_id):
-        with open('logged_in_users.txt', 'r+') as file:
-            for i in file:
-
-                if subject_id != i.strip():
+        with open('logged_in_users.txt', 'r') as file:
+            for line in file:
+                if subject_id != line.strip():
                     print(f"\nUser {subject_id} isn't logged in.\n")
                 else:
                     with open('logged_in_users.txt', 'w') as file:
@@ -57,13 +64,13 @@ class AuthSystem:
                         print(f"\nUser {subject_id} logged out successfully. Thank you for using our services.\n")
                         sys.exit()
 
-    def reset_password(self):
+    def reset_password(self, subject_id, password):
         try:
-            subject_id = input("Enter your username: ").strip()
+            #subject_id = input("Enter your username: ").strip()
             if subject_id not in self.users:
                 raise ValueError("Invalid username.\n")
 
-            password = getpass.getpass("Enter your current password: ")
+            #password = getpass.getpass("Enter your current password: ")
             if self.users[subject_id].password != User.hash_password(password):
                 raise ValueError("\nInvalid password.\n")
             
