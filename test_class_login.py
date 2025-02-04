@@ -74,12 +74,10 @@ class AuthSystem:
                     print("Logout Error")
 
     def reset_password(self, subject_id, password):
-        try:
-            #subject_id = input("Enter your username: ").strip()
+        try:            
             if subject_id not in self.users:
                 raise ValueError("Invalid username.\n")
 
-            #password = getpass.getpass("Enter your current password: ")
             if self.users[subject_id].password != User.hash_password(password):
                 raise ValueError("\nInvalid password.\n")
             
@@ -108,7 +106,7 @@ class AuthSystem:
                         raise ValueError("\nNew password must be different from the old password.\n")
                     
                     #with open('test_class_login.py', 'w') as file:
-                        User.hash_password[username] = file.write(f"{h_new_password}")
+                        #User.hash_password[username] = file.write(f"{h_new_password}")
                     print("\nPassword reset successful!\n")
                         
                     break
