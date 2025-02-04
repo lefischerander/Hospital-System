@@ -17,7 +17,7 @@ class AuthSystem:
       try:
         connection = pyodbc.connect(connection_string)
         cursor = connection.cursor()
-        cursor.execute("select firstname, surname, role, password FROM New_login_data WHERE subject_id = ? AND password = ?", subject_id, password)
+        cursor.execute("select  firstname, surname, role, password FROM New_login_data WHERE subject_id = ? AND password = ?", subject_id, password)
         self.users = cursor.fetchall()
         cursor.close()
         connection.close()
@@ -29,9 +29,15 @@ class AuthSystem:
 
     def login(self, subject_id, password):
         self.data_base_log(subject_id, password)
-        if subject_id not in self.users:
+        user= None
+        for i in self.users:
+            if str(i[0] == str(subject_id)):
+                user= i
+                break
+        
+        if user is None:
             print(f"\nUsername {subject_id} not found.")
-        elif User.hash_password(password) != self.users[3]:
+        elif User.hash_password(password) != user[3]:
             print("\nInvalid password.\n")
         else:
             with open('logged_in_users.txt', 'r') as file:

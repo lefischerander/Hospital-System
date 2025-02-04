@@ -20,10 +20,10 @@ def main():
             if auth.logged_in == False:
                 main()
             while auth.logged_in == True:
-                user_role = auth.users[user].role
-                if user_role == 'doctor':
+                user_role = auth.users[0][2]
+                if user_role == 'Doctor':
                     Actions.doktor_actions()
-                elif user_role == 'patient':
+                elif user_role == 'Patient':
                     Actions.patient_actions()
                 elif user_role == 'admin': 
                     Actions.admin_actions()
@@ -41,6 +41,7 @@ def main():
             main()
     except ValueError as error:
             print(error)
+
 
 
     
