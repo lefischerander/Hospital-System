@@ -1,5 +1,4 @@
-from user_test import User, Admin, Patient, Doctor
-import sys
+from user_test import User
 import getpass
 import sys
 import pyodbc
@@ -14,12 +13,17 @@ class AuthSystem:
     
     
     def data_base_log(self, subject_id, password):
+      try:
         connection = pyodbc.connect(connection_string)
         cursor = connection.cursor()
-        cursor.execute("select firstname, surname from  from New_login_data where subject_id = ? and password = ?", subject_id, password)
+        cursor.execute("select firstname, surname, role FROM New_login_data WHERE subject_id = ? AND password = ?", subject_id, password)
         self.users = cursor.fetchall()
         cursor.close()
         connection.close()
+      except pyodbc.Error as db_error:
+          print(f" Db error: {db_error}")
+      except Exception as e :
+          print(f"An unexpected error occured: {e}")
 
 
     def login(self, subject_id, password):

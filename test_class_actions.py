@@ -25,7 +25,7 @@ class Actions:
         
         elif choice == '2':
           try:
-              user_to_be_deleted = input("Enter the subject_id of the user you want to delete: ")
+              user_to_be_deleted = int(input("Enter the subject_id of the user you want to delete: "))
               user_service.delete_user(user_to_be_deleted)
           except Exception as e:
                 print(f"An unexpected error occurred: {e}")
@@ -38,8 +38,9 @@ class Actions:
                     Actions.admin_actions()
         elif choice == '3':
             try:
-                patient = input("Enter the subject_id of the patient you want to view:  ")
-                user_service.get_patient_information(patient)
+                patient = int(input("Enter the subject_id of the patient you want to view:  "))
+                patient_info= user_service.get_patient_information(patient)
+                print(patient_info)
             except Exception as e:
                 print("Error: ", e) 
                 
@@ -140,7 +141,7 @@ class Actions:
                 user_service.get_patient_information(patient)
             except Exception as e:
                 print("Error: ", e)
-                
+
         
         
         
