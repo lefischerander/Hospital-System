@@ -1,30 +1,26 @@
 from user_test import User, Admin, Patient, Doctor
 import sys
 import getpass
-#import users_data
+import sys
+import pyodbc
+
+connection_string = 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES'
 
 class AuthSystem:
     def __init__(self):
-        self.users = {
-            '123': Admin('K.Kolbek','3eb3fe66b31e3b4d10fa70b5cad49c7112294af6ae4e476a1c405155d45aa121', 'Konstantin', 'Kolbek',), # admin123 Admin123!  
-            '234': Admin('L.Fischer', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'Leander', 'Fischer'),
-            '345': Admin('N.Razafindraibe', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'Nante', 'Razafindraibe'),
-            '456': Admin('E.Schaefer', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'Erik', 'Schaefer'),
-            '10000001': Patient('10000001', '3eb3fe66b31e3b4d10fa70b5cad49c7112294af6ae4e476a1c405155d45aa121', 'ATest', 'TestA'), # 01.01.2025
-            '10003400': Patient('10003400', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'BTest', 'TestB'),
-            '10002428': Patient('10002428', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'CTest', 'TestC'),
-            '10032725': Patient('10032725', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'DTest', 'TestD'),
-            '10027445': Patient('10027445', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'ETest', 'TestE'),
-            '10022281': Patient('10022281', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'FTest', 'TestF'),
-            '10035631': Patient('10035631', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'GTest', 'TestG'),
-            '10024043': Patient('10024043', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'HTest', 'TestH'),
-            '10025612': Patient('10025612', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'ITest', 'TestI'),
-            '10003046': Patient('10003046', '5ac7b35987b4b0235e42f7c8d85e69bffa03e14d36c1c3855ce11f29678b2a69', 'JTest', 'TestJ'),
-            '110': Doctor('110', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'Doom', 'Paris', 'radiology'), # test
-            '111': Doctor('111', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'Maik', 'Maier','gastroenterology'),
-            '112': Doctor('112', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08', 'Anja', 'Mueller','oncology')
-        }
-        self.logged_in = False
+        self.users=[]
+    
+    
+    
+    
+    def data_base_log(self, subject_id, password):
+        connection = pyodbc.connect(connection_string)
+        cursor = connection.cursor()
+        cursor.execute("select firstname, surname from  from New_login_data where subject_id = ? and password = ?", subject_id, password)
+        self.users = cursor.fetchall()
+        cursor.close()
+        connection.close()
+
 
     def login(self, subject_id, password):
         if subject_id not in self.users:
