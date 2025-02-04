@@ -8,6 +8,7 @@ connection_string = 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63
 class AuthSystem:
     def __init__(self):
         self.users=[]
+        self.logged_in = False
     
     
     
@@ -16,7 +17,7 @@ class AuthSystem:
       try:
         connection = pyodbc.connect(connection_string)
         cursor = connection.cursor()
-        cursor.execute("select firstname, surname, role FROM New_login_data WHERE subject_id = ? AND password = ?", subject_id, password)
+        cursor.execute("select firstname, surname, role, password FROM New_login_data WHERE subject_id = ? AND password = ?", subject_id, password)
         self.users = cursor.fetchall()
         cursor.close()
         connection.close()
@@ -27,9 +28,10 @@ class AuthSystem:
 
 
     def login(self, subject_id, password):
+        self.data_base_log(subject_id, password)
         if subject_id not in self.users:
             print(f"\nUsername {subject_id} not found.")
-        elif User.hash_password(password) != self.users[subject_id].password:
+        elif User.hash_password(password) != self.users[3]:
             print("\nInvalid password.\n")
         else:
             with open('logged_in_users.txt', 'r') as file:
@@ -45,24 +47,25 @@ class AuthSystem:
                         file.write(f"{subject_id}\n")
                         print(f"\nLogin successful! Welcome, {subject_id}.")
                         self.logged_in = True
-                        user_role = self.users[subject_id].role
-                        if user_role == 'doctor':
+                        user_role = self.users[2]
+                        if user_role == 'Doctor':
                             print(f"You are {user_role} in this hospital")
-                            print(f"Your department: {self.users[subject_id].department}\n")
+                            print(f"Your department: \n")   #edit department later
                         else:
                             print(f"You are {user_role} in this hospital\n")       
 
 
     def logout(self, subject_id):
         with open('logged_in_users.txt', 'r') as file:
-            for line in file:
-                if subject_id != line.strip():
-                    print(f"\nUser {subject_id} isn't logged in.\n")
-                else:
+            line = file.readline()
+            while line:
+                if subject_id == line.strip():
                     with open('logged_in_users.txt', 'w') as file:
                         file.write(f"{0}\n")
                         print(f"\nUser {subject_id} logged out successfully. Thank you for using our services.\n")
                         sys.exit()
+                else:
+                    print("Logout Error")
 
     def reset_password(self, subject_id, password):
         try:
