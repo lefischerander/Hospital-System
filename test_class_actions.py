@@ -8,7 +8,7 @@ user_service= Service_Database.User_service()#creating an instance of the class 
 auth_system = AuthSystem()#instance of the class AuthSystem
 
 class Actions:
-    def admin_actions():
+    def admin_actions(subject_id):
         # Actions for the admin
         print("Your possible actions: ")
         print()
@@ -18,17 +18,17 @@ class Actions:
         print("4. View doctor's information")
         print("5. Change password")
         print("6. Logout")
+        print(subject_id)
         
         choice = input("Choose an action: ")
         if choice == '1':
             user_service.view_all_users()
             print("Press 'menu' to go back to the main menu or 'logout' to logout")
-            
             answer = input()
             if answer == 'menu':
                 Actions.admin_actions()
             elif answer == 'logout':
-                auth_system.logout()
+                auth_system.logout(subject_id)
                 
 
 
@@ -74,6 +74,18 @@ class Actions:
             patient_info= user_service.get_patient_information(patient)
             print(patient_info)
             print("Press 'menu' to go back to the main menu or 'logout' to logout")
+        elif choice == '4':
+            doctor= int(input("Enter the subject_id of the doctor you want to view"))
+            doctor_info= user_service.get_doctor_by_name(doctor)
+            print(doctor_info)
+            print("Press 'menu' to go back to the main menu or 'logout' to logout")
+        
+        elif choice == '6':
+            auth_system.logout(subject_id)
+
+
+        
+
 
                 
 
@@ -95,20 +107,8 @@ class Actions:
             #     print(f"The {username} will be not deleted")
             # print()
             # Actions.admin_actions() # Return to admin actions
-        elif choice == '3':
-            print("Platzhalter Zeile: 33")
-            print()
-            Actions.admin_actions() # Return to admin actions
-        elif choice == '4': 
-            print("Platzhalter Zeile: 37")
-            print()
-            Actions.admin_actions() # Return to admin actions
-        elif choice == '5':
-            #subject_id = input("Enter your username: ")
-            auth = AuthSystem()
-            id = input("Enter your username: ").strip()
-            auth.logout(id)    # Logout
-
+       
+        
     def doktor_actions():
     # Actions for the doctor
         print("Your possible actions: ")

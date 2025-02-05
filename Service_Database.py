@@ -108,7 +108,7 @@ class User_service:
             result = cursor.fetchone()
             cursor.close()
             connection.close()
-            print(f"All information about the patient {result[3]} {result[4]: }") 
+        
             return result 
         except Exception as e:
             print("Error fetching patient information: ", e)
@@ -253,21 +253,25 @@ class User_service:
 
     #usage example
 
-# if __name__ == "__main__":
-#     user_service = User_service()
-#     print("Welcome to the hospital database.")
-#     print("Please choose an action:")
-#     print()
-#     print("\n"'1.Login ,2. View patient information, "\n",3. View most recent weight record,"\n"4.View most recent height record')
+if __name__ == "__main__":
+    user_service = User_service()
+    print("Welcome to the hospital database.")
+    print("Please choose an action:")
+    print()
+    action= input("Press '1' to view all users in the hospital, Press '2' to view a patient's information " )
+    if action == '1':
+        user_service.view_all_users()
+        print("All users: ", user_service.view_all_users())
+   
+    elif action == '2':
+        subject_id = int(input("Enter subject ID: "))
+        patient_info = user_service.get_patient_information(subject_id)
+        if patient_info:
+            print("Patient information:", patient_info)
+        else:
+            print("No patient information found or an error occurred.")
     
-#     action = input("Choose an action: ")
-#     if action == '1':
-#         try:
-#             subject_id= input("Subject ID: ")
-#             password= input("Password: ")
-#             login= user_service.login(subject_id, password)
-#             if not login:
-
+   
             
 
         
