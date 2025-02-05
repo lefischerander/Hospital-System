@@ -19,45 +19,73 @@ class Analyse:
     
     def read_omr(self):
         df = pd.read_csv(self.omr_csv_path)
+        print(df.head())
         id = input("Enter subject_id: ")
-        patient = df.loc[df["subject_id"] == id]
+        patient = df[df['subject_id'].astype(str) == id]
         return patient
     
     def read_admissions(self):
         df = pd.read_csv(self.admissions_csv_path)
-        return df
+        print(df.head())
+        id = input("Enter subject_id: ")
+        patient = df[df['subject_id'].astype(str) == id]
+        return patient
     
     def read_diagnoses_icd(self):
         df = pd.read_csv(self.diagnoses_icd_csv_path)
-        return df
+        print(df.head())
+        id = input("Enter subject_id: ")
+        patient = df[df['subject_id'].astype(str) == id]
+        return patient
     
     def read_drgcodes(self):
         df = pd.read_csv(self.drgcodes_csv_path)
-        return df
+        print(df.head())
+        id = input("Enter subject_id: ")
+        patient = df[df['subject_id'].astype(str) == id]
+        return patient
     
     def read_emar(self):
         df = pd.read_csv(self.emar_csv_path)
-        return df
+        print(df.head())
+        id = input("Enter subject_id: ")
+        patient = df[df['subject_id'].astype(str) == id]
+        return patient
     
     def read_patients(self):
         df = pd.read_csv(self.patients_csv_path)
-        return df
+        print(df.head())
+        id = input("Enter subject_id: ")
+        patient = df[df['subject_id'].astype(str) == id]
+        return patient
     
     def read_pharmacy(self):
         df = pd.read_csv(self.pharmacy_csv_path)
-        return df
+        print(df.head())
+        id = input("Enter subject_id: ")
+        patient = df[df['subject_id'].astype(str) == id]
+        return patient
     
     def read_procedures_icd(self):
         df = pd.read_csv(self.procedures_icd_csv_path)
-        return df
+        print(df.head())
+        id = input("Enter subject_id: ")
+        patient = df[df['subject_id'].astype(str) == id]
+        return patient
     
     def read_d_icd_diagnoses(self):        
         df = pd.read_csv(self.d_icd_diagnoses_csv_path)
-        return df
+        print(df.head())
+        id = input("Enter subject_id: ")
+        patient = df[df['subject_id'].astype(str) == id]
+        return patient
     
     def read_d_icd_procedures(self):
         df = pd.read_csv(self.d_icd_procedures_csv_path)
-        return df
+        print(df.head())
+        id = input("Enter subject_id: ")
+        patient = df[df['subject_id'].astype(str) == id]
+        return patient
     
 
 # filterwarnings("ignore", category=UserWarning, message='.*pandas only supports SQLAlchemy connectable.*')        
