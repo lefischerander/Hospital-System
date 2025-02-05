@@ -4,8 +4,6 @@ from test_class_login import AuthSystem
 import sys
 from test_class_actions import Actions
 from user_test import User
-global global_username
-global global_password
 global_username = ""
 global_password = ""
 
@@ -81,8 +79,8 @@ def login_action():
             cancel_button.pack(side=RIGHT, padx=5)
 
         def logout():
-            AuthSystem.logout(global_username)
-            global_username = ""
+            AuthSystem.logout(global_username) 
+            global_username= ""
             actions_window.destroy()
             root.deiconify()
         
@@ -234,6 +232,7 @@ def login_action():
             cancel_button.pack(side=RIGHT, padx=5)
 
         def logout():
+            messagebox.showinfo("Global Username: ", global_username)
             AuthSystem.logout(global_username)
             global_username = ""
             actions_window.destroy()
@@ -257,13 +256,10 @@ def login_action():
     password_entry.pack(pady=5)
 
     def submit_login():
-
-        
-
         username = username_entry.get()
         password = password_entry.get()
         global_username = username
-        messagebox.showinfo("Globalusername", f"Username: {global_username}")
+        messagebox.showinfo("Globalusername", f"Username: {username}")
         hash_password = User.hash_password(password)
         auth.login(username, hash_password)
         if auth.logged_in == False:
@@ -284,7 +280,7 @@ def login_action():
             else:
                 messagebox.showerror("No role given\n")
                 root.deiconify()
-                login_window.quit()
+                login_window.destroy()
             
     def cancel_login():
         login_window.destroy()
