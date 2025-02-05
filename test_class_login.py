@@ -30,6 +30,7 @@ class AuthSystem:
     def login(self, subject_id, password):
         self.data_base_log(subject_id, password)
         user= None
+        
         for i in self.users:
             if str(i[0] == str(subject_id)):
                 user= i
@@ -37,7 +38,8 @@ class AuthSystem:
         
         if user is None:
             print(f"\nUsername {subject_id} not found.")
-        elif User.hash_password(password) != user[3]:
+        elif password != user[3]:
+            print(User.hash_password(password))
             print("\nInvalid password.\n")
         else:
             with open('logged_in_users.txt', 'r') as file:
@@ -53,7 +55,7 @@ class AuthSystem:
                         file.write(f"{subject_id}\n")
                         print(f"\nLogin successful! Welcome, {subject_id}.")
                         self.logged_in = True
-                        user_role = self.users[2]
+                        user_role = user[2]
                         if user_role == 'Doctor':
                             print(f"You are {user_role} in this hospital")
                             print(f"Your department: \n")   #edit department later

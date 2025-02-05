@@ -5,6 +5,7 @@ import hashlib
 import Service_Database
 
 user_service= Service_Database.User_service()#creating an instance of the class Userservice
+auth_system = AuthSystem()#instance of the class AuthSystem
 
 class Actions:
     def admin_actions():
@@ -14,35 +15,66 @@ class Actions:
         print("1. View all users")
         print("2. Delete an account")
         print("3. View patient's information")
-        print("4. Change your password") 
-        print("5. Logout")
+        print("4. View doctor's information")
+        print("5. Change password")
+        print("6. Logout")
         
         choice = input("Choose an action: ")
         if choice == '1':
-            print(f"All Users: {Patient, Doctor}", ) # Show all users
-            print()
-            Actions.admin_actions() # Return to admin actions
+            user_service.view_all_users()
+            print("Press 'menu' to go back to the main menu or 'logout' to logout")
+            
+            answer = input()
+            if answer == 'menu':
+                Actions.admin_actions()
+            elif answer == 'logout':
+                auth_system.logout()
+                
+
+
+            
+            
+            
+            
+            #Actions.admin_actions()
+            
+            #print(f"All Users: {Patient, Doctor}", ) # Show all users
+            #print()
+            #Actions.admin_actions() # Return to admin actions
         
         elif choice == '2':
-          try:
-              user_to_be_deleted = int(input("Enter the subject_id of the user you want to delete: "))
-              user_service.delete_user(user_to_be_deleted)
-          except Exception as e:
-                print(f"An unexpected error occurred: {e}")
-                print("Do you want to try again? (yes/no)")
-                answer = input()
-                if answer == 'yes':
-                    user_to_be_deleted = input("Enter the subject_id of the user you want to delete: ")
-                    user_service.delete_user(user_to_be_deleted)
-                else:
+          user_to_be_deleted = int(input("Enter the subject_id of the user you want to delete: "))
+          answer= print("Are you sure you want to delete this user? (yes/no)")
+          if answer == 'yes':
+            user_service.delete_user(user_to_be_deleted)
+            print("User deleted successfully")
+            print("Press 'menu' to go back to the main menu or 'logout' to logout")
+            answer = input()
+            if answer == 'menu':
+                Actions.admin_actions()
+            elif answer == 'logout':
+                auth_system.logout()
+            else:
+                print("Invalid input")
+                Actions.admin_actions()
+          
+          else:
+                print("You changed your mind")
+                answer= print("Press 'menu' to go back to the main menu or 'logout' to logout")
+                if answer == 'menu':
                     Actions.admin_actions()
+                elif answer == 'logout':
+                    auth_system.logout()
+                else:
+                    print("Invalid input")
+                    Actions.admin_actions()
+
         elif choice == '3':
-            try:
-                patient = int(input("Enter the subject_id of the patient you want to view:  "))
-                patient_info= user_service.get_patient_information(patient)
-                print(patient_info)
-            except Exception as e:
-                print("Error: ", e) 
+            patient = int(input("Enter the subject_id of the patient you want to view:  "))
+            patient_info= user_service.get_patient_information(patient)
+            print(patient_info)
+            print("Press 'menu' to go back to the main menu or 'logout' to logout")
+
                 
 
           
@@ -84,7 +116,8 @@ class Actions:
         print("2. View your profile")
         print("3. Change your password")
         print("4. View patient's information")
-        print("5. Logout")
+        print("5. Add diagnosis")
+        print("6. Logout")
         print()
         
         choice = input("Choose an action: ")

@@ -202,7 +202,34 @@ class User_service:
         except Exception as e:
             print("Error fetching most recent BMI: ", e)
             return None
-        
+    def view_all_users(self):
+        connection= pyodbc.connect(connection_string)
+        cursor= connection.cursor()
+        cursor.execute("select subject_id, firstname, surname, role from New_login_data")
+        users= cursor.fetchall()
+        cursor.close()
+        connection.close()
+        return users
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     def login(self, subject_id, password):
         try:
             connection = pyodbc.connect(connection_string)
@@ -226,20 +253,20 @@ class User_service:
 
     #usage example
 
-if __name__ == "__main__":
-    user_service = User_service()
-    print("Welcome to the hospital database.")
-    print("Please choose an action:")
-    print()
-    print("\n"'1.Login ,2. View patient information, "\n",3. View most recent weight record,"\n"4.View most recent height record')
+# if __name__ == "__main__":
+#     user_service = User_service()
+#     print("Welcome to the hospital database.")
+#     print("Please choose an action:")
+#     print()
+#     print("\n"'1.Login ,2. View patient information, "\n",3. View most recent weight record,"\n"4.View most recent height record')
     
-    action = input("Choose an action: ")
-    if action == '1':
-        try:
-            subject_id= input("Subject ID: ")
-            password= input("Password: ")
-            login= user_service.login(subject_id, password)
-            if not login:
+#     action = input("Choose an action: ")
+#     if action == '1':
+#         try:
+#             subject_id= input("Subject ID: ")
+#             password= input("Password: ")
+#             login= user_service.login(subject_id, password)
+#             if not login:
 
             
 
@@ -248,28 +275,28 @@ if __name__ == "__main__":
     
     
     
-    elif action == '2':
-        subject_id = input("Enter subject ID: ")
-        patient_info = user_service.get_patient_information(subject_id)
-        if patient_info:
-            print("Patient information:", patient_info)
-        else:
-            print("No patient information found or an error occurred.")
-    elif action == '3':
-        subject_id = input("Enter subject ID: ")
-        weight_record = user_service.get_most_recent_weight(subject_id)
-        if weight_record:
-            print("Most recent weight record:", weight_record)
-        else:
-            print("No weight record found or an error occurred.")
+    # elif action == '2':
+    #     subject_id = input("Enter subject ID: ")
+    #     patient_info = user_service.get_patient_information(subject_id)
+    #     if patient_info:
+    #         print("Patient information:", patient_info)
+    #     else:
+    #         print("No patient information found or an error occurred.")
+    # elif action == '3':
+    #     subject_id = input("Enter subject ID: ")
+    #     weight_record = user_service.get_most_recent_weight(subject_id)
+    #     if weight_record:
+    #         print("Most recent weight record:", weight_record)
+    #     else:
+    #         print("No weight record found or an error occurred.")
     
-    elif action == '4':
-        subject_id= input("Enter subject Id: ")
-        heith_record= user_service.get_most_recent_height(subject_id)
-        if heith_record:
-            print("Most recent height record:", heith_record)
-        else:
-            print("No height record found or an error occurred.")
+    # elif action == '4':
+    #     subject_id= input("Enter subject Id: ")
+    #     heith_record= user_service.get_most_recent_height(subject_id)
+    #     if heith_record:
+    #         print("Most recent height record:", heith_record)
+    #     else:
+    #         print("No height record found or an error occurred.")
 
     
     
