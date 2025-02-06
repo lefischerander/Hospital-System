@@ -108,7 +108,11 @@ class User_service:
             result = cursor.fetchone()
             cursor.close()
             connection.close()
+<<<<<<< Updated upstream
+        
+=======
             print(f"All information about the patient {result[3]} {result[4]: }") 
+>>>>>>> Stashed changes
             return result 
         except Exception as e:
             print("Error fetching patient information: ", e)
@@ -202,7 +206,50 @@ class User_service:
         except Exception as e:
             print("Error fetching most recent BMI: ", e)
             return None
+<<<<<<< Updated upstream
+    def view_all_users(self):
+        connection= pyodbc.connect(connection_string)
+        cursor= connection.cursor()
+        cursor.execute("select subject_id, firstname, surname, role from New_login_data")
+        users= cursor.fetchall()
+        cursor.close()
+        connection.close()
+        return users
+    
+    def get_password(self, subject_id):
+        try:
+            connection = pyodbc.connect(connection_string)
+            cursor = connection.cursor()
+            cursor.execute("select password from New_login_data where subject_id = ?", subject_id)
+            password = cursor.fetchone()[0]
+            cursor.close()
+            connection.close()
+            return password
+        except Exception as e:
+            print("Error: ", e)
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+=======
         
+>>>>>>> Stashed changes
     def login(self, subject_id, password):
         try:
             connection = pyodbc.connect(connection_string)
@@ -220,6 +267,10 @@ class User_service:
            return f"Database error: {db_error}"
         except Exception as e:
            return f"An unexpected error occurred: {e}"
+<<<<<<< Updated upstream
+    
+=======
+>>>>>>> Stashed changes
         
     
 
@@ -231,6 +282,22 @@ if __name__ == "__main__":
     print("Welcome to the hospital database.")
     print("Please choose an action:")
     print()
+<<<<<<< Updated upstream
+    action= input("Press '1' to view all users in the hospital, Press '2' to view a patient's information " )
+    if action == '1':
+        user_service.view_all_users()
+        print("All users: ", user_service.view_all_users())
+   
+    elif action == '2':
+        subject_id = int(input("Enter subject ID: "))
+        patient_info = user_service.get_patient_information(subject_id)
+        if patient_info:
+            print("Patient information:", patient_info)
+        else:
+            print("No patient information found or an error occurred.")
+    
+   
+=======
     print("\n"'1.Login ,2. View patient information, "\n",3. View most recent weight record,"\n"4.View most recent height record')
     
     action = input("Choose an action: ")
@@ -241,6 +308,7 @@ if __name__ == "__main__":
             login= user_service.login(subject_id, password)
             if not login:
 
+>>>>>>> Stashed changes
             
 
         
@@ -248,6 +316,30 @@ if __name__ == "__main__":
     
     
     
+<<<<<<< Updated upstream
+    # elif action == '2':
+    #     subject_id = input("Enter subject ID: ")
+    #     patient_info = user_service.get_patient_information(subject_id)
+    #     if patient_info:
+    #         print("Patient information:", patient_info)
+    #     else:
+    #         print("No patient information found or an error occurred.")
+    # elif action == '3':
+    #     subject_id = input("Enter subject ID: ")
+    #     weight_record = user_service.get_most_recent_weight(subject_id)
+    #     if weight_record:
+    #         print("Most recent weight record:", weight_record)
+    #     else:
+    #         print("No weight record found or an error occurred.")
+    
+    # elif action == '4':
+    #     subject_id= input("Enter subject Id: ")
+    #     heith_record= user_service.get_most_recent_height(subject_id)
+    #     if heith_record:
+    #         print("Most recent height record:", heith_record)
+    #     else:
+    #         print("No height record found or an error occurred.")
+=======
     elif action == '2':
         subject_id = input("Enter subject ID: ")
         patient_info = user_service.get_patient_information(subject_id)
@@ -270,6 +362,7 @@ if __name__ == "__main__":
             print("Most recent height record:", heith_record)
         else:
             print("No height record found or an error occurred.")
+>>>>>>> Stashed changes
 
     
     

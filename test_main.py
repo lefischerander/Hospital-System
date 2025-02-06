@@ -21,12 +21,13 @@ def main():
                 main()
             while auth.logged_in == True:
                 user_role = auth.users[0][2]
+                subject_id = user
                 if user_role == 'Doctor':
                     Actions.doktor_actions()
                 elif user_role == 'Patient':
                     Actions.patient_actions()
                 elif user_role == 'admin': 
-                    Actions.admin_actions()
+                    Actions.admin_actions(subject_id)
                 else:
                     print("Error 404\n")
                     break         
