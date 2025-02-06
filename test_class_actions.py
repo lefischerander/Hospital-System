@@ -46,7 +46,7 @@ class Actions:
             #Actions.admin_actions() # Return to admin actions
         
         elif choice == '2':
-          user_to_be_deleted = int(input("Enter the subject_id of the user you want to delete: "))
+          user_to_be_deleted = int(int(input("Enter the subject_id of the user you want to delete: ")))
           answer= print("Are you sure you want to delete this user? (yes/no)")
           if answer == 'yes':
             user_service.delete_user(user_to_be_deleted)
@@ -71,8 +71,9 @@ class Actions:
 
 
         elif choice == '3':
-            patient = int(input("Enter the subject_id of the patient you want to view:  "))
-            patient_info= user_service.get_patient_information(patient)
+            patient = int(int(input("Enter the subject_id of the patient you want to view:  ")))
+            patient_info= patient_info= user_service.get_patient_information(patient)
+                print(patient_info)
             print(patient_info)
             answer= print("Press 'menu' to go back to the main menu")
             if answer== 'menu':

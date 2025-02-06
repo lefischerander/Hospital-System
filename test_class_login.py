@@ -1,4 +1,5 @@
 from user_test import User
+from user_test import User
 import getpass
 import sys
 import pyodbc
@@ -15,6 +16,7 @@ class AuthSystem:
     
     
     def data_base_log(self, subject_id, password):
+      try:
       try:
         connection = pyodbc.connect(connection_string)
         cursor = connection.cursor()
