@@ -16,7 +16,7 @@ class AuthSystem:
     
     
     def data_base_log(self, subject_id, password):
-      try:
+      
       try:
         connection = pyodbc.connect(connection_string)
         cursor = connection.cursor()

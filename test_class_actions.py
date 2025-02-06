@@ -73,8 +73,8 @@ class Actions:
         elif choice == '3':
             patient = int(int(input("Enter the subject_id of the patient you want to view:  ")))
             patient_info= patient_info= user_service.get_patient_information(patient)
-                print(patient_info)
             print(patient_info)
+            
             answer= print("Press 'menu' to go back to the main menu")
             if answer== 'menu':
                 Actions.admin_actions()
