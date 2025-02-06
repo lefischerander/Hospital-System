@@ -210,6 +210,18 @@ class User_service:
         cursor.close()
         connection.close()
         return users
+    
+    def get_password(self, subject_id):
+        try:
+            connection = pyodbc.connect(connection_string)
+            cursor = connection.cursor()
+            cursor.execute("select password from New_login_data where subject_id = ?", subject_id)
+            password = cursor.fetchone()[0]
+            cursor.close()
+            connection.close()
+            return password
+        except Exception as e:
+            print("Error: ", e)
 
     
     
@@ -247,6 +259,7 @@ class User_service:
            return f"Database error: {db_error}"
         except Exception as e:
            return f"An unexpected error occurred: {e}"
+    
         
     
 

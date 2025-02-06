@@ -3,6 +3,7 @@ import getpass
 import sys
 import pyodbc
 
+
 connection_string = 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES'
 
 class AuthSystem:
@@ -46,14 +47,14 @@ class AuthSystem:
                 line = file.readline()
                 while line:
                     if subject_id == line.strip():
-                        print(f"\nUser {subject_id} already logged in.\n")
+                        print(f"\nUser {user[0]} {user[1]} (role: {user[2]}  already logged in.\n")
                         break
                     else:
                         line = file.readline()
                 if not line:    
                     with open('logged_in_users.txt', 'a') as file:
-                        file.write(f"{subject_id}\n")
-                        print(f"\nLogin successful! Welcome, {subject_id}.")
+                        file.write(f"{user[0]} {user[1]} \n")
+                        print(f"\nLogin successful! Welcome, {user[0]} {user[1]}.")
                         self.logged_in = True
                         user_role = user[2]
                         if user_role == 'Doctor':

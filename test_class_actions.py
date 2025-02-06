@@ -18,17 +18,19 @@ class Actions:
         print("4. View doctor's information")
         print("5. Change password")
         print("6. Logout")
-        print(subject_id)
+        
         
         choice = input("Choose an action: ")
         if choice == '1':
             user_service.view_all_users()
-            print("Press 'menu' to go back to the main menu or 'logout' to logout")
-            answer = input()
+            print('All users: ', user_service.view_all_users())
+            answer= print("Press 'menu' to go back to the main menu: ")
             if answer == 'menu':
-                Actions.admin_actions()
-            elif answer == 'logout':
-                auth_system.logout(subject_id)
+                Actions.admin_actions(subject_id)
+            else:
+                print("Invalid input")
+                Actions.admin_actions(subject_id)
+
                 
 
 
@@ -48,23 +50,20 @@ class Actions:
           if answer == 'yes':
             user_service.delete_user(user_to_be_deleted)
             print("User deleted successfully")
-            print("Press 'menu' to go back to the main menu or 'logout' to logout")
-            answer = input()
-            if answer == 'menu':
+            subaction= print("Press 'menu' to go back to the main menu")
+            if subaction == 'menu':
                 Actions.admin_actions()
-            elif answer == 'logout':
-                auth_system.logout()
             else:
                 print("Invalid input")
                 Actions.admin_actions()
+           
           
           else:
                 print("You changed your mind")
-                answer= print("Press 'menu' to go back to the main menu or 'logout' to logout")
-                if answer == 'menu':
+                answer= print("Press 'menu' to go back to the main menu")
+                if subaction == 'menu':
                     Actions.admin_actions()
-                elif answer == 'logout':
-                    auth_system.logout()
+               
                 else:
                     print("Invalid input")
                     Actions.admin_actions()
@@ -73,12 +72,26 @@ class Actions:
             patient = int(input("Enter the subject_id of the patient you want to view:  "))
             patient_info= user_service.get_patient_information(patient)
             print(patient_info)
-            print("Press 'menu' to go back to the main menu or 'logout' to logout")
+            answer= print("Press 'menu' to go back to the main menu")
+            if answer== 'menu':
+                Actions.admin_actions()
+        
         elif choice == '4':
             doctor= int(input("Enter the subject_id of the doctor you want to view"))
             doctor_info= user_service.get_doctor_by_name(doctor)
             print(doctor_info)
             print("Press 'menu' to go back to the main menu or 'logout' to logout")
+        
+        #elif choice == '5':
+            #old_password = input("Enter your old password: ")
+            #if 
+        
+        
+        
+        
+        
+        
+        
         
         elif choice == '6':
             auth_system.logout(subject_id)
