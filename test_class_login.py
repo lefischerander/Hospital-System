@@ -90,7 +90,7 @@ class AuthSystem:
         #                 print("Logout Error")
         #                 break
 
-    def reset_password(self, subject_id, password):
+    def reset_password(self, subject_id, password, new_password, confirm_new_password):
         try:            
             if subject_id not in self.users:
                 raise ValueError("Invalid username.\n")
@@ -100,7 +100,6 @@ class AuthSystem:
             
             while True:
                 try:
-                    new_password = getpass.getpass("Enter new password: ")
                     if len(new_password) < 8:
                         raise ValueError("\nPassword must be at least 8 characters long.\n")
                     if new_password.islower():
@@ -114,8 +113,7 @@ class AuthSystem:
                     if new_password.isalnum():
                         raise ValueError("\nPassword must contain at least one special character.\n")
                     
-                    con_new_password = getpass.getpass("\nConfirm your new password: ")
-                    if new_password != con_new_password:
+                    if new_password != confirm_new_password:
                         raise ValueError("\nPasswords do not match!\n")
                     
                     h_new_password = User.hash_password(new_password)
