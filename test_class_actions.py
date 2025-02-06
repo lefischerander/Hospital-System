@@ -1,8 +1,8 @@
 from test_class_login import AuthSystem
 import getpass
-from user_test import User, Admin, Patient, Doctor
 import hashlib
 import Service_Database
+from user_test import User
 
 user_service= Service_Database.User_service()#creating an instance of the class Userservice
 auth_system = AuthSystem()#instance of the class AuthSystem
@@ -10,17 +10,18 @@ auth_system = AuthSystem()#instance of the class AuthSystem
 class Actions:
     def admin_actions(subject_id):
         # Actions for the admin
-        print("Your possible actions: ")
-        print()
+        print("Your possible actions: \n")
         print("1. View all users")
         print("2. Delete an account")
         print("3. View patient's information")
         print("4. View doctor's information")
         print("5. Change password")
-        print("6. Logout")
+        print("6. Logout\n")
         
         
-        choice = input("Choose an action: ")
+        choice = input("Choose an action: \n")
+        auth = AuthSystem()
+
         if choice == '1':
             user_service.view_all_users()
             print('All users: ', user_service.view_all_users())
@@ -68,6 +69,7 @@ class Actions:
                     print("Invalid input")
                     Actions.admin_actions()
 
+
         elif choice == '3':
             patient = int(input("Enter the subject_id of the patient you want to view:  "))
             patient_info= user_service.get_patient_information(patient)
@@ -100,16 +102,9 @@ class Actions:
         
 
 
-                
+            Actions.admin_actions() # Return to admin actions
+        
 
-          
-
-
-            
-            
-            
-            
-            
             # username = input("Username: ")
             # user = AuthSystem.self.users[username]  # pick specific user
             # kill_acc = input(f"Are you sure you want to delete {username}? \n1. YES 2. NO \n") # asking befor detliting
@@ -120,8 +115,21 @@ class Actions:
             #     print(f"The {username} will be not deleted")
             # print()
             # Actions.admin_actions() # Return to admin actions
-       
+
+            
+        elif choice == '4': 
+            user = input("Username: ").strip()
+            pw = getpass.getpass("Your currend Password: ")
+            pw = User.hash_password(pw)
+            auth.reset_password(user, pw)
+            Actions.admin_actions() # Return to admin actions
         
+        elif choice == '5':
+            #subject_id = input("Enter your username: ")
+            auth = AuthSystem()
+            id = input("Enter your username: ").strip()
+            auth.logout(id)    # Logout
+
     def doktor_actions():
     # Actions for the doctor
         print("Your possible actions: ")
@@ -132,6 +140,8 @@ class Actions:
         print("5. Add diagnosis")
         print("6. Logout")
         print()
+
+        auth = AuthSystem()
         
         choice = input("Choose an action: ")
         if choice == '1':
@@ -176,9 +186,12 @@ class Actions:
             else:
                 print("Invalid username or password!")  # Output if login data is incorrect
                 username
+        
         elif choice == '3':
-            print("Platzhalter Zeile: 79")
-            print()
+            user = input("Username: ").strip()
+            pw = getpass.getpass("Your currend Password: ")
+            pw = User.hash_password(pw)
+            auth.reset_password(user, pw)
             Actions.doktor_actions() # Return to admin actions
         
         elif choice=='4':
@@ -187,15 +200,8 @@ class Actions:
                 user_service.get_patient_information(patient)
             except Exception as e:
                 print("Error: ", e)
-
-        
-        
-        
-        
-        
         elif choice == '5':
             AuthSystem.logout()    # Logout
-
 
     def patient_actions():
         # Actions for the patient
@@ -205,6 +211,8 @@ class Actions:
         print("3. Change password")
         print("4. Logout") 
         print()
+
+        auth = AuthSystem()
         
         choice = input("Choose an action: ")
         if choice == '1':
@@ -216,9 +224,12 @@ class Actions:
             print()
             Actions.patient_actions()
         elif choice == '3':
-            print("Platzhalter Zeile: 120")
-            print()
+            user = input("Username: ").strip()
+            pw = getpass.getpass("Your currend Password: ")
+            pw = User.hash_password(pw)
+            auth.reset_password(user, pw)
             Actions.patient_actions()
+
         elif choice == '4':
             AuthSystem.logout()    # Logout
 
