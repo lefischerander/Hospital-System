@@ -8,7 +8,7 @@ user_service= Service_Database.User_service()#creating an instance of the class 
 auth_system = AuthSystem()#instance of the class AuthSystem
 
 class Actions:
-    def admin_actions(self):
+    def admin_actions():
         # Actions for the admin
         print("Your possible actions: \n")
         print("1. View all users")
@@ -116,7 +116,7 @@ class Actions:
            # id = input("Enter your username: ").strip()
             #auth.logout(id)    # Logout
 
-    def doktor_actions(self):
+    def doktor_actions():
     # Actions for the doctor
         print("Your possible actions: ")
         print("1. View patient's profile")
@@ -246,7 +246,7 @@ class Actions:
         elif choice == '5':
             AuthSystem.logout()    # Logout
 
-    def patient_actions(self):
+    def patient_actions():
         # Actions for the patient
         print("Your possible actions: ")
         print("1. View your medical procedures") 
