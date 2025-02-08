@@ -18,7 +18,6 @@ class Actions:
         print("5. Change password")
         print("6. Logout\n")
         
-        
         choice = input("Choose an action: \n")
         auth = AuthSystem()
 
@@ -26,20 +25,7 @@ class Actions:
             user_service.view_all_users()
             print('All users: ', user_service.view_all_users())
             Actions.admin_actions()
-
-                
-
-
-            
-            
-            
-            
-            #Actions.admin_actions()
-            
-            #print(f"All Users: {Patient, Doctor}", ) # Show all users
-            #print()
-            #Actions.admin_actions() # Return to admin actions
-        
+           
         elif choice == '2':
           user_to_be_deleted = int(int(input("Enter the subject_id of the user you want to delete: ")))
           answer= print("Are you sure you want to delete this user? (yes/no)")
@@ -52,8 +38,7 @@ class Actions:
             else:
                 print("Invalid input")
                 Actions.admin_actions()
-           
-          
+                     
           else:
                 print("You changed your mind")
                 answer= print("Press 'menu' to go back to the main menu")
@@ -64,9 +49,8 @@ class Actions:
                     print("Invalid input")
                     Actions.admin_actions()
 
-
         elif choice == '3':
-            patient = int(input("Enter the subject_id of the patient you want to view:  "))
+            patient = int(input("Enter the subject_id of the patient you want to view:  \n"))
             patient_info= patient_info= user_service.get_patient_profile(patient)
             print(patient_info)
             
@@ -80,41 +64,17 @@ class Actions:
             print(doctor_info)
             print("Press 'menu' to go back to the main menu or 'logout' to logout")
         
-        #elif choice == '5':
-            #old_password = input("Enter your old password: ")
-            #if 
-        
-        
+        elif choice == '5':
+            user = input("Enter your Subject_id: ").strip()
+            pw = getpass.getpass("Your currend Password: ")
+            pw = User.hash_password(pw)
+            auth.reset_password(user, pw)
+            Actions.admin_actions() # Return to admin actions
         
         elif choice == '6':
             auth_system.logout()
             Actions.admin_actions() # Return to admin actions
-        
-
-            # username = input("Username: ")
-            # user = AuthSystem.self.users[username]  # pick specific user
-            # kill_acc = input(f"Are you sure you want to delete {username}? \n1. YES 2. NO \n") # asking befor detliting
-            # if kill_acc == '1':
-            #     print("Platzhalter Zeile: 26")
-            #     print(f"{username} is now deleted")
-            # elif kill_acc == '2':
-            #     print(f"The {username} will be not deleted")
-            # print()
-            # Actions.admin_actions() # Return to admin actions
-
             
-        # elif choice == '4': 
-        #     user = input("Username: ").strip()
-        #     pw = getpass.getpass("Your currend Password: ")
-        #     pw = User.hash_password(pw)
-        #     auth.reset_password(user, pw)
-        #     Actions.admin_actions() # Return to admin actions
-        
-        #elif choice == '5':
-            #subject_id = input("Enter your username: ")
-            #auth = AuthSystem()
-           # id = input("Enter your username: ").strip()
-            #auth.logout(id)    # Logout
 
     def doktor_actions():
     # Actions for the doctor
@@ -128,8 +88,8 @@ class Actions:
         print()
 
         auth = AuthSystem()
-        
         choice = input("Choose an action: ")
+
         if choice == '1':
             patient = int(input("Enter the subject_id of the patient you want to view:  "))
             patient_profile= user_service.get_patient_profile(patient)
@@ -153,10 +113,7 @@ class Actions:
             else:
                 print("Invalid input")
                 Actions.doktor_actions()
-
-        
-        
-        
+            
         elif choice == '3':
             patient_diagnosis = int(input(" Enter the subject_id of the patient you want to add a diagnosis to: "))
             icd_c = input("Enter the diagnosis' ICD-Code: ")
@@ -177,74 +134,17 @@ class Actions:
             procedures= user_service.get_procedures_by_subject_id(patient_procedures)
             print(procedures)
             print("Press 'menu' to go back to the main menu")
+        
+        elif choice=='5':
+            user = input("Enter your Subject_id: ").strip()
+            pw = getpass.getpass("Your currend Password: ")
+            pw = User.hash_password(pw)
+            auth.reset_password(user, pw)
+            Actions.admin_actions() # Return to admin actions
 
-
-        
-        
-        
-        
-        
-        
-        
-        
-        # if choice == '1':
-        #     username = input("Patient: ")
-        #     patient = AuthSystem.self.users[username]   # Show patient data
-        #     if patient:
-        #         if patient['role'] == 'patient':
-        #             print("Platzhalter Zeile: 58")
-        #             print()
-        #             b = input("Work on patient record -> 1. \nback to actions -> 2.\n")
-        #             if b == '1':
-        #                 print("Platzhalter Zeile: 61")
-        #                 Actions.doktor_actions()
-        # elif choice == '2':
-        #                 print()
-        #                 Actions.doktor_actions()
-        #         else:
-        #             print("User is not a patient!") # Check if user is a patient
-        #             print()
-        #             Actions.doktor_actions()    # Return to doctor actions
-        #     else:
-        #         print("Such patient doesn't exist!")    # Check if patient exists
-        #         print()
-        #         Actions.doktor_actions()    # Return to doctor actions
-
-        # elif choice == '2':
-        #     username = input("Username: ")
-        #     password = getpass.getpass("Password: ")
-        #     pw = hashlib.sha256(password.encode()).hexdigest()  #hashing the password
-        #     user = AuthSystem.self.users[username]
-        #     if user and user['password'] == pw:
-        #         print()
-        #         print(user)
-        #         print()
-        #         b = input("Work on your profile -> 1. \nback to actions -> 2.\n")
-        #         if b == '1':
-        #             print("Platzhalter Zeile: 87")
-        #             return b
-        #         elif b == '2':
-        #             print()
-        #             Actions.doktor_actions()
-        #     else:
-        #         print("Invalid username or password!")  # Output if login data is incorrect
-        #         username
-        
-        # elif choice == '3':
-        #     user = input("Username: ").strip()
-        #     pw = getpass.getpass("Your currend Password: ")
-        #     pw = User.hash_password(pw)
-        #     auth.reset_password(user, pw)
-        #     Actions.doktor_actions() # Return to admin actions
-        
-        # elif choice=='4':
-        #     try:
-        #         patient= input("Enter the subject_id of the patient you want to view:  ")
-        #         user_service.get_patient_information(patient)
-        #     except Exception as e:
-        #         print("Error: ", e)
-        elif choice == '5':
+        elif choice == '6':
             AuthSystem.logout()    # Logout
+
 
     def patient_actions():
         # Actions for the patient
@@ -255,9 +155,9 @@ class Actions:
         print("4. Logout") 
         print()
 
-        auth = AuthSystem()
-        
+        auth = AuthSystem()        
         choice = input("Choose an action: ")
+
         if choice == '1':
             patient_procedures = int(input("Enter your subject_id before to view your medical procedures: "))
             user_service.get_procedures_by_subject_id(patient_procedures)
@@ -269,9 +169,7 @@ class Actions:
             else:
                 print("Invalid input")
                 Actions.patient_actions()
-
-            
-           
+   
         elif choice == '2':
             patient = int(input("Before you can view your profile, you need to input your subject_id first"))
             patient_profile= user_service.get_your_profile(patient) 

@@ -35,3 +35,6 @@ def analyse_main():
         print(f"Parse error: {test}")
     except Exception as e:
         print(f"An error occurred: {e}")
+
+if __name__ == "__main__":
+    analyse_main()

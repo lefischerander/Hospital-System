@@ -78,18 +78,7 @@ class AuthSystem:
                     print(f"\nUser {subject_id} logged out successfully. Thank you for using our services.\n")
                     self.logged_in = False
             sys.exit()
-        # with open('logged_in_users.txt', 'r') as file:
-        #     lines = file.readline()
-        #     for line in lines:
-        #         with open('logged_in_users.txt', 'w+') as file:
-        #             if subject_id == line.strip():
-        #                 file.write(f"{0}\n")
-        #                 print(f"\nUser {subject_id} logged out successfully. Thank you for using our services.\n")
-        #                 sys.exit()
-        #             else:
-        #                 print("Logout Error")
-        #                 break
-
+      
     def reset_password(self, subject_id, password, new_password, confirm_new_password):
         try:            
             if subject_id not in self.users:

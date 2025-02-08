@@ -1,5 +1,7 @@
 import pandas as pd
 import os
+import matplotlib.pyplot as plt
+import numpy as np
 #import pyodbc
 #from warnings import filterwarnings
 
@@ -22,6 +24,7 @@ class Analyse:
         print(df.head())
         id = input("Enter subject_id: ")
         patient = df[df['subject_id'].astype(str) == id]
+
         return patient
     
     def read_admissions(self):
@@ -55,8 +58,18 @@ class Analyse:
     def read_patients(self):
         df = pd.read_csv(self.patients_csv_path)
         print(df.head())
-        id = input("Enter subject_id: ")
-        patient = df[df['subject_id'].astype(str) == id]
+        print(df.shape)
+        b_width = 5 # set the width of bin
+        df["anchor_age"].plot(kind="hist", bins=np.arange(min(df["anchor_age"])-1, max(df["anchor_age"]) + b_width, b_width))  # we are setting the bins values in a list by incrementing them with bin width = 5
+        plt.xlabel("Age")   # Label of x-axis
+        plt.ylabel("Patients")  # Label of y-axis
+        plt.title("Age distribution of patients")   # Title of the plot
+        plt.xticks(np.arange(min(df["anchor_age"]),max(df["anchor_age"])+10 ,5))    # We set the values in the x-axis
+        plt.yticks(np.arange(0,25,2))                # Setting the values in y-axis
+        df.plot(kind="scatter", x="anchor_age", y="gender")  # Scatter plot
+        plt.show()  # Display the plot
+        id = input("Enter subject_id: ")  # Ask the user to enter the subject_id  
+        patient = df[df['subject_id'].astype(str) == id]  # Get the patient with the entered subject_id
         return patient
     
     def read_pharmacy(self):
