@@ -17,7 +17,7 @@ class MainUI:
         auth = AuthSystem()
         auth.logout(global_username)
         global_username = None
-        MainUI.home_action()
+        root.deiconify()
 
     def login_action():
         global global_username, global_password
@@ -106,7 +106,7 @@ class MainUI:
             new_password = new_password_entry.get()
             confirm_new_password = confirm_new_password_entry.get()
             hash_password = User.hash_password(old_password)
-            auth.reset_password(username, hash_password)
+            auth.reset_password(username, hash_password, new_password, confirm_new_password)
             messagebox.showinfo("Reset Password Info", f"Username: {username}\nPassword: {old_password}")
             reset_password_window.destroy()
             root.deiconify()
