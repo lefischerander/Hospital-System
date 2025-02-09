@@ -1,52 +1,57 @@
 import pyodbc
 
 
-connection_string = 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES'
+connection_string = "DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES"
 
-#Metadata for database tables
+# Metadata for database tables
 LOGIN_DATA = "New_login_data"
 DOCTORS = "doctors"
 
-class User_service:
-    def __init__(self, surname = None):
-        self.connection_string = connection_string
-        self.surname= surname
 
-    
-    def delete_user(self, user): ##low priority
-        
+class User_service:
+    def __init__(self, surname=None):
+        self.connection_string = connection_string
+        self.surname = surname
+
+    def delete_user(self, user):  ##low priority
         try:
-            if self.get_role_by_id(self.get_id()) != 'admin':
+            if self.get_role_by_id(self.get_id()) != "admin":
                 raise Exception("Only admins can delete users")
-            
-            connection= pyodbc.connect(self.connection_string)
+
+            connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            cursor.execute("delete from ? where New_login_data.subject_id = ?", LOGIN_DATA, user.get_id())
-            
+            cursor.execute(
+                "delete from ? where New_login_data.subject_id = ?",
+                LOGIN_DATA,
+                user.get_id(),
+            )
+
             connection.commit()
-            
+
             cursor.close()
             connection.close()
         except Exception as e:
-            print("Error:" , e)
-    
+            print("Error:", e)
+
     def get_role_by_id(self, id):
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            cursor.execute("select role from ? where subject_id = ?",LOGIN_DATA, id)
+            cursor.execute("select role from ? where subject_id = ?", LOGIN_DATA, id)
             role = cursor.fetchone()[0]
             cursor.close()
             connection.close()
             return role
         except Exception as e:
             print("Error: user not found", e)
-    
+
     def get_id(self):
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            cursor.execute("select subject_id from ? where surname = ?", LOGIN_DATA, self.surname)
+            cursor.execute(
+                "select subject_id from ? where surname = ?", LOGIN_DATA, self.surname
+            )
             id = cursor.fetchone()[0]
             cursor.close()
             connection.close()
@@ -54,22 +59,25 @@ class User_service:
         except Exception as e:
             print("Error: user not found ", e)
 
-    def get_doctor_by_name(self, surname ):
+    def get_doctor_by_name(self, surname):
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            cursor.execute("select firstname, surname, department_name, age from ? where surname = ?", DOCTORS, surname)
+            cursor.execute(
+                "select firstname, surname, department_name, age from ? where surname = ?",
+                DOCTORS,
+                surname,
+            )
             doctor = cursor.fetchone()
             cursor.close()
             connection.close()
             return doctor
         except Exception as e:
             print("Error: user not found ", e)
-    
-    def get_your_profile(self,subject_id):
+
+    def get_your_profile(self, subject_id):
         try:
-            if self.get_role_by_id(self.get_id())== 'patient':
-                
+            if self.get_role_by_id(self.get_id()) == "patient":
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
                 query = """
@@ -82,8 +90,7 @@ class User_service:
                 cursor.close()
                 connection.close()
                 return f"Your profile: {result}"
-            elif self.get_role_by_id(self.get_id())== 'doctor':
-                
+            elif self.get_role_by_id(self.get_id()) == "doctor":
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
                 query = """
@@ -95,30 +102,39 @@ class User_service:
                 cursor.close()
                 connection.close()
                 return f"Your profile: {result}"
-            
+
             else:
                 return "Error fetching profile ,please retry"
         except Exception as e:
             print("Error fetching profile: ", e)
             return None
 
-
-    def create_user(self, username, password, role): ##low priority
+    def create_user(self, username, password, role):  ##low priority
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            cursor.execute("insert into ? (username, password, role) values (?, ?, ?)", LOGIN_DATA, username, password, role)
+            cursor.execute(
+                "insert into ? (username, password, role) values (?, ?, ?)",
+                LOGIN_DATA,
+                username,
+                password,
+                role,
+            )
             connection.commit()
             cursor.close()
             connection.close()
         except Exception as e:
             print("Error creating user: ", e)
 
-    def change_password(self, username, password):   ##low priority
+    def change_password(self, username, password):  ##low priority
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            cursor.execute("update New_login_data set password = ? where username = ?", password, username)
+            cursor.execute(
+                "update New_login_data set password = ? where username = ?",
+                password,
+                username,
+            )
             connection.commit()
             cursor.close()
             connection.close()
@@ -127,31 +143,51 @@ class User_service:
 
     def create_diagnosis(self, patient_id, icd_code, icd_version):
         try:
-            if self.get_role_by_id(self.get_id()) != 'doctor':
+            if self.get_role_by_id(self.get_id()) != "doctor":
                 raise Exception("Only doctors can add diagnoses")
-            
-            connection= pyodbc.connect(self.connection_string)
+
+            connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            
-            cursor.execute("select count(*) from patients where subject_id= ? order by hadm_id desc", patient_id)
+
+            cursor.execute(
+                "select count(*) from patients where subject_id= ? order by hadm_id desc",
+                patient_id,
+            )
             if cursor.fetchone()[0] == 0:
                 raise Exception(f"Patient with subject ID {patient_id} not found")
-            
-            hadm_id = cursor.execute("select subject_id, hadm_id from admissions where subject_id = ? order by hadm_id desc", patient_id).fetchone()[0]
+
+            hadm_id = cursor.execute(
+                "select subject_id, hadm_id from admissions where subject_id = ? order by hadm_id desc",
+                patient_id,
+            ).fetchone()[0]
             try:
-                seq_num = cursor.execute("select max(seq_num) from diagnoses_icd where subject_id = ? and hadm_id = ?", patient_id, hadm_id).fetchone()[0] + 1
-            except pyodbc.Error as e:
-                seq_num = 1           
-            
-            cursor.execute("insert into diagnoses_icd (subject_id, hadm_id, seq_num, icd_code, icd_version) values (?, ?, ?, ?, ?)", patient_id, hadm_id, seq_num, icd_code, icd_version)
+                seq_num = (
+                    cursor.execute(
+                        "select max(seq_num) from diagnoses_icd where subject_id = ? and hadm_id = ?",
+                        patient_id,
+                        hadm_id,
+                    ).fetchone()[0]
+                    + 1
+                )
+            except pyodbc.Error:
+                seq_num = 1
+
+            cursor.execute(
+                "insert into diagnoses_icd (subject_id, hadm_id, seq_num, icd_code, icd_version) values (?, ?, ?, ?, ?)",
+                patient_id,
+                hadm_id,
+                seq_num,
+                icd_code,
+                icd_version,
+            )
             connection.commit()
             cursor.close()
             connection.close()
             print(f" Diagnosis added for patients with subject ID: {patient_id}")
         except Exception as e:
             print("Error:  ", e)
-    
-    def get_patient_profile(self, subject_id): #dod time must be string
+
+    def get_patient_profile(self, subject_id):  # dod time must be string
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
@@ -164,28 +200,33 @@ class User_service:
             result = cursor.fetchone()
             cursor.close()
             connection.close()
-        
-            return result 
+
+            return result
         except Exception as e:
             print("Error fetching patient profile: ", e)
             return None
-    
+
     def get_diagnosis(self, patient_id):
         try:
-            connection= pyodbc.connect(self.connection_string)
-            cursor= connection.cursor()
-            cursor.execute("select d.subject_id, d.hadm_id, d.d_icd_diagnosis from diagnosis AS d where d.subject_id = ?", patient_id)
+            connection = pyodbc.connect(self.connection_string)
+            cursor = connection.cursor()
+            cursor.execute(
+                "select d.subject_id, d.hadm_id, d.d_icd_diagnosis from diagnosis AS d where d.subject_id = ?",
+                patient_id,
+            )
             diagnosis = cursor.fetchone()
             cursor.close()
             connection.close()
             return diagnosis
         except Exception as e:
             print("Error: user not found ", e)
-    
+
     def get_procedures_by_subject_id(self, subject_id):
         try:
-            user_role= self.get_role_by_id(self.get_id())
-            if user_role == 'doctor' or (user_role == 'patient' and self.get_id() == subject_id):
+            user_role = self.get_role_by_id(self.get_id())
+            if user_role == "doctor" or (
+                user_role == "patient" and self.get_id() == subject_id
+            ):
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
                 query = """
@@ -205,9 +246,7 @@ class User_service:
         except Exception as e:
             print("Error fetching procedures: ", e)
             return None
-                
-           
-    
+
     def get_most_recent_weight(self, subject_id):
         try:
             connection = pyodbc.connect(self.connection_string)
@@ -226,7 +265,7 @@ class User_service:
         except Exception as e:
             print("Error fetching most recent weight: ", e)
             return None
-        
+
     def get_most_recent_height(self, subject_id):
         try:
             connection = pyodbc.connect(self.connection_string)
@@ -245,7 +284,7 @@ class User_service:
         except Exception as e:
             print("Error fetching most recent height: ", e)
             return None
-    
+
     def get_most_recent_bmi(self, subject_id):
         try:
             connection = pyodbc.connect(self.connection_string)
@@ -264,58 +303,45 @@ class User_service:
         except Exception as e:
             print("Error fetching most recent BMI: ", e)
             return None
+
     def view_all_users(self):
-        try:
-            connection= pyodbc.connect(self.connection_string)
-            cursor= connection.cursor()
-            cursor.execute(f"select subject_id, firstname, surname, role from {LOGIN_DATA}")
-            users= cursor.fetchall()
-            cursor.close()
-            connection.close()
-            return users
-        except  pyodbc as database_error:
-            print("Error fetching all users: ", database_error)
-            return None
-    
-    def get_password(self, subject_id):# low priority
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            cursor.execute("select password from New_login_data where subject_id = ?", subject_id)
+            cursor.execute(
+                f"select subject_id, firstname, surname, role from {LOGIN_DATA}"
+            )
+            users = cursor.fetchall()
+            cursor.close()
+            connection.close()
+            return users
+        except pyodbc as database_error:
+            print("Error fetching all users: ", database_error)
+            return None
+
+    def get_password(self, subject_id):  # low priority
+        try:
+            connection = pyodbc.connect(self.connection_string)
+            cursor = connection.cursor()
+            cursor.execute(
+                "select password from New_login_data where subject_id = ?", subject_id
+            )
             password = cursor.fetchone()[0]
             cursor.close()
             connection.close()
             return password
         except Exception as e:
             print("Error: ", e)
-    
-    
 
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     def login(self, subject_id, password):
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            cursor.execute("select firstname, surname from  New_login_data where subject_id = ? and password = ?", subject_id, password)
+            cursor.execute(
+                "select firstname, surname from  New_login_data where subject_id = ? and password = ?",
+                subject_id,
+                password,
+            )
             result = cursor.fetchone()
             cursor.close()
             connection.close()
@@ -323,19 +349,14 @@ class User_service:
                 print(f"Welcome {result[0]} {result[1]}")
             else:
                 return "Invalid subject_id or password"
-        
+
         except Exception as db_error:
-           return f"Database error: {db_error}"
+            return f"Database error: {db_error}"
         except Exception as e:
-           return f"An unexpected error occurred: {e}"
+            return f"An unexpected error occurred: {e}"
 
+    # usage example
 
-    
-        
-    
-
-
-    #usage example
 
 if __name__ == "__main__":
     user_service = User_service()
@@ -343,55 +364,41 @@ if __name__ == "__main__":
     print("Please choose an action:")
     print()
 
-    action= input("Press '1' to view all users in the hospital, Press '2' to view a patient's profile, Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient " )
+    action = input(
+        "Press '1' to view all users in the hospital, Press '2' to view a patient's profile, Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
+    )
     print("Okay you chose: ", action)
-    if action == '1':
+    if action == "1":
         user_service.view_all_users()
         print("All users: ", user_service.view_all_users())
-   
-    elif action == '2':
+
+    elif action == "2":
         subject_id = int(input("Enter subject ID: "))
         patient_info = user_service.get_patient_profile(subject_id)
         if patient_info:
             print("Patient's profile:", patient_info)
         else:
             print("No patient information found or an error occurred.")
-    elif action == '3':
-        subject_id= int(input ("Enter subject ID: "))
+    elif action == "3":
+        subject_id = int(input("Enter subject ID: "))
         icd_code = input("Enter ICD code: ")
         icd_version = input("Enter ICD version: ")
         user_service.create_diagnosis(subject_id, icd_code, icd_version)
-        
-        sub_action= input("Do you want to view the diagnosis? (yes/no): ")
-        if sub_action == 'yes':
+
+        sub_action = input("Do you want to view the diagnosis? (yes/no): ")
+        if sub_action == "yes":
             diagnosis = user_service.get_diagnosis(subject_id)
             print("Diagnosis:", diagnosis)
         else:
             print("Okay")
-    
-    elif action == '4':
+
+    elif action == "4":
         subject_id = int(input("Enter subject ID: "))
         procedures = user_service.get_procedures_by_subject_id(subject_id)
         if procedures:
             print(f"Procedures record of patient {subject_id} :", procedures)
         else:
             print("No procedures found or an error occurred.")
-
-    
-   
-    
-    
-   
-
-        
-    
-    
-    
-    
-    
-    
-    
-    
 
     # elif action == '2':
     #     subject_id = input("Enter subject ID: ")
@@ -407,7 +414,7 @@ if __name__ == "__main__":
     #         print("Most recent weight record:", weight_record)
     #     else:
     #         print("No weight record found or an error occurred.")
-    
+
     # elif action == '4':
     #     subject_id= input("Enter subject Id: ")
     #     heith_record= user_service.get_most_recent_height(subject_id)
@@ -416,17 +423,7 @@ if __name__ == "__main__":
     #     else:
     #         print("No height record found or an error occurred.")
 
-    
-    
-    
-    
     ##def get_user_by_id(self, id):
-        #try:
-            #if self.get_role_by_id(self.get_id() != 'admin') or self.get_role_by_id(self.get_id() != 'doctor'):
-                #raise Exception("Only admins and doctors can view  patient data")
-            
-        
-            
-            
-
-    
+    # try:
+    # if self.get_role_by_id(self.get_id() != 'admin') or self.get_role_by_id(self.get_id() != 'doctor'):
+    # raise Exception("Only admins and doctors can view  patient data")
