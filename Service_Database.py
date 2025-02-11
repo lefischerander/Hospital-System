@@ -3,9 +3,18 @@ import pyodbc
 
 connection_string = "DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES"
 
-# Metadata for database tables
+# database tables
 LOGIN_DATA = "New_login_data"
 DOCTORS = "doctors"
+PATIENTS = "patients"
+DIAGNOSES = "diagnoses_icd"
+PROCEDURES = "procedures_icd"
+OMR = "omr"
+DIAGNOSES_DESC = "d_icd_diagnoses"
+PROCEDURES_DESC = "d_icd_procedures"
+EMAR = "emar"
+ADMISSIONS = "admissions"
+PHARMACY = "pharmacy"
 
 
 class User_service:
@@ -21,7 +30,7 @@ class User_service:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                "delete from ? where New_login_data.subject_id = ?",
+                "delete from ? where subject_id = ?",
                 LOGIN_DATA,
                 user.get_id(),
             )
@@ -81,11 +90,11 @@ class User_service:
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
                 query = """
-                SELECT p.subject_id, p.gender, p.anchor_age, p.firstname, p.surname 
-                FROM patients AS p
-                WHERE p.subject_id = ?
+                SELECT subject_id, gender, anchor_age, firstname, surname 
+                FROM ? 
+                WHERE subject_id = ?
                 """
-                cursor.execute(query, subject_id)
+                cursor.execute(query, PATIENTS, subject_id)
                 result = cursor.fetchone()
                 cursor.close()
                 connection.close()
@@ -94,10 +103,11 @@ class User_service:
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
                 query = """
-                SELECT d.subject_id, d.firstname, d.surname, d.department_name, d.age 
-                FROM doctors AS d WHERE d.subject_id = ?
+                SELECT subject_id, firstname, surname, department_name, age 
+                FROM ? 
+                WHERE subject_id = ?
                 """
-                cursor.execute(query, subject_id)
+                cursor.execute(query, DOCTORS, subject_id)
                 result = cursor.fetchone()
                 cursor.close()
                 connection.close()
@@ -131,7 +141,8 @@ class User_service:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                "update New_login_data set password = ? where username = ?",
+                "update ? set password = ? where username = ?",
+                LOGIN_DATA,
                 password,
                 username,
             )
@@ -150,14 +161,15 @@ class User_service:
             cursor = connection.cursor()
 
             cursor.execute(
-                "select count(*) from patients where subject_id= ? order by hadm_id desc",
+                "select count(*) from ? where subject_id= ? order by hadm_id desc",
+                PATIENTS,
                 patient_id,
             )
             if cursor.fetchone()[0] == 0:
                 raise Exception(f"Patient with subject ID {patient_id} not found")
 
             hadm_id = cursor.execute(
-                "select subject_id, hadm_id from admissions where subject_id = ? order by hadm_id desc",
+                "select subject_id, hadm_id from ? where subject_id = ? order by hadm_id desc",
                 patient_id,
             ).fetchone()[0]
             try:
@@ -212,7 +224,7 @@ class User_service:
             cursor = connection.cursor()
             cursor.execute(
                 "select d.subject_id, d.hadm_id, d.d_icd_diagnosis from diagnosis AS d where d.subject_id = ?",
-                patient_id,
+                ADMISSIONS.patient_id,
             )
             diagnosis = cursor.fetchone()
             cursor.close()
@@ -231,12 +243,12 @@ class User_service:
                 cursor = connection.cursor()
                 query = """
                     SELECT p.subject_id, p.hadm_id, p.seq_num, p.chartdate, p.icd_code, p.icd_version, dp.long_title 
-                    FROM procedures_icd AS p
-                    INNER JOIN d_icd_procedures AS dp ON p.icd_code = dp.icd_code
+                    FROM ? AS p
+                    INNER JOIN ? AS dp ON p.icd_code = dp.icd_code
                     WHERE p.subject_id = ?
                     ORDER BY p.seq_num
                 """
-                cursor.execute(query, subject_id)
+                cursor.execute(query, PROCEDURES, PROCEDURES_DESC, subject_id)
                 results = cursor.fetchall()
                 cursor.close()
                 connection.close()
@@ -253,11 +265,11 @@ class User_service:
             cursor = connection.cursor()
             query = """
                 SELECT TOP 1 * 
-                FROM omr
+                FROM ?
                 WHERE subject_id = ? AND result_name LIKE 'Weight%'
                 ORDER BY chartdate DESC
             """
-            cursor.execute(query, subject_id)
+            cursor.execute(query, OMR, subject_id)
             result = cursor.fetchone()
             cursor.close()
             connection.close()
@@ -272,11 +284,11 @@ class User_service:
             cursor = connection.cursor()
             query = """
                 SELECT TOP 1 * 
-                FROM omr
+                FROM ?
                 WHERE subject_id = ? AND result_name LIKE 'Height%'
                 ORDER BY chartdate DESC
             """
-            cursor.execute(query, subject_id)
+            cursor.execute(query, OMR, subject_id)
             result = cursor.fetchone()
             cursor.close()
             connection.close()
@@ -291,11 +303,11 @@ class User_service:
             cursor = connection.cursor()
             query = """
                 SELECT TOP 1 * 
-                FROM omr
+                FROM ?
                 WHERE subject_id = ? AND result_name LIKE 'BMI%'
                 ORDER BY chartdate DESC
             """
-            cursor.execute(query, subject_id)
+            cursor.execute(query, OMR, subject_id)
             result = cursor.fetchone()
             cursor.close()
             connection.close()
@@ -324,7 +336,7 @@ class User_service:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                "select password from New_login_data where subject_id = ?", subject_id
+                "select password from ? where subject_id = ?", LOGIN_DATA, subject_id
             )
             password = cursor.fetchone()[0]
             cursor.close()
@@ -338,7 +350,8 @@ class User_service:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                "select firstname, surname from  New_login_data where subject_id = ? and password = ?",
+                "select firstname, surname from ? where subject_id = ? and password = ?",
+                LOGIN_DATA,
                 subject_id,
                 password,
             )
