@@ -2,7 +2,8 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 import numpy as np
-# import pyodbc
+#import seaborn as sns
+#import pyodbc
 # from warnings import filterwarnings
 
 
@@ -30,10 +31,41 @@ class Analyse:
 
     def read_omr(self):
         df = pd.read_csv(self.omr_csv_path)
-        print(df.head())
-        id = input("Enter subject_id: ")
-        patient = df[df["subject_id"].astype(str) == id]
+        # print(df.head(40))
+        # print(df.shape)
+        id = input("Enter subject_id: ")  # Ask the user to enter the subject_id
+        patient = df[df["subject_id"].astype(str) == id]  # Get the patient with the entered subject_id
+        #return patient
+        patient = patient.sort_values(by='chartdate')
+        patient['chartdate'] = pd.to_datetime(patient['chartdate'])
+        
+        x1 = x2 = x3 = x4 = None
 
+        if patient['result_name'].eq('Height (Inches)').any():
+            x1 = patient[patient['result_name'] == 'Height (Inches)']['result_value']
+        elif patient['result_name'].eq('Weight (Lbs)').any():
+            x2 = patient[patient['result_name'] == 'Weight (Lbs)']['result_value']
+        elif patient['result_name'].eq('BMI (kg/m2)').any():
+            x3 = patient[patient['result_name'] == 'BMI (kg/m2)']['result_value']
+        elif patient['result_name'].eq('Blood Pressure').any():
+            x4 = patient[patient['result_name'] == 'Blood Pressure']['result_value']
+            
+        y = patient['chartdate']
+      
+        plt.figure()
+        if x1 is not None:
+            plt.plot(x1, y, 'r*-', label = 'Height')
+        if x2 is not None:
+            plt.plot(x2, y, 'go--', label = 'Weight') 
+        if x3 is not None:
+            plt.plot(x3, y, 'bx-.', label = 'BMI') 
+        if x4 is not None:
+            plt.plot(x4, y, 'ys:', label = 'Blood Pressure') 
+        plt.xlabel('Values')
+        plt.ylabel('Date')
+        plt.title('Patient Data')
+        plt.legend()
+        plt.show()
         return patient
 
     def read_admissions(self):
@@ -85,9 +117,7 @@ class Analyse:
         df.plot(kind="scatter", x="anchor_age", y="gender")  # Scatter plot
         plt.show()  # Display the plot
         id = input("Enter subject_id: ")  # Ask the user to enter the subject_id
-        patient = df[
-            df["subject_id"].astype(str) == id
-        ]  # Get the patient with the entered subject_id
+        patient = df[df["subject_id"].astype(str) == id]  # Get the patient with the entered subject_id
         return patient
 
     def read_pharmacy(self):
