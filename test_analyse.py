@@ -4,8 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 #import seaborn as sns
 #import pyodbc
-# from warnings import filterwarnings
-
 
 class Analyse:
     def __init__(self):
@@ -31,69 +29,66 @@ class Analyse:
 
     def read_omr(self):
         df = pd.read_csv(self.omr_csv_path)
-        # print(df.head(40))
-        # print(df.shape)
-        id = input("Enter subject_id: ")  # Ask the user to enter the subject_id
-        patient = df[df["subject_id"].astype(str) == id]  # Get the patient with the entered subject_id
-        #return patient
+        id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
+        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
         patient = patient.sort_values(by='chartdate')
-        patient['chartdate'] = pd.to_datetime(patient['chartdate'])
         
         x1 = x2 = x3 = x4 = None
 
-        if patient['result_name'].eq('Height (Inches)').any():
-            x1 = patient[patient['result_name'] == 'Height (Inches)']['result_value']
-        elif patient['result_name'].eq('Weight (Lbs)').any():
-            x2 = patient[patient['result_name'] == 'Weight (Lbs)']['result_value']
-        elif patient['result_name'].eq('BMI (kg/m2)').any():
-            x3 = patient[patient['result_name'] == 'BMI (kg/m2)']['result_value']
-        elif patient['result_name'].eq('Blood Pressure').any():
-            x4 = patient[patient['result_name'] == 'Blood Pressure']['result_value']
-            
-        y = patient['chartdate']
-      
-        plt.figure()
-        if x1 is not None:
-            plt.plot(x1, y, 'r*-', label = 'Height')
-        if x2 is not None:
-            plt.plot(x2, y, 'go--', label = 'Weight') 
-        if x3 is not None:
-            plt.plot(x3, y, 'bx-.', label = 'BMI') 
-        if x4 is not None:
-            plt.plot(x4, y, 'ys:', label = 'Blood Pressure') 
-        plt.xlabel('Values')
-        plt.ylabel('Date')
-        plt.title('Patient Data')
-        plt.legend()
-        plt.show()
+        x1 = patient[patient['result_name'] == "Height (Inches)"]
+        x2 = patient[patient['result_name'] == "Weight (Lbs)"]
+        x3 = patient[patient['result_name'] == "BMI (kg/m2)"]
+        x4 = patient[patient['result_name'] == "Blood Pressure"]
+
+        fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 6))
+
+        axes[0, 0].plot(x1['chartdate'], pd.to_numeric(x1['result_value']))
+        axes[0, 0].set_title('Height (Inches)')
+        axes[0, 0].tick_params(axis='x', rotation=30)
+
+        axes[0, 1].plot(x2['chartdate'], pd.to_numeric(x2['result_value']))
+        axes[0, 1].set_title('Weight (Lbs)')
+        axes[0, 1].tick_params(axis='x', rotation=30)
+
+        axes[1, 0].plot(x3['chartdate'], pd.to_numeric(x3['result_value']))
+        axes[1, 0].set_title('BMI (kg/m2)')
+        axes[1, 0].tick_params(axis='x', rotation=30)
+
+        axes[1, 1].plot(x4['chartdate'], x4['result_value'].sort_values())
+        axes[1, 1].set_title('Blood Pressure')
+        axes[1, 1].tick_params(axis='x', rotation=30)
+
+        plt.tight_layout()      
+        plt.show()      
         return patient
+
 
     def read_admissions(self):
         df = pd.read_csv(self.admissions_csv_path)
         print(df.head())
-        id = input("Enter subject_id: ")
-        patient = df[df["subject_id"].astype(str) == id]
+        id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
+        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
         return patient
 
     def read_diagnoses_icd(self):
         df = pd.read_csv(self.diagnoses_icd_csv_path)
         print(df.head())
-        id = input("Enter subject_id: ")
-        patient = df[df["subject_id"].astype(str) == id]
+        id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
+        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
         return patient
 
     def read_drgcodes(self):
         df = pd.read_csv(self.drgcodes_csv_path)
         print(df.head())
-        id = input("Enter subject_id: ")
-        patient = df[df["subject_id"].astype(str) == id]
+        id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
+        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
         return patient
 
     def read_emar(self):
         df = pd.read_csv(self.emar_csv_path)
         print(df.head())
-        id = input("Enter subject_id: ")
-        patient = df[df["subject_id"].astype(str) == id]
+        id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
+        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
         return patient
 
     def read_patients(self):
@@ -115,42 +110,36 @@ class Analyse:
         )  # We set the values in the x-axis
         plt.yticks(np.arange(0, 25, 2))  # Setting the values in y-axis
         df.plot(kind="scatter", x="anchor_age", y="gender")  # Scatter plot
+        #sns.scatterplot(data=tips, x="total_bill", y="tip", hue="time")
         plt.show()  # Display the plot
-        id = input("Enter subject_id: ")  # Ask the user to enter the subject_id
-        patient = df[df["subject_id"].astype(str) == id]  # Get the patient with the entered subject_id
+        id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
+        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
         return patient
 
     def read_pharmacy(self):
         df = pd.read_csv(self.pharmacy_csv_path)
         print(df.head())
-        id = input("Enter subject_id: ")
-        patient = df[df["subject_id"].astype(str) == id]
+        id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
+        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
         return patient
 
     def read_procedures_icd(self):
         df = pd.read_csv(self.procedures_icd_csv_path)
         print(df.head())
-        id = input("Enter subject_id: ")
-        patient = df[df["subject_id"].astype(str) == id]
+        id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
+        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
         return patient
 
     def read_d_icd_diagnoses(self):
         df = pd.read_csv(self.d_icd_diagnoses_csv_path)
         print(df.head())
-        id = input("Enter subject_id: ")
-        patient = df[df["subject_id"].astype(str) == id]
+        id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
+        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
         return patient
 
     def read_d_icd_procedures(self):
         df = pd.read_csv(self.d_icd_procedures_csv_path)
         print(df.head())
-        id = input("Enter subject_id: ")
-        patient = df[df["subject_id"].astype(str) == id]
+        id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
+        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
         return patient
-
-
-# filterwarnings("ignore", category=UserWarning, message='.*pandas only supports SQLAlchemy connectable.*')
-# conn_string = 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES'
-# conn = pyodbc.connect(conn_string)
-# sql = "SELECT * FROM omr"
-# pd.read_sql(sql, conn)
