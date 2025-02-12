@@ -63,7 +63,7 @@ A web-based project that simulates a hospital and its patients
 
 # Installation and Usage
 ## SQL Server Setup
-The system requires a working instance of our database running on your local machine. Restore the [database backup] (database1.zip) according to the official [Quickstart guide] (https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/quickstart-backup-restore-database?view=sql-server-ver16&tabs=ssms).  
+The system requires a working instance of our database running on your local machine. Restore the [database backup](database1.zip) according to the official [Quickstart guide](https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/quickstart-backup-restore-database?view=sql-server-ver16&tabs=ssms).  
 
 # Timeline
 ![screenshot](Timeline.png)
