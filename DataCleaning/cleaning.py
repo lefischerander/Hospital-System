@@ -1,83 +1,62 @@
 import pandas as pd
 from pathlib import Path
 import os
+import time
 
+start_time = time.time()
 pd.options.mode.chained_assignment = None
-
-
-def clean_empty_col(df, column):
-    """
-    Function to clean the dataframe from empty rows in a specified column
-
-    Parameters:
-    df (DataFrame): The DataFrame to be cleaned
-    column (str): The column to be checked for empty rows
-
-    Returns:
-    df (DataFrame): The cleaned DataFrame
-    """
-    df = df.dropna(subset=[column])
-    return df
-
 
 path = Path(__file__).parent / "Files/"
 
-# Cleaning the files
-for filename in os.listdir(path):
+# Columns that are not allowed to have NaN/NULL values
+nn_col = (
+    "subject_id",
+    "gender",
+    "anchor_age",
+    "anchor_year",
+    "anchor_year_group",
+    "chartdate",
+    "result_name",
+    "result_value",
+    "seq_num",
+    "hadm_id",
+    "admittime",
+    "admission_type",
+    "icd_code",
+    "icd_version",
+    "emar_id",
+    "emar_seq",
+    "charttime",
+    "storetime",
+    "pharmacy_id",
+    "drug_type",
+    "drug",
+    "proc_type",
+    "entertime",
+)
+
+
+def clean(filename):
+    """
+    Cleans the files in the Files directory and saves them in the CleanedFiles directory
+
+    Parameters:
+    filename (str): The name of the file to be cleaned
+    """
     temp_path = f"{path}/{filename}"
     target_path = Path(__file__).parent / f"CleanedFiles/cleaned_{filename}"
 
     df = pd.read_csv(open(temp_path))
 
-    # Cleaning the empty rows if the column exists
-    if "subject_id" in df.columns:
-        df = clean_empty_col(df, "subject_id")
-    elif "gender" in df.columns:
-        df = clean_empty_col(df, "gender")
-    elif "anchor_age" in df.columns:
-        df = clean_empty_col(df, "anchor_age")
-    elif "anchor_year" in df.columns:
-        df = clean_empty_col(df, "anchor_year")
-    elif "anchor_year_group" in df.columns:
-        df = clean_empty_col(df, "anchor_year_group")
-    elif "chartdate" in df.columns:
-        df = clean_empty_col(df, "chartdate")
-    elif "result_name" in df.columns:
-        df = clean_empty_col(df, "result_name")
-    elif "result_value" in df.columns:
-        df = clean_empty_col(df, "result_value")
-    elif "seq_num" in df.columns:
-        df = clean_empty_col(df, "seq_num")
-    elif "hadm_id" in df.columns:
-        df = clean_empty_col(df, "hadm_id")
-    elif "admittime" in df.columns:
-        df = clean_empty_col(df, "admittime")
-    elif "admission_type" in df.columns:
-        df = clean_empty_col(df, "admission_type")
-    elif "icd_code" in df.columns:
-        df = clean_empty_col(df, "icd_code")
-    elif "icd_version" in df.columns:
-        df = clean_empty_col(df, "icd_version")
-    elif "emar_id" in df.columns:
-        df = clean_empty_col(df, "emar_id")
-    elif "emar_seq" in df.columns:
-        df = clean_empty_col(df, "emar_seq")
-    elif "charttime" in df.columns:
-        df = clean_empty_col(df, "charttime")
-    elif "storetime" in df.columns:
-        df = clean_empty_col(df, "storetime")
-    elif "pharmacy_id" in df.columns:
-        df = clean_empty_col(df, "pharmacy_id")
-    elif "drug_type" in df.columns:
-        df = clean_empty_col(df, "drug_type")
-    elif "drug" in df.columns:
-        df = clean_empty_col(df, "drug")
-    elif "proc_type" in df.columns:
-        df = clean_empty_col(df, "proc_type")
-    elif "entertime" in df.columns:
-        df = clean_empty_col(df, "entertime")
+    for c in df.columns:
+        if c in nn_col:
+            df = df[df[c].notna()]
 
     df.to_csv(target_path, index=False, encoding="utf-8", header=True)
+
+
+for filename in os.listdir(path):
+    clean(filename)
 
 
 # Cleaning the patients.csv file with specific conditions
@@ -92,6 +71,7 @@ deleteCondition = patients[
 patients.drop(deleteCondition, inplace=True)
 
 patients.to_csv(path, index=False, encoding="utf-8", header=True)
+
 
 # CLeaning the omr.csv file with specific conditions
 path = Path(__file__).parent / "CleanedFiles/cleaned_omr.csv"
@@ -127,3 +107,5 @@ omr["result_value"] = omr["result_value"].astype(object)
 omr = pd.concat([omr, bp_temp], ignore_index=True)
 
 omr.to_csv(path, index=False, encoding="utf-8", header=True)
+
+print("--- %s seconds ---" % (time.time() - start_time))
