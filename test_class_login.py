@@ -2,8 +2,12 @@
 import sys
 import pyodbc
 from user_test import User
+import datetime
+import threading
+import Database_Information as dbi
 
-connection_string = "DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES"
+connection_string = dbi.connection_string
+
 
 
 class AuthSystem:
@@ -135,3 +139,6 @@ class AuthSystem:
                     print(error)
         except ValueError as error:
             print(error)
+    
+    
+    #def Autologout(self, timeout_minutes = 4):
