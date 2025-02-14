@@ -1,11 +1,5 @@
 import pyodbc
-
-# database information for the connection string
-MACHINE = "LAPTOP-CC0D63"
-DB = "LANK"
-USER = "LANK_USER"
-PASSWORD = "Lank1."
-connection_string = f"DRIVER={{ODBC Driver 18 for SQL Server}};SERVER={MACHINE};DATABASE={DB};UID={USER};PWD={PASSWORD};TrustServerCertificate=YES"
+import Database_Information as db_info
 
 # database tables
 LOGIN_DATA = "New_login_data"
@@ -22,11 +16,35 @@ PHARMACY = "pharmacy"
 
 
 class User_service:
-    def __init__(self, surname=None):
+    """
+    This class is responsible for handling all database operations
+
+    Attributes:
+    connection_string: str
+        The connection string to the database
+    """
+
+    def __init__(self, connection_string):
+        """
+        Initializes the connection string to the database
+
+        Parameters:
+        connection_string: str
+            The connection string to the database
+        """
         self.connection_string = connection_string
-        self.surname = surname
 
     def delete_user(self, user):  ##low priority
+        """Deletes a user from the database based on the user's subject ID
+
+
+        Args:
+            user (int): the to-be-deleted user's subject ID
+
+        Raises:
+            Exception: If the user is not an admin
+            Exception: If the user is not found in the database or another error occurs
+        """
         try:
             if self.get_role_by_id(self.get_id()) != "admin":
                 raise Exception("Only admins can delete users")
@@ -47,6 +65,18 @@ class User_service:
             print("Error:", e)
 
     def get_role_by_id(self, id):
+        """
+        Gets the role of a user based on the user's subject ID
+
+        Args:
+            id (int): the user's subject ID
+
+        Returns:
+            str: the role of the user
+
+        Raises:
+            Exception: If the user is not found in the database or another error occurs
+        """
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
@@ -58,12 +88,23 @@ class User_service:
         except Exception as e:
             print("Error: user not found", e)
 
-    def get_id(self):
+    def get_id(self, surname):
+        """Gets a user's subject ID based on the user's surname
+
+        Args:
+            surname (str): The user's surname
+
+        Returns:
+            int: The user's subject ID
+
+        Raises:
+            Exception: If the user is not found in the database or another error occurs
+        """
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                f"select subject_id from {LOGIN_DATA} where surname = ?", self.surname
+                f"select subject_id from {LOGIN_DATA} where surname = ?", surname
             )
             id = cursor.fetchone()[0]
             cursor.close()
@@ -73,6 +114,17 @@ class User_service:
             print("Error: user not found ", e)
 
     def get_doctor_by_name(self, surname):
+        """Gets a doctor's information based on the doctor's surname
+
+        Args:
+            surname (str): The doctor's surname
+
+        Returns:
+            pyodbc.row: The row containing the doctor's information (pyodbc object)
+
+        Raises:
+            Exception: If the doctor is not found in the database or another error occurs
+        """
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
@@ -89,6 +141,18 @@ class User_service:
             print("Error: user not found ", e)
 
     def get_your_profile(self, subject_id):
+        """
+        Gets the profile of a user based on the user's subject ID
+
+        Args:
+            subject_id (int): the user's subject ID
+
+        Returns:
+            pyodbc.row: the row containing the user's profile (pyodbc object)
+
+        Raises:
+            Exception: If the user is not found in the database or another error occurs
+        """
         try:
             if self.get_role_by_id(subject_id) == "Patient":
                 connection = pyodbc.connect(self.connection_string)
@@ -97,8 +161,8 @@ class User_service:
                 SELECT subject_id, gender, anchor_age, firstname, surname 
                 FROM {PATIENTS} 
                 WHERE subject_id = ?
-                """ 
-                cursor.execute(query,subject_id )
+                """
+                cursor.execute(query, subject_id)
                 result = cursor.fetchone()
                 cursor.close()
                 connection.close()
@@ -110,8 +174,8 @@ class User_service:
                 SELECT subject_id, firstname, surname, department_name, age 
                 FROM  {DOCTORS} 
                 WHERE subject_id = ?
-                """ 
-                cursor.execute(query,subject_id)
+                """
+                cursor.execute(query, subject_id)
                 result = cursor.fetchone()
                 cursor.close()
                 connection.close()
@@ -376,7 +440,7 @@ class User_service:
 
 
 if __name__ == "__main__":
-    user_service = User_service()
+    user_service = User_service(db_info.connection_string)
     print("Welcome to the hospital database.")
     print("Please choose an action:")
     print()
@@ -387,9 +451,8 @@ if __name__ == "__main__":
     print("Okay you chose: ", action)
     if action == "1":
         role_id = input("Give the subject_id: ")
-        The_role_id= user_service.get_role_by_id( role_id )
+        The_role_id = user_service.get_role_by_id(role_id)
         print(The_role_id)
-       
 
     elif action == "2":
         subject_id = int(input("Enter subject ID: "))
