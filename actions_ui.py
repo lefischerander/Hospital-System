@@ -272,18 +272,18 @@ class ActionsUI:
 
             row_list = ["User ID", "Name", "Surname", "Role"]
             for i in range(len(row_list)):
-                frame = user_table.Frame(master=user_table, relief=RAISED, borderwidth=1)
+                frame = Frame(master=user_table, relief=RAISED, borderwidth=1)
                 
                 frame.grid(row=0, column=i)
-                label=user_table.Label(master=frame, text=row_list[i])
+                label=Label(master=frame, text=row_list[i])
                 label.pack()
 
             all_users = user_service.view_all_users()
             for i in range(len(all_users)):
                 for j in range(len(all_users[i])):
-                    user_grid = user_table.Frame(master=frame, width=10)
+                    user_grid = Frame(master=frame, width=10)
                     user_grid.grid(row=i, column=j)
-                    label = user_table.Label(master=user_grid, text=all_users[i][j])
+                    label = Label(master=user_grid, text=all_users[i][j])
                     label.pack()
 
 
