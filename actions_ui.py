@@ -86,7 +86,7 @@ class ActionsUI:
             view_profile_window.geometry("800x600")
 
             user_profile = user_service.get_your_profile(global_username)
-            user_info = ["User ID", "Gender", "Age", "Name", "Surname"]
+            user_info = ["User ID", "Name", "Surname", "Department", "Age"]
 
             for i in range(len(user_profile)):
                 for j in range(1):
@@ -322,8 +322,33 @@ class ActionsUI:
 
 
         def delete_user():
-            # delete user
-            actions_window.withdraw()
+            def get_user_id():
+                get_user_id_window = Toplevel(actions_window)
+                get_user_id_window.title("Patient ID")
+
+                Label(get_user_id_window, text="Patient ID:").pack(pady=5)
+                patient_id = Entry(get_user_id_window)
+                patient_id.pack(pady=5)
+
+                def submit_patient_id():
+                    get_user_id_window.destroy()
+                    return patient_id
+
+                
+                def cancel_get_patient_id():
+                    get_user_id_window.destroy()
+
+                button_frame = Frame(get_user_id_window)
+                button_frame.pack(pady=10)
+                
+                submit_button = Button(get_user_id_window, text="Submit", command=submit_patient_id)
+                submit_button.pack(pady=5, side=RIGHT)
+
+                cancel_button = Button(get_user_id_window, text="Cancel", command=cancel_get_patient_id)
+                cancel_button.pack(pady=5, side=RIGHT)
+
+            user_id = get_user_id()
+            user_service.delete_user(user_id)
 
         def change_password():
             actions_window.withdraw()
