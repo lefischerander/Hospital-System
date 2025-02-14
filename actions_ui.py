@@ -67,7 +67,9 @@ class ActionsUI:
             view_patient_data_window = Toplevel(actions_window)
             view_patient_data_window.title("Patient Data")
             view_patient_data_window.geometry("800x600")
-
+            
+            back_button = Button(master=view_patient_data_window, text="Back", command=back_action)
+            back_button.pack(side=TOP)
 
             patient_data = user_service.get_patient_profile(patient_id)
             patient_info = ["Patient_ID", "Gender", "Age", "Name", "Surname", "Date of Death"]
@@ -81,9 +83,6 @@ class ActionsUI:
                     else:
                         label = Label(master=patient_grid, text=patient_data[i])
                         label.pack()
-            
-            back_button = Button(master=view_patient_data_window, text="Back", command=back_action)
-            back_button.pack(side=TOP)
 
         def view_profile():
             actions_window.withdraw()
@@ -97,6 +96,9 @@ class ActionsUI:
             def back_action():
                 view_profile_window.destroy()
                 actions_window.deiconify
+            
+            back_button = Button(master=view_profile_window, text="Back", command=back_action)
+            back_button.pack(side=TOP)
 
             for i in range(len(user_profile)):
                 for j in range(2):
@@ -109,10 +111,6 @@ class ActionsUI:
                     else:
                         label = Label(master=user_grid, text=user_profile[i])
                         label.pack()
-
-            
-            back_button = Button(master=view_profile_window, text="Back", command=back_action)
-            back_button.pack(side=TOP)
 
 
         def change_password():
@@ -218,6 +216,9 @@ class ActionsUI:
                 view_profile_window.destroy()
                 action_window.deiconify
 
+            back_button = Button(master=view_profile_window, text="Back", command=back_action)
+            back_button.pack(side=TOP)
+
             for i in range(len(user_profile)):
                 for j in range(2):
                     
@@ -229,9 +230,6 @@ class ActionsUI:
                     else:
                         label = Label(master=user_grid, text=user_profile[i])
                         label.pack()
-
-            back_button = Button(master=view_profile_window, text="Back", command=back_action)
-            back_button.pack(side=TOP)
 
 
         def change_password():
@@ -334,6 +332,9 @@ class ActionsUI:
                 user_table.destroy()
                 actions_window.deiconify
 
+            back_button = Button(master=user_table, text="Back", command=back_action)
+            back_button.pack(side=TOP)
+
             for i in range(len(all_users)+1):
                 for j in range(len(row_list)):
                     user_grid = Frame(master=user_table, relief=RAISED, borderwidth=1, width=15)
@@ -346,9 +347,6 @@ class ActionsUI:
                         
                     label = Label(master=user_grid, text=all_users[i-1][j])
                     label.pack()
-
-            back_button = Button(master=user_table, text="Back", command=back_action)
-            back_button.pack(side=TOP)
 
 
         def delete_user():
