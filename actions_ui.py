@@ -69,14 +69,14 @@ class ActionsUI:
             view_patient_data_window.geometry("800x600")
             
             back_button = Button(text="Back", command=back_action)
-            back_button.pack(pady=10)
+            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
             patient_data = user_service.get_patient_profile(patient_id)
             patient_info = ["Patient_ID", "Gender", "Age", "Name", "Surname", "Date of Death"]
             for i in range(len(patient_data)):
                 for j in range(2):
                     patient_grid = Frame(master=view_patient_data_window, relief=RAISED, borderwidth=1, width=15)
-                    patient_grid.grid(row=i, column=j)
+                    patient_grid.grid(row=i, column=j, padx=5, pady=5)
                     if(j==0):
                         label = Label(master=patient_grid, text=patient_info[i])
                         label.pack()
@@ -98,13 +98,13 @@ class ActionsUI:
                 view_profile_window.destroy()
             
             back_button = Button(text="Back", command=back_action)
-            back_button.pack(pady=10)
+            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
             for i in range(len(user_profile)):
                 for j in range(2):
                     
                     user_grid = Frame(master=view_profile_window, relief=RAISED, borderwidth=1, width=15)
-                    user_grid.grid(row=i, column=j)
+                    user_grid.grid(row=i, column=j, padx=5, pady=5)
                     if(j==0):
                         label = Label(master=user_grid, text=user_info[i])
                         label.pack()
@@ -217,13 +217,13 @@ class ActionsUI:
                 view_profile_window.destroy()
 
             back_button = Button(text="Back", command=back_action)
-            back_button.pack(pady=10)
+            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
             for i in range(len(user_profile)):
                 for j in range(2):
                     
                     user_grid = Frame(master=view_profile_window, relief=RAISED, borderwidth=1, width=15)
-                    user_grid.grid(row=i, column=j)
+                    user_grid.grid(row=i, column=j, padx=5, pady=5)
                     if(j==0):
                         label = Label(master=user_grid, text=user_info[i])
                         label.pack()
@@ -332,13 +332,13 @@ class ActionsUI:
                 actions_window.deiconify
                 user_table.destroy()
 
-            back_button = Button(text="Back", command=back_action)
-            back_button.pack(pady=10)
+            back_button = Button(user_table, text="Back", command=back_action)
+            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
             for i in range(len(all_users)+1):
                 for j in range(len(row_list)):
                     user_grid = Frame(master=user_table, relief=RAISED, borderwidth=1, width=15)
-                    user_grid.grid(row=i, column=j)
+                    user_grid.grid(row=i+1, column=j, padx=5, pady=5)
 
                     if i == 0:
                         label = Label(master=user_grid, text=row_list[j])
