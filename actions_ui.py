@@ -307,11 +307,11 @@ class ActionsUI:
             all_users = user_service.view_all_users()
 
             for i in range(len(all_users)+1):
-                for j in range(len(all_users[i])):
+                for j in range(len(row_list)):
                     user_grid = Frame(master=user_table, relief=RAISED, borderwidth=1, width=15)
                     user_grid.grid(row=i, column=j)
 
-                    if i == -1:
+                    if i == 0:
                         label = Label(master=user_grid, text=row_list[j])
                         label.pack()
                         continue
