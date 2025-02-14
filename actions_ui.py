@@ -5,11 +5,12 @@ from test_class_login import AuthSystem
 
 from helppage import HelpPage
 
-# import sys
+import sys
+import subprocess
 # from test_class_actions import Actions
 from user_test import User
 import Service_Database
-from main_ui import MainUI, global_username
+# from main_ui import root
 
 user_service = (
     Service_Database.User_service()
@@ -20,7 +21,7 @@ user_service= Service_Database.User_service()#creating an instance of the class 
 #Doktor [uid][name][surname][department]
 #Patient [uid][gender][age][Date of Death][name][surname]
 class ActionsUI:
-    def doktor_actions():
+    def doktor_actions(global_username):
         actions_window = Tk()
         actions_window.title("Doktor Actions")
         actions_window.geometry("800x600")
@@ -134,10 +135,17 @@ class ActionsUI:
             )
             cancel_button.pack(side=RIGHT, padx=5)
 
+        def logout():
+            actions_window.destroy()
+            subprocess.run(["python", "main_ui.py"])
+            sys.exit()            
+            
+            
+
         button_frame = Frame(actions_window)
         button_frame.pack(pady=10)
 
-        logout_button = Button(button_frame, text="Logout", command=MainUI.logout())
+        logout_button = Button(button_frame, text="Logout", command=logout())
         logout_button.pack(side=RIGHT, padx=5)
 
         patient_data = Button(
@@ -154,7 +162,7 @@ class ActionsUI:
         help_button = Button(actions_window, text="Help", command=HelpPage.help_page)
         help_button.pack(pady=10)
 
-    def patient_actions():
+    def patient_actions(global_username):
         action_window = Tk()
         action_window.title("Patient Actions")
         action_window.geometry("800x600")
@@ -230,10 +238,16 @@ class ActionsUI:
             )
             cancel_button.pack(side=RIGHT, padx=5)
 
+        def logout():
+            action_window.destroy()
+            subprocess.run(["python", "main_ui.py"])
+            sys.exit()            
+            
+
         button_frame = Frame(action_window)
         button_frame.pack(pady=10)
 
-        logout_button = Button(button_frame, text="Logout", command=MainUI.logout())
+        logout_button = Button(button_frame, text="Logout", command=logout())
         logout_button.pack(side=RIGHT, padx=5)
 
         change_password_button = Button(button_frame, text="Change Password", command=change_password)
@@ -242,7 +256,7 @@ class ActionsUI:
         help_button = Button(action_window, text="Help", command=HelpPage.help_page)
         help_button.pack(pady=10)
 
-    def admin_actions():
+    def admin_actions(global_username):
         actions_window = Tk()
         actions_window.title("Actions")
         actions_window.geometry("800x600")
@@ -329,10 +343,15 @@ class ActionsUI:
             )
             cancel_button.pack(side=RIGHT, padx=5)
 
+        def logout():
+            actions_window.destroy()
+            subprocess.run(["python", "main_ui.py"])
+            sys.exit()            
+        
         button_frame = Frame(actions_window)
         button_frame.pack(pady=10)
 
-        logout_button = Button(button_frame, text="Logout", command=MainUI.logout())
+        logout_button = Button(button_frame, text="Logout", command=logout())
         logout_button.pack(side=RIGHT, padx=5)
 
         change_password_button = Button(button_frame, text="Change Password", command=change_password)
