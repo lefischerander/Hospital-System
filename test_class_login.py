@@ -2,8 +2,7 @@
 import sys
 import pyodbc
 from user_test import User
-
-connection_string = "DRIVER={ODBC Driver 18 for SQL Server};SERVER=LAPTOP-CC0D63;DATABASE=LANK;UID=LANK_USER;PWD=Lank1.;TrustServerCertificate=YES"
+from Database_Information import connection_string
 
 
 class AuthSystem:
