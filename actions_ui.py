@@ -60,15 +60,15 @@ class ActionsUI:
                 cancel_button.pack(pady=5, side=RIGHT)
 
             def back_action():
-                view_patient_data_window.destroy
                 actions_window.deiconify
+                view_patient_data_window.destroy
 
             patient_id = get_patient_id()
             view_patient_data_window = Toplevel(actions_window)
             view_patient_data_window.title("Patient Data")
             view_patient_data_window.geometry("800x600")
             
-            back_button = Button(master=view_patient_data_window, text="Back", command=back_action)
+            back_button = Button(text="Back", command=back_action)
             back_button.pack(pady=10)
 
             patient_data = user_service.get_patient_profile(patient_id)
@@ -94,10 +94,10 @@ class ActionsUI:
             user_info = ["User ID", "Gender", "Age", "Name", "Surname"]
 
             def back_action():
-                view_profile_window.destroy()
                 actions_window.deiconify
+                view_profile_window.destroy()
             
-            back_button = Button(master=view_profile_window, text="Back", command=back_action)
+            back_button = Button(text="Back", command=back_action)
             back_button.pack(pady=10)
 
             for i in range(len(user_profile)):
@@ -213,10 +213,10 @@ class ActionsUI:
             user_info = ["User ID", "Gender", "Age", "Name", "Surname"]
 
             def back_action():
-                view_profile_window.destroy()
                 action_window.deiconify
+                view_profile_window.destroy()
 
-            back_button = Button(master=view_profile_window, text="Back", command=back_action)
+            back_button = Button(text="Back", command=back_action)
             back_button.pack(pady=10)
 
             for i in range(len(user_profile)):
@@ -329,10 +329,10 @@ class ActionsUI:
             all_users = user_service.view_all_users()
 
             def back_action():
-                user_table.destroy()
                 actions_window.deiconify
+                user_table.destroy()
 
-            back_button = Button(master=user_table, text="Back", command=back_action)
+            back_button = Button(text="Back", command=back_action)
             back_button.pack(pady=10)
 
             for i in range(len(all_users)+1):
