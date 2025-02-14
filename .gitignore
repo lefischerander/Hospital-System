@@ -1,5 +1,5 @@
 # ignore personal file (Database_Information.py)
-
+db_access.py
 
 # Ignore Python cache files
 __pycache__/
