@@ -67,7 +67,7 @@ class ActionsUI:
             patient_data = user_service.get_patient_profile(patient_id)
             patient_info = ["Patient_ID", "Gender", "Age", "Name", "Surname", "Date of Death"]
             for i in range(len(patient_data)):
-                for j in range(1):
+                for j in range(2):
                     patient_grid = Frame(master=view_patient_data_window, relief=RAISED, borderwidth=1, width=15)
                     patient_grid.grid(row=i, column=j)
                     if(j==0):
@@ -89,7 +89,7 @@ class ActionsUI:
             user_info = ["User ID", "Gender", "Age", "Name", "Surname"]
 
             for i in range(len(user_profile)):
-                for j in range(1):
+                for j in range(2):
                     
                     user_grid = Frame(master=view_profile_window, relief=RAISED, borderwidth=1, width=15)
                     user_grid.grid(row=i, column=j)
@@ -200,7 +200,7 @@ class ActionsUI:
             user_info = ["User ID", "Gender", "Age", "Name", "Surname"]
 
             for i in range(len(user_profile)):
-                for j in range(1):
+                for j in range(2):
                     
                     user_grid = Frame(master=view_profile_window, relief=RAISED, borderwidth=1, width=15)
                     user_grid.grid(row=i, column=j)

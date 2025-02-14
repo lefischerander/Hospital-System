@@ -102,7 +102,7 @@ class User_service:
                 result = cursor.fetchone()
                 cursor.close()
                 connection.close()
-                return f"Your profile: {result}"
+                return result
             elif self.get_role_by_id(subject_id) == "Doctor":
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
@@ -115,7 +115,7 @@ class User_service:
                 result = cursor.fetchone()
                 cursor.close()
                 connection.close()
-                return f"Your profile: {result}"
+                return result
 
             else:
                 return "Error fetching profile ,please retry"
