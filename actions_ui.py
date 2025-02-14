@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, messagebox, Label, Entry, Toplevel, Frame, RIGHT, LEFT, RAISED
+from tkinter import Tk, Button, messagebox, Label, Entry, Toplevel, Frame, RIGHT, LEFT, RAISED, TOP
 
 # import getpass
 from test_class_login import AuthSystem
@@ -33,7 +33,6 @@ class ActionsUI:
         print()
 
         def view_patient_data():
-            actions_window.withdraw()
             def get_patient_id():
                 get_patient_id_window = Toplevel(actions_window)
                 get_patient_id_window.title("Patient ID")
@@ -49,7 +48,6 @@ class ActionsUI:
                 
                 def cancel_get_patient_id():
                     get_patient_id_window.destroy()
-                    actions_window.deiconify()
 
                 button_frame = Frame(get_patient_id_window)
                 button_frame.pack(pady=10)
@@ -308,18 +306,16 @@ class ActionsUI:
             row_list = ["User ID", "Name", "Surname", "Role"]
             all_users = user_service.view_all_users()
 
-            for i in range(len(row_list)):
-                top_grid = Frame(master=user_table, relief=RAISED, borderwidth=1, width=15)
-                top_grid.grid(row=0, column=i)
-
-                label = Label(master=user_grid, text=row_list[j])
-                label.pack()
-
-            for i in range(len(all_users)):
+            for i in range(-1, len(all_users)):
                 for j in range(len(all_users[i])):
                     user_grid = Frame(master=user_table, relief=RAISED, borderwidth=1, width=15)
                     user_grid.grid(row=i, column=j)
 
+                    if i == -1:
+                        label = Label(master=user_grid, text=row_list[j])
+                        label.pack()
+                        continue
+                        
                     label = Label(master=user_grid, text=all_users[i][j])
                     label.pack()
 
