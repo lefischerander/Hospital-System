@@ -42,34 +42,28 @@ class AuthSystem:
         elif password != user[3]:
             print(User.hash_password(password))
             print("\nInvalid password.\n")
-        
-        
         else:
-            print(f"\nLogin successful! Welcome, {user[0]} {user[1]}.")
-            user_role= user[2]
-            print(f"You role in this hospital: {user_role}\n")
-        # else:
-        #     with open("logged_in_users.txt", "r") as file:
-        #         line = file.readline()
-        #         while line:
-        #             if subject_id == line.strip():
-        #                 print(
-        #                     f"\nUser {user[0]} {user[1]} (role: {user[2]}  already logged in.\n"
-        #                 )
-        #                 break
-        #             else:
-        #                 line = file.readline()
-        #         if not line:
-        #             with open("logged_in_users.txt", "a") as file:
-        #                 file.write(f"{user[0]} {user[1]} \n")
-        #                 print(f"\nLogin successful! Welcome, {user[0]} {user[1]}.")
-        #                 self.logged_in = True
-        #                 user_role = user[2]
-        #                 if user_role == "Doctor":
-        #                     print(f"You are {user_role} in this hospital")
-        #                     print("Your department: \n")  # edit department later
-        #                 else:
-        #                     print(f"You are {user_role} in this hospital\n")
+            with open("logged_in_users.txt", "r") as file:
+                line = file.readline()
+                while line:
+                    if subject_id == line.strip():
+                        print(
+                            f"\nUser {user[0]} {user[1]} (role: {user[2]}  already logged in.\n"
+                        )
+                        break
+                    else:
+                        line = file.readline()
+                if not line:
+                    with open("logged_in_users.txt", "a") as file:
+                        file.write(f"{user[0]} {user[1]} \n")
+                        print(f"\nLogin successful! Welcome, {user[0]} {user[1]}.")
+                        self.logged_in = True
+                        user_role = user[2]
+                        if user_role == "Doctor":
+                            print(f"You are {user_role} in this hospital")
+                            print("Your department: \n")  # edit department later
+                        else:
+                            print(f"You are {user_role} in this hospital\n")
 
     def logout(self, subject_id):
         with open("logged_in_users.txt", "r") as file:
