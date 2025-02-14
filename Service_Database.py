@@ -1,5 +1,6 @@
 import pyodbc
-from Database_Information import connection_string
+from db_access import connection_string
+
 
 # database tables
 LOGIN_DATA = "New_login_data"
