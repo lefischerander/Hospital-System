@@ -69,7 +69,7 @@ class ActionsUI:
             view_patient_data_window.geometry("800x600")
             
             back_button = Button(master=view_patient_data_window, text="Back", command=back_action)
-            back_button.pack(side=TOP)
+            back_button.pack(pady=10)
 
             patient_data = user_service.get_patient_profile(patient_id)
             patient_info = ["Patient_ID", "Gender", "Age", "Name", "Surname", "Date of Death"]
@@ -98,7 +98,7 @@ class ActionsUI:
                 actions_window.deiconify
             
             back_button = Button(master=view_profile_window, text="Back", command=back_action)
-            back_button.pack(side=TOP)
+            back_button.pack(pady=10)
 
             for i in range(len(user_profile)):
                 for j in range(2):
@@ -217,7 +217,7 @@ class ActionsUI:
                 action_window.deiconify
 
             back_button = Button(master=view_profile_window, text="Back", command=back_action)
-            back_button.pack(side=TOP)
+            back_button.pack(pady=10)
 
             for i in range(len(user_profile)):
                 for j in range(2):
@@ -333,7 +333,7 @@ class ActionsUI:
                 actions_window.deiconify
 
             back_button = Button(master=user_table, text="Back", command=back_action)
-            back_button.pack(side=TOP)
+            back_button.pack(pady=10)
 
             for i in range(len(all_users)+1):
                 for j in range(len(row_list)):
