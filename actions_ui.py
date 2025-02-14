@@ -119,7 +119,7 @@ class ActionsUI:
                 width=15,
             )
 
-            back_button = Button(text="Back", command=back_action)
+            back_button = Button(user_grid, text="Back", command=back_action)
             back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
             for i in range(len(user_profile)):
