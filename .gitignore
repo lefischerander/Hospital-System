@@ -1,2 +1,6 @@
 # ignore personal file (Database_Information.py)
 Database_Information.py
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
