@@ -83,7 +83,7 @@ class ActionsUI:
                         label.pack()
             
             back_button = Button(master=view_patient_data_window, text="Back", command=back_action)
-            back_button.pack(side=TOP, side=RIGHT)
+            back_button.pack(side=TOP)
 
         def view_profile():
             actions_window.withdraw()
@@ -112,7 +112,7 @@ class ActionsUI:
 
             
             back_button = Button(master=view_profile_window, text="Back", command=back_action)
-            back_button.pack(side=TOP, side=RIGHT)
+            back_button.pack(side=TOP)
 
 
         def change_password():
@@ -231,7 +231,7 @@ class ActionsUI:
                         label.pack()
 
             back_button = Button(master=view_profile_window, text="Back", command=back_action)
-            back_button.pack(side=TOP, side=RIGHT)
+            back_button.pack(side=TOP)
 
 
         def change_password():
@@ -348,7 +348,7 @@ class ActionsUI:
                     label.pack()
 
             back_button = Button(master=user_table, text="Back", command=back_action)
-            back_button.pack(side=TOP, side=RIGHT)
+            back_button.pack(side=TOP)
 
 
         def delete_user():
