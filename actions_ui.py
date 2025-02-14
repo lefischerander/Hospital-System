@@ -43,7 +43,9 @@ class ActionsUI:
                 patient_id.pack(pady=5)
 
                 def submit_patient_id():
+                    get_patient_id_window.destroy()
                     return patient_id
+
                 
                 def cancel_get_patient_id():
                     get_patient_id_window.destroy()
@@ -65,7 +67,17 @@ class ActionsUI:
 
 
             patient_data = user_service.get_patient_profile(patient_id)
-
+            patient_info = ["Patient_ID", "Gender", "Age", "Name", "Surname", "Date of Death"]
+            for i in range(len(patient_data)):
+                for j in range(1):
+                    patient_grid = Frame(master=view_patient_data_window, relief=RAISED, borderwidth=1, width=15)
+                    patient_grid.grid(row=i, column=j)
+                    if(j==0):
+                        label = Label(master=patient_grid, text=patient_info[i])
+                        label.pack()
+                    else:
+                        label = Label(master=patient_grid, text=patient_data[i])
+                        label.pack()
             #check output
             #add back button
 
@@ -76,9 +88,19 @@ class ActionsUI:
             view_profile_window.geometry("800x600")
 
             user_profile = user_service.get_your_profile(global_username)
+            user_info = ["User ID", "Gender", "Age", "Name", "Surname"]
 
-            #check output
-            #add back button
+            for i in range(len(user_profile)):
+                for j in range(1):
+                    
+                    user_grid = Frame(master=view_profile_window, relief=RAISED, borderwidth=1, width=15)
+                    user_grid.grid(row=i, column=j)
+                    if(j==0):
+                        label = Label(master=user_grid, text=user_info[i])
+                        label.pack()
+                    else:
+                        label = Label(master=user_grid, text=user_profile[i])
+                        label.pack()
 
         def change_password():
             actions_window.withdraw()
@@ -177,9 +199,19 @@ class ActionsUI:
             view_profile_window.geometry("800x600")
 
             user_profile = user_service.get_your_profile(global_username)
+            user_info = ["User ID", "Gender", "Age", "Name", "Surname"]
 
-            #check output
-            #add back button
+            for i in range(len(user_profile)):
+                for j in range(1):
+                    
+                    user_grid = Frame(master=view_profile_window, relief=RAISED, borderwidth=1, width=15)
+                    user_grid.grid(row=i, column=j)
+                    if(j==0):
+                        label = Label(master=user_grid, text=user_info[i])
+                        label.pack()
+                    else:
+                        label = Label(master=user_grid, text=user_profile[i])
+                        label.pack()
 
         def change_password():
             action_window.withdraw()
@@ -251,6 +283,9 @@ class ActionsUI:
         change_password_button = Button(button_frame, text="Change Password", command=change_password)
         change_password_button.pack(side=RIGHT, padx=5)
 
+        view_profile_button = Button(button_frame, text="View your profile", command=view_profile)
+        view_profile_button.pack(side=RIGHT, padx=5)
+
         help_button = Button(action_window, text="Help", command=HelpPage.help_page)
         help_button.pack(pady=10)
 
@@ -268,18 +303,23 @@ class ActionsUI:
         def view_all_users():
             user_table = Toplevel(actions_window)
             user_table.title("All Users")
-            user_table.geometry("1920x1080")
+            user_table.geometry("800x600")
 
             row_list = ["User ID", "Name", "Surname", "Role"]
             all_users = user_service.view_all_users()
 
+            for i in range(len(row_list)):
+                top_grid = Frame(master=user_table, relief=RAISED, borderwidth=1, width=15)
+                top_grid.grid(row=0, column=i)
+
+                label = Label(master=user_grid, text=row_list[j])
+                label.pack()
+
             for i in range(len(all_users)):
                 for j in range(len(all_users[i])):
-                    user_grid = Frame(master=user_table, relief=RAISED, borderwidth=1)
+                    user_grid = Frame(master=user_table, relief=RAISED, borderwidth=1, width=15)
                     user_grid.grid(row=i, column=j)
 
-                    label = Label(master=user_grid, text=row_list[j])
-                    label.pack()
                     label = Label(master=user_grid, text=all_users[i][j])
                     label.pack()
 
