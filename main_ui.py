@@ -14,13 +14,6 @@ global_password = None
 def home_action():
     root.deiconify()
 
-def logout():
-    global global_username
-    auth = AuthSystem()
-    auth.logout(global_username)
-    global_username = None
-    root.deiconify()
-
 def login_action():
     global global_username, global_password
     root.withdraw()
