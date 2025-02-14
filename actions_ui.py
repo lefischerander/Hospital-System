@@ -18,8 +18,7 @@ user_service = (
 
 
 user_service= Service_Database.User_service()#creating an instance of the class Userservice
-#Doktor [uid][name][surname][department]
-#Patient [uid][gender][age][Date of Death][name][surname]
+
 class ActionsUI:
     def doktor_actions(global_username):
         actions_window = Tk()
@@ -33,6 +32,7 @@ class ActionsUI:
         print()
 
         def view_patient_data():
+            actions_window.withdraw
             def get_patient_id():
                 get_patient_id_window = Toplevel(actions_window)
                 get_patient_id_window.title("Patient ID")
@@ -48,6 +48,7 @@ class ActionsUI:
                 
                 def cancel_get_patient_id():
                     get_patient_id_window.destroy()
+                    actions_window.deiconify
 
                 button_frame = Frame(get_patient_id_window)
                 button_frame.pack(pady=10)
@@ -57,6 +58,10 @@ class ActionsUI:
 
                 cancel_button = Button(get_patient_id_window, text="Cancel", command=cancel_get_patient_id)
                 cancel_button.pack(pady=5, side=RIGHT)
+
+            def back_action():
+                view_patient_data_window.destroy
+                actions_window.deiconify
 
             patient_id = get_patient_id()
             view_patient_data_window = Toplevel(actions_window)
@@ -76,8 +81,9 @@ class ActionsUI:
                     else:
                         label = Label(master=patient_grid, text=patient_data[i])
                         label.pack()
-            #check output
-            #add back button
+            
+            back_button = Button(master=view_patient_data_window, text="Back", command=back_action)
+            back_button.pack(side=TOP, side=RIGHT)
 
         def view_profile():
             actions_window.withdraw()
@@ -87,6 +93,10 @@ class ActionsUI:
 
             user_profile = user_service.get_your_profile(global_username)
             user_info = ["User ID", "Name", "Surname", "Department", "Age"]
+
+            def back_action():
+                view_profile_window.destroy()
+                actions_window.deiconify
 
             for i in range(len(user_profile)):
                 for j in range(1):
@@ -99,6 +109,11 @@ class ActionsUI:
                     else:
                         label = Label(master=user_grid, text=user_profile[i])
                         label.pack()
+
+            
+            back_button = Button(master=view_profile_window, text="Back", command=back_action)
+            back_button.pack(side=TOP, side=RIGHT)
+
 
         def change_password():
             actions_window.withdraw()
@@ -199,6 +214,10 @@ class ActionsUI:
             user_profile = user_service.get_your_profile(global_username)
             user_info = ["User ID", "Gender", "Age", "Name", "Surname"]
 
+            def back_action():
+                view_profile_window.destroy()
+                action_window.deiconify
+
             for i in range(len(user_profile)):
                 for j in range(1):
                     
@@ -210,6 +229,10 @@ class ActionsUI:
                     else:
                         label = Label(master=user_grid, text=user_profile[i])
                         label.pack()
+
+            back_button = Button(master=view_profile_window, text="Back", command=back_action)
+            back_button.pack(side=TOP, side=RIGHT)
+
 
         def change_password():
             action_window.withdraw()
@@ -299,12 +322,17 @@ class ActionsUI:
         print()
 
         def view_all_users():
+            actions_window.withdraw
             user_table = Toplevel(actions_window)
             user_table.title("All Users")
             user_table.geometry("800x600")
 
             row_list = ["User ID", "Name", "Surname", "Role"]
             all_users = user_service.view_all_users()
+
+            def back_action():
+                user_table.destroy()
+                actions_window.deiconify
 
             for i in range(len(all_users)+1):
                 for j in range(len(row_list)):
@@ -319,9 +347,12 @@ class ActionsUI:
                     label = Label(master=user_grid, text=all_users[i-1][j])
                     label.pack()
 
+            back_button = Button(master=user_table, text="Back", command=back_action)
+            back_button.pack(side=TOP, side=RIGHT)
 
 
         def delete_user():
+            actions_window.withdraw
             def get_user_id():
                 get_user_id_window = Toplevel(actions_window)
                 get_user_id_window.title("Patient ID")
@@ -331,12 +362,14 @@ class ActionsUI:
                 patient_id.pack(pady=5)
 
                 def submit_patient_id():
+                    messagebox.askquestion(title="Delete user", message="Are you sure you want to continue?")
                     get_user_id_window.destroy()
                     return patient_id
 
                 
                 def cancel_get_patient_id():
                     get_user_id_window.destroy()
+                    actions_window.deiconify
 
                 button_frame = Frame(get_user_id_window)
                 button_frame.pack(pady=10)
@@ -349,6 +382,7 @@ class ActionsUI:
 
             user_id = get_user_id()
             user_service.delete_user(user_id)
+            messagebox.showinfo(title=None, message="User removed successfully")
 
         def change_password():
             actions_window.withdraw()
