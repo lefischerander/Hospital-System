@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, messagebox, Label, Entry, Toplevel, Frame, RIGHT, LEFT, RAISED, TOP
+from tkinter import Tk, Button, messagebox, Label, Entry, Toplevel, Frame, RIGHT, RAISED
 
 # import getpass
 from test_class_login import AuthSystem
@@ -7,6 +7,7 @@ from helppage import HelpPage
 
 import sys
 import subprocess
+
 # from test_class_actions import Actions
 from user_test import User
 import Service_Database
@@ -16,8 +17,6 @@ user_service = (
     Service_Database.User_service()
 )  # creating an instance of the class Userservice
 
-
-user_service= Service_Database.User_service()#creating an instance of the class Userservice
 
 class ActionsUI:
     def doktor_actions(global_username):
@@ -33,6 +32,7 @@ class ActionsUI:
 
         def view_patient_data():
             actions_window.withdraw
+
             def get_patient_id():
                 get_patient_id_window = Toplevel(actions_window)
                 get_patient_id_window.title("Patient ID")
@@ -45,18 +45,21 @@ class ActionsUI:
                     get_patient_id_window.destroy()
                     return patient_id
 
-                
                 def cancel_get_patient_id():
                     get_patient_id_window.destroy()
                     actions_window.deiconify
 
                 button_frame = Frame(get_patient_id_window)
                 button_frame.pack(pady=10)
-                
-                submit_button = Button(get_patient_id_window, text="Submit", command=submit_patient_id)
+
+                submit_button = Button(
+                    get_patient_id_window, text="Submit", command=submit_patient_id
+                )
                 submit_button.pack(pady=5, side=RIGHT)
 
-                cancel_button = Button(get_patient_id_window, text="Cancel", command=cancel_get_patient_id)
+                cancel_button = Button(
+                    get_patient_id_window, text="Cancel", command=cancel_get_patient_id
+                )
                 cancel_button.pack(pady=5, side=RIGHT)
 
             def back_action():
@@ -67,17 +70,29 @@ class ActionsUI:
             view_patient_data_window = Toplevel(actions_window)
             view_patient_data_window.title("Patient Data")
             view_patient_data_window.geometry("800x600")
-            
+
             back_button = Button(text="Back", command=back_action)
             back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
             patient_data = user_service.get_patient_profile(patient_id)
-            patient_info = ["Patient_ID", "Gender", "Age", "Name", "Surname", "Date of Death"]
+            patient_info = [
+                "Patient_ID",
+                "Gender",
+                "Age",
+                "Name",
+                "Surname",
+                "Date of Death",
+            ]
             for i in range(len(patient_data)):
                 for j in range(2):
-                    patient_grid = Frame(master=view_patient_data_window, relief=RAISED, borderwidth=1, width=15)
+                    patient_grid = Frame(
+                        master=view_patient_data_window,
+                        relief=RAISED,
+                        borderwidth=1,
+                        width=15,
+                    )
                     patient_grid.grid(row=i, column=j, padx=5, pady=5)
-                    if(j==0):
+                    if j == 0:
                         label = Label(master=patient_grid, text=patient_info[i])
                         label.pack()
                     else:
@@ -96,22 +111,25 @@ class ActionsUI:
             def back_action():
                 actions_window.deiconify
                 view_profile_window.destroy()
-            
+
             back_button = Button(text="Back", command=back_action)
             back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
             for i in range(len(user_profile)):
                 for j in range(2):
-                    
-                    user_grid = Frame(master=view_profile_window, relief=RAISED, borderwidth=1, width=15)
+                    user_grid = Frame(
+                        master=view_profile_window,
+                        relief=RAISED,
+                        borderwidth=1,
+                        width=15,
+                    )
                     user_grid.grid(row=i, column=j, padx=5, pady=5)
-                    if(j==0):
+                    if j == 0:
                         label = Label(master=user_grid, text=user_info[i])
                         label.pack()
                     else:
                         label = Label(master=user_grid, text=user_profile[i])
                         label.pack()
-
 
         def change_password():
             actions_window.withdraw()
@@ -146,8 +164,13 @@ class ActionsUI:
                     "Reset Password Info",
                     f"Username: {username}\nPassword: {old_password}",
                 )
-                auth.reset_password(username, hash_password, new_password, confirm_new_password)
-                messagebox.showinfo("Reset Password Info", f"Username: {username}\nPassword: {old_password}")
+                auth.reset_password(
+                    username, hash_password, new_password, confirm_new_password
+                )
+                messagebox.showinfo(
+                    "Reset Password Info",
+                    f"Username: {username}\nPassword: {old_password}",
+                )
                 change_password_window.destroy()
                 actions_window.deiconify()
 
@@ -171,9 +194,7 @@ class ActionsUI:
         def logout():
             actions_window.destroy()
             subprocess.run(["python", "main_ui.py"])
-            sys.exit()            
-            
-            
+            sys.exit()
 
         button_frame = Frame(actions_window)
         button_frame.pack(pady=10)
@@ -181,15 +202,19 @@ class ActionsUI:
         logout_button = Button(button_frame, text="Logout", command=logout)
         logout_button.pack(side=RIGHT, padx=5)
 
-        patient_data = Button(button_frame, text="View patiant data", command=view_patient_data)
+        patient_data = Button(
+            button_frame, text="View patiant data", command=view_patient_data
+        )
         patient_data.pack(side=RIGHT, padx=5)
 
         profile = Button(button_frame, text="View your profile", command=view_profile)
         profile.pack(side=RIGHT, padx=5)
 
-        change_password_button = Button(button_frame, text="Change Password", command=change_password)
+        change_password_button = Button(
+            button_frame, text="Change Password", command=change_password
+        )
         change_password_button.pack(side=RIGHT, padx=5)
-        
+
         help_button = Button(actions_window, text="Help", command=HelpPage.help_page)
         help_button.pack(pady=10)
 
@@ -221,16 +246,19 @@ class ActionsUI:
 
             for i in range(len(user_profile)):
                 for j in range(2):
-                    
-                    user_grid = Frame(master=view_profile_window, relief=RAISED, borderwidth=1, width=15)
+                    user_grid = Frame(
+                        master=view_profile_window,
+                        relief=RAISED,
+                        borderwidth=1,
+                        width=15,
+                    )
                     user_grid.grid(row=i, column=j, padx=5, pady=5)
-                    if(j==0):
+                    if j == 0:
                         label = Label(master=user_grid, text=user_info[i])
                         label.pack()
                     else:
                         label = Label(master=user_grid, text=user_profile[i])
                         label.pack()
-
 
         def change_password():
             action_window.withdraw()
@@ -265,8 +293,13 @@ class ActionsUI:
                     "Reset Password Info",
                     f"Username: {username}\nPassword: {old_password}",
                 )
-                auth.reset_password(username, hash_password, new_password, confirm_new_password)
-                messagebox.showinfo("Reset Password Info", f"Username: {username}\nPassword: {old_password}")
+                auth.reset_password(
+                    username, hash_password, new_password, confirm_new_password
+                )
+                messagebox.showinfo(
+                    "Reset Password Info",
+                    f"Username: {username}\nPassword: {old_password}",
+                )
                 change_password_window.destroy()
                 action_window.deiconify()
 
@@ -290,8 +323,7 @@ class ActionsUI:
         def logout():
             action_window.destroy()
             subprocess.run(["python", "main_ui.py"])
-            sys.exit()            
-            
+            sys.exit()
 
         button_frame = Frame(action_window)
         button_frame.pack(pady=10)
@@ -299,10 +331,14 @@ class ActionsUI:
         logout_button = Button(button_frame, text="Logout", command=logout)
         logout_button.pack(side=RIGHT, padx=5)
 
-        change_password_button = Button(button_frame, text="Change Password", command=change_password)
+        change_password_button = Button(
+            button_frame, text="Change Password", command=change_password
+        )
         change_password_button.pack(side=RIGHT, padx=5)
 
-        view_profile_button = Button(button_frame, text="View your profile", command=view_profile)
+        view_profile_button = Button(
+            button_frame, text="View your profile", command=view_profile
+        )
         view_profile_button.pack(side=RIGHT, padx=5)
 
         help_button = Button(action_window, text="Help", command=HelpPage.help_page)
@@ -335,22 +371,24 @@ class ActionsUI:
             back_button = Button(user_table, text="Back", command=back_action)
             back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
-            for i in range(len(all_users)+1):
+            for i in range(len(all_users) + 1):
                 for j in range(len(row_list)):
-                    user_grid = Frame(master=user_table, relief=RAISED, borderwidth=1, width=15)
-                    user_grid.grid(row=i+1, column=j, padx=5, pady=5)
+                    user_grid = Frame(
+                        master=user_table, relief=RAISED, borderwidth=1, width=15
+                    )
+                    user_grid.grid(row=i + 1, column=j, padx=5, pady=5)
 
                     if i == 0:
                         label = Label(master=user_grid, text=row_list[j])
                         label.pack()
                         continue
-                        
-                    label = Label(master=user_grid, text=all_users[i-1][j])
-                    label.pack()
 
+                    label = Label(master=user_grid, text=all_users[i - 1][j])
+                    label.pack()
 
         def delete_user():
             actions_window.withdraw
+
             def get_user_id():
                 get_user_id_window = Toplevel(actions_window)
                 get_user_id_window.title("Patient ID")
@@ -360,22 +398,28 @@ class ActionsUI:
                 patient_id.pack(pady=5)
 
                 def submit_patient_id():
-                    messagebox.askquestion(title="Delete user", message="Are you sure you want to continue?")
+                    messagebox.askquestion(
+                        title="Delete user",
+                        message="Are you sure you want to continue?",
+                    )
                     get_user_id_window.destroy()
                     return patient_id
 
-                
                 def cancel_get_patient_id():
                     get_user_id_window.destroy()
                     actions_window.deiconify
 
                 button_frame = Frame(get_user_id_window)
                 button_frame.pack(pady=10)
-                
-                submit_button = Button(get_user_id_window, text="Submit", command=submit_patient_id)
+
+                submit_button = Button(
+                    get_user_id_window, text="Submit", command=submit_patient_id
+                )
                 submit_button.pack(pady=5, side=RIGHT)
 
-                cancel_button = Button(get_user_id_window, text="Cancel", command=cancel_get_patient_id)
+                cancel_button = Button(
+                    get_user_id_window, text="Cancel", command=cancel_get_patient_id
+                )
                 cancel_button.pack(pady=5, side=RIGHT)
 
             user_id = get_user_id()
@@ -415,8 +459,13 @@ class ActionsUI:
                     "Reset Password Info",
                     f"Username: {username}\nPassword: {old_password}",
                 )
-                auth.reset_password(username, hash_password, new_password, confirm_new_password)
-                messagebox.showinfo("Reset Password Info", f"Username: {username}\nPassword: {old_password}")
+                auth.reset_password(
+                    username, hash_password, new_password, confirm_new_password
+                )
+                messagebox.showinfo(
+                    "Reset Password Info",
+                    f"Username: {username}\nPassword: {old_password}",
+                )
                 change_password_window.destroy()
                 actions_window.deiconify()
 
@@ -440,21 +489,27 @@ class ActionsUI:
         def logout():
             actions_window.destroy()
             subprocess.run(["python", "main_ui.py"])
-            sys.exit()            
-        
+            sys.exit()
+
         button_frame = Frame(actions_window)
         button_frame.pack(pady=10)
 
         logout_button = Button(button_frame, text="Logout", command=logout)
         logout_button.pack(side=RIGHT, padx=5)
 
-        change_password_button = Button(button_frame, text="Change Password", command=change_password)
+        change_password_button = Button(
+            button_frame, text="Change Password", command=change_password
+        )
         change_password_button.pack(side=RIGHT, padx=5)
 
-        delete_user_button = Button(button_frame, text="Delete a user", command=delete_user)
+        delete_user_button = Button(
+            button_frame, text="Delete a user", command=delete_user
+        )
         delete_user_button.pack(side=RIGHT, padx=5)
 
-        view_all_users_button = Button(button_frame, text="View all users", command=view_all_users)
+        view_all_users_button = Button(
+            button_frame, text="View all users", command=view_all_users
+        )
         view_all_users_button.pack(side=RIGHT, padx=5)
 
         help_button = Button(actions_window, text="Help", command=HelpPage.help_page)
