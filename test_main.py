@@ -29,7 +29,7 @@ def main():
                 elif user_role == "Patient":
                     Actions.patient_actions()
                 elif user_role == "admin":
-                    Actions.admin_actions(subject_id)
+                    Actions.admin_actions()
                 else:
                     print("Error 404\n")
                     break

@@ -59,7 +59,7 @@ class Actions:
             patient = int(
                 input("Enter the subject_id of the patient you want to view:  \n")
             )
-            patient_info = patient_info = user_service.get_patient_profile(patient)
+            patient_info = user_service.get_patient_profile(patient)
             print(patient_info)
 
             answer = print("Press 'menu' to go back to the main menu")
