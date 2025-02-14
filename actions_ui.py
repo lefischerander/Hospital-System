@@ -1,4 +1,4 @@
-from tkinter import Tk, Button, messagebox, Label, Entry, Toplevel, Frame, RIGHT
+from tkinter import Tk, Button, messagebox, Label, Entry, Toplevel, Frame, RIGHT, LEFT, RAISED
 
 # import getpass
 from test_class_login import AuthSystem
@@ -261,9 +261,8 @@ class ActionsUI:
 
         print("1. View all users")
         print("2. Delete a user")
-        print("3. View your profile")
-        print("4. Change Password")
-        print("5. Logout")
+        print("3. Change Password")
+        print("4. Logout")
         print()
 
         def view_all_users():
@@ -271,20 +270,27 @@ class ActionsUI:
             user_table.title("All Users")
             user_table.geometry("1920x1080")
 
+            row_list = ["User ID", "Name", "Surname", "Role"]
+            for i in range(len(row_list)):
+                frame = user_table.Frame(master=user_table, relief=RAISED, borderwidth=1)
+                
+                frame.grid(row=0, column=i)
+                label=user_table.Label(master=frame, text=row_list[i])
+                label.pack()
+
+            all_users = user_service.view_all_users()
+            for i in range(len(all_users)):
+                for j in range(len(all_users[i])):
+                    user_grid = user_table.Frame(master=frame, width=10)
+                    user_grid.grid(row=i, column=j)
+                    label = user_table.Label(master=user_grid, text=all_users[i][j])
+                    label.pack()
+
+
+
         def delete_user():
             # delete user
             actions_window.withdraw()
-
-        def view_profile():
-            actions_window.withdraw()
-            view_profile_window = Toplevel(actions_window)
-            view_profile_window.title("Profile")
-            view_profile_window.geometry("800x600")
-
-            user_profile = user_service.get_your_profile(global_username)
-
-            #check output
-            #add back button
 
         def change_password():
             actions_window.withdraw()
@@ -354,9 +360,6 @@ class ActionsUI:
 
         change_password_button = Button(button_frame, text="Change Password", command=change_password)
         change_password_button.pack(side=RIGHT, padx=5)
-
-        view_profile_button = Button(button_frame, text="View your profile", command=view_profile)
-        view_profile_button.pack(side=RIGHT, padx=5)
 
         delete_user_button = Button(button_frame, text="Delete a user", command=delete_user)
         delete_user_button.pack(side=RIGHT, padx=5)
