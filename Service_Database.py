@@ -50,7 +50,7 @@ class User_service:
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            cursor.execute("select role from ? where subject_id = ?", LOGIN_DATA, id)
+            cursor.execute(f"select role from {LOGIN_DATA} where subject_id = ?", id)
             role = cursor.fetchone()[0]
             cursor.close()
             connection.close()
@@ -63,7 +63,7 @@ class User_service:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                "select subject_id from ? where surname = ?", LOGIN_DATA, self.surname
+                f"select subject_id from {LOGIN_DATA} where surname = ?", self.surname
             )
             id = cursor.fetchone()[0]
             cursor.close()
@@ -90,32 +90,32 @@ class User_service:
 
     def get_your_profile(self, subject_id):
         try:
-            if self.get_role_by_id(self.get_id()) == "patient":
+            if self.get_role_by_id(subject_id) == "Patient":
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
-                query = """
+                query = f"""
                 SELECT subject_id, gender, anchor_age, firstname, surname 
-                FROM ? 
+                FROM {PATIENTS} 
                 WHERE subject_id = ?
-                """
-                cursor.execute(query, PATIENTS, subject_id)
+                """ 
+                cursor.execute(query,subject_id )
                 result = cursor.fetchone()
                 cursor.close()
                 connection.close()
-                return f"Your profile: {result}"
-            elif self.get_role_by_id(self.get_id()) == "doctor":
+                return result
+            elif self.get_role_by_id(subject_id) == "Doctor":
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
-                query = """
+                query = f"""
                 SELECT subject_id, firstname, surname, department_name, age 
-                FROM ? 
+                FROM  {DOCTORS} 
                 WHERE subject_id = ?
-                """
-                cursor.execute(query, DOCTORS, subject_id)
+                """ 
+                cursor.execute(query,subject_id)
                 result = cursor.fetchone()
                 cursor.close()
                 connection.close()
-                return f"Your profile: {result}"
+                return result
 
             else:
                 return "Error fetching profile ,please retry"
@@ -382,18 +382,20 @@ if __name__ == "__main__":
     print()
 
     action = input(
-        "Press '1' to view all users in the hospital, Press '2' to view a patient's profile, Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
+        "Press '1'to get role by id, Press '2' to view a patient's profile, Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
     )
     print("Okay you chose: ", action)
     if action == "1":
-        user_service.view_all_users()
-        print("All users: ", user_service.view_all_users())
+        role_id = input("Give the subject_id: ")
+        The_role_id= user_service.get_role_by_id( role_id )
+        print(The_role_id)
+       
 
     elif action == "2":
         subject_id = int(input("Enter subject ID: "))
-        patient_info = user_service.get_patient_profile(subject_id)
-        if patient_info:
-            print("Patient's profile:", patient_info)
+        your_profile = user_service.get_your_profile(subject_id)
+        if your_profile:
+            print("Your profile", your_profile)
         else:
             print("No patient information found or an error occurred.")
     elif action == "3":

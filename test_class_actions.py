@@ -16,7 +16,7 @@ class Actions:
         # Actions for the admin
         print("Your possible actions: \n")
         print("1. View all users")
-        print("2. Delete an account")  # low priority
+        print("2. Delete an account") 
         print("3. View patient's profile")
         print("4. View doctor's profile")
         print("5. Change password")
@@ -26,8 +26,10 @@ class Actions:
         auth = AuthSystem()
 
         if choice == "1":
+            # We are parsing the view_all-users function to the instance of the class Service 
             user_service.view_all_users()
             print("All users: ", user_service.view_all_users())
+            # After tah
             Actions.admin_actions()
 
         elif choice == "2":
@@ -112,20 +114,15 @@ class Actions:
                 Actions.doktor_actions()
 
         elif choice == "2":
-            doctor = int(
+            doctor_id = int(
                 input(
-                    "Before you can view your profile, you need to input your subject_id first"
+                    "Before you can view your profile, you need to input your subject_id first: "
                 )
             )
-            doctor_profile = user_service.get_your_profile(doctor)
+            doctor_profile = user_service.get_your_profile(doctor_id)
             print(doctor_profile)
 
-            answer = print("Press 'menu' to go back to the main menu")
-            if answer == "menu":
-                Actions.doktor_actions()
-            else:
-                print("Invalid input")
-                Actions.doktor_actions()
+            Actions.doktor_actions()
 
         elif choice == "3":
             patient_diagnosis = int(
