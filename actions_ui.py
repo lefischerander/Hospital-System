@@ -312,7 +312,7 @@ class ActionsUI:
                 top_grid = Frame(master=user_table, relief=RAISED, borderwidth=1, width=15)
                 top_grid.grid(row=0, column=i)
 
-                label = Label(master=user_grid, text=row_list[j])
+                label = Label(master= top_grid, text=row_list[i])
                 label.pack()
 
             for i in range(len(all_users)):
