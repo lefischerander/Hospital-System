@@ -275,9 +275,11 @@ class ActionsUI:
 
             for i in range(len(all_users)):
                 for j in range(len(all_users[i])):
-                    user_grid = Frame(master=user_table, width=10)
+                    user_grid = Frame(master=user_table, relief=RAISED, borderwidth=1)
                     user_grid.grid(row=i, column=j)
+
                     label = Label(master=user_grid, text=row_list[j])
+                    label.pack()
                     label = Label(master=user_grid, text=all_users[i][j])
                     label.pack()
 
