@@ -303,9 +303,9 @@ class User_service:
 
     def get_procedures_by_subject_id(self, subject_id):
         try:
-            user_role = self.get_role_by_id(self.get_id())
+            user_role = self.get_role_by_id(self.get_id(surname))
             if user_role == "doctor" or (
-                user_role == "patient" and self.get_id() == subject_id
+                user_role == "patient" and self.get_id(surname) == subject_id
             ):
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
@@ -446,12 +446,12 @@ if __name__ == "__main__":
     print()
 
     action = input(
-        "Press '1'to get role by id, Press '2' to view a patient's profile, Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
+        "Press '1'to get id, Press '2' to view a patient's profile, Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
     )
     print("Okay you chose: ", action)
     if action == "1":
-        role_id = input("Give the subject_id: ")
-        The_role_id = user_service.get_role_by_id(role_id)
+        surname = input("Give the surname: ")
+        The_role_id = user_service.get_id(surname)
         print(The_role_id)
 
     elif action == "2":
