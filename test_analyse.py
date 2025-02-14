@@ -2,8 +2,6 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 import numpy as np
-#import seaborn as sns
-#import pyodbc
 
 class Analyse:
     def __init__(self):
@@ -60,86 +58,102 @@ class Analyse:
 
         plt.tight_layout()      
         plt.show()      
-        return patient
+        patient_value = df[df["subject_id"] == id][["chartdate","result_name","result_value"]]
+        return patient_value.to_string(index=False)
 
 
     def read_admissions(self):
         df = pd.read_csv(self.admissions_csv_path)
-        print(df.head())
+        df1 =pd.read_csv(self.patients_csv_path)
+
+        merged_df = pd.merge(df, df1[['subject_id', 'gender']], on='subject_id', how='left')
+        
+        adtime = merged_df["admittime"]
+        ditime = merged_df["dischtime"]
+        gender = merged_df['gender']
+        time = pd.to_datetime(ditime) - pd.to_datetime(adtime)
+        days = time.dt.days
+
+        data_1 = days[gender == 'M']
+        data_2 = days[gender == 'F']
+        data = [data_1, data_2]
+
+        plt.boxplot(data, patch_artist=True, meanline=True, showmeans=True, labels=['Male', 'Female'])
+        plt.title('Duration of Stay (Days) in Hospital')
+        plt.ylabel('Days')
+        plt.yticks(np.arange(0, max(days) + 1, 2))
+        plt.grid(True, linestyle='--', linewidth=1.5, alpha=0.7)
+        plt.show()  # Display the plot
+        
         id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
-        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
-        return patient
+        patient = merged_df[merged_df["subject_id"] == id][["admittime","dischtime","deathtime","admission_type","insurance","edregtime","edouttime","hospital_expire_flag"]]
+        return patient.to_string(index=False)
 
     def read_diagnoses_icd(self):
         df = pd.read_csv(self.diagnoses_icd_csv_path)
-        print(df.head())
+        df1 =pd.read_csv(self.d_icd_diagnoses_csv_path)
+        print(df.head(20))
+        merged_df = pd.merge(df, df1[['icd_code', 'long_title']], on='icd_code', how='left')
         id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
-        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
-        return patient
+        patient = merged_df[merged_df["subject_id"] == id][["seq_num","icd_code","icd_version","long_title"]]
+        return patient.to_string(index=False)
 
     def read_drgcodes(self):
         df = pd.read_csv(self.drgcodes_csv_path)
-        print(df.head())
         id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
-        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
-        return patient
+        patient = df[df["subject_id"] == id][["drg_code","description","drg_severity","drg_mortality"]]
+        return patient.to_string(index=False)
 
     def read_emar(self):
         df = pd.read_csv(self.emar_csv_path)
-        print(df.head())
         id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
-        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
-        return patient
+        patient = df[df["subject_id"] == id][["pharmacy_id","medication","charttime","scheduletime","event_txt"]]
+        return patient.to_string(index=False)
 
     def read_patients(self):
         df = pd.read_csv(self.patients_csv_path)
-        print(df.head())
-        print(df.shape)
+        age = df["anchor_age"]
+        gender = df["gender"]
         b_width = 5  # set the width of bin
-        df["anchor_age"].plot(
-            kind="hist",
-            bins=np.arange(
-                min(df["anchor_age"]) - 1, max(df["anchor_age"]) + b_width, b_width
-            ),
-        )  # we are setting the bins values in a list by incrementing them with bin width = 5
-        plt.xlabel("Age")  # Label of x-axis
-        plt.ylabel("Patients")  # Label of y-axis
-        plt.title("Age distribution of patients")  # Title of the plot
-        plt.xticks(
-            np.arange(min(df["anchor_age"]), max(df["anchor_age"]) + 10, 5)
-        )  # We set the values in the x-axis
-        plt.yticks(np.arange(0, 25, 2))  # Setting the values in y-axis
-        df.plot(kind="scatter", x="anchor_age", y="gender")  # Scatter plot
-        #sns.scatterplot(data=tips, x="total_bill", y="tip", hue="time")
+
+        fig, ax = plt.subplots(figsize=(10, 6))  # Create a figure and axis
+        ax.hist(age[gender == 'M'], bins=np.arange(min(age) - 1, max(age) + 1, b_width), alpha=0.5, label='Male', color='b')
+        ax.hist(age[gender == 'F'], bins=np.arange(min(age) - 1, max(age) + 1, b_width), alpha=0.5, label='Female', color='r')
+        
+        ax.set_title('Distribution of Patient Ages by Gender')
+        ax.set_xlabel('Age')
+        ax.set_ylabel('Number of Patients')
+        ax.legend(loc='upper right')
+                
         plt.show()  # Display the plot
         id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
-        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
-        return patient
+        patient = df[df["subject_id"] == id][["gender","anchor_age","dod"]]
+        return patient.to_string(index=False)
 
     def read_pharmacy(self):
         df = pd.read_csv(self.pharmacy_csv_path)
-        print(df.head())
         id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
-        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
-        return patient
+        patient = df[df["subject_id"] == id][["pharmacy_id","medication","proc_type","frequency","starttime","stoptime"]]
+        return patient.to_string(index=False)
 
     def read_procedures_icd(self):
         df = pd.read_csv(self.procedures_icd_csv_path)
-        print(df.head())
+        df1 =pd.read_csv(self.d_icd_procedures_csv_path)
+        merged_df = pd.merge(df, df1[['icd_code', 'long_title']], on='icd_code', how='left')
         id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
-        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
-        return patient
+        patient = merged_df[merged_df["subject_id"] == id][["chartdate","seq_num","icd_code","long_title","icd_version"]]
+        return patient.to_string(index=False)
 
     def read_d_icd_diagnoses(self):
         df = pd.read_csv(self.d_icd_diagnoses_csv_path)
-        print(df.head())
-        id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
-        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
-        return patient
+        #print(df.head(20))
+        icd = input("Enter icd code: ")  # Ask the user to enter the icd code
+        icd_code = df[df["icd_code"].astype(str) == icd]["long_title"].values[0]  # Get the long title of the icd code
+        return icd_code
 
     def read_d_icd_procedures(self):
         df = pd.read_csv(self.d_icd_procedures_csv_path)
-        print(df.head())
-        id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
-        patient = df[df["subject_id"] == id]  # Get the patient with the entered subject_id
-        return patient
+        #print(df.head(20))
+        icd = input("Enter icd code: ")  # Ask the user to enter the icd code
+        icd_code = df[df["icd_code"].astype(str) == icd]["long_title"].values[0]  # Get the long title of the icd code
+        return icd_code
