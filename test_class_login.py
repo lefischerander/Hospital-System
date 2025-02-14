@@ -4,10 +4,7 @@ import pyodbc
 from user_test import User
 import datetime
 import threading
-import Database_Information as dbi
-
-connection_string = dbi.connection_string
-
+from db_access import connection_string
 
 
 class AuthSystem:
