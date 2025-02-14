@@ -112,17 +112,19 @@ class ActionsUI:
                 actions_window.deiconify
                 view_profile_window.destroy()
 
+            user_grid = Frame(
+                master=view_profile_window,
+                relief=RAISED,
+                borderwidth=1,
+                width=15,
+            )
+
             back_button = Button(text="Back", command=back_action)
             back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
             for i in range(len(user_profile)):
                 for j in range(2):
-                    user_grid = Frame(
-                        master=view_profile_window,
-                        relief=RAISED,
-                        borderwidth=1,
-                        width=15,
-                    )
+                    
                     user_grid.grid(row=i+1, column=j, padx=5, pady=5)
                     if j == 0:
                         label = Label(master=user_grid, text=user_info[i])
