@@ -145,12 +145,10 @@ class ActionsUI:
         button_frame = Frame(actions_window)
         button_frame.pack(pady=10)
 
-        logout_button = Button(button_frame, text="Logout", command=logout())
+        logout_button = Button(button_frame, text="Logout", command=logout)
         logout_button.pack(side=RIGHT, padx=5)
 
-        patient_data = Button(
-            button_frame, text="View patiant data", command=view_patient_data
-        )
+        patient_data = Button(button_frame, text="View patiant data", command=view_patient_data)
         patient_data.pack(side=RIGHT, padx=5)
 
         profile = Button(button_frame, text="View your profile", command=view_profile)
@@ -247,7 +245,7 @@ class ActionsUI:
         button_frame = Frame(action_window)
         button_frame.pack(pady=10)
 
-        logout_button = Button(button_frame, text="Logout", command=logout())
+        logout_button = Button(button_frame, text="Logout", command=logout)
         logout_button.pack(side=RIGHT, padx=5)
 
         change_password_button = Button(button_frame, text="Change Password", command=change_password)
@@ -351,7 +349,7 @@ class ActionsUI:
         button_frame = Frame(actions_window)
         button_frame.pack(pady=10)
 
-        logout_button = Button(button_frame, text="Logout", command=logout())
+        logout_button = Button(button_frame, text="Logout", command=logout)
         logout_button.pack(side=RIGHT, padx=5)
 
         change_password_button = Button(button_frame, text="Change Password", command=change_password)
