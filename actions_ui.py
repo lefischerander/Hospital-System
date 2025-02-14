@@ -91,7 +91,7 @@ class ActionsUI:
                         borderwidth=1,
                         width=15,
                     )
-                    patient_grid.grid(row=i, column=j, padx=5, pady=5)
+                    patient_grid.grid(row=i+1, column=j, padx=5, pady=5)
                     if j == 0:
                         label = Label(master=patient_grid, text=patient_info[i])
                         label.pack()
@@ -123,7 +123,7 @@ class ActionsUI:
                         borderwidth=1,
                         width=15,
                     )
-                    user_grid.grid(row=i, column=j, padx=5, pady=5)
+                    user_grid.grid(row=i+1, column=j, padx=5, pady=5)
                     if j == 0:
                         label = Label(master=user_grid, text=user_info[i])
                         label.pack()
@@ -252,7 +252,7 @@ class ActionsUI:
                         borderwidth=1,
                         width=15,
                     )
-                    user_grid.grid(row=i, column=j, padx=5, pady=5)
+                    user_grid.grid(row=i+1, column=j, padx=5, pady=5)
                     if j == 0:
                         label = Label(master=user_grid, text=user_info[i])
                         label.pack()
