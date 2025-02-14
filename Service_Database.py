@@ -1,5 +1,5 @@
 import pyodbc
-import Database_Information as db_info
+from Database_Information import connection_string
 
 # database tables
 LOGIN_DATA = "New_login_data"
@@ -24,7 +24,7 @@ class User_service:
         The connection string to the database
     """
 
-    def __init__(self, connection_string):
+    def __init__(self):
         """
         Initializes the connection string to the database
 
@@ -440,7 +440,7 @@ class User_service:
 
 
 if __name__ == "__main__":
-    user_service = User_service(db_info.connection_string)
+    user_service = User_service()
     print("Welcome to the hospital database.")
     print("Please choose an action:")
     print()
