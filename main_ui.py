@@ -1,12 +1,10 @@
-from tkinter import Tk, Button, messagebox, Label, Entry, Toplevel, Frame, RIGHT
 
-# import getpass
-from test_class_login import AuthSystem
-
-# import sys
 # from test_class_actions import Actions
+from tkinter import Tk, Button, messagebox, Label, Entry, Toplevel, Frame, LEFT, RIGHT
+from test_class_login import AuthSystem
 from user_test import User
 from actions_ui import ActionsUI
+from helppage import HelpPage
 
 global_username = None
 global_password = None
@@ -146,12 +144,13 @@ root.geometry("800x600")
 login_button = Button(root, text="Login", command=MainUI.login_action)
 login_button.pack(pady=10)
 
-reset_password_button = Button(
-    root, text="Reset Password", command=MainUI.reset_password_action
-)
+reset_password_button = Button(root, text="Reset Password", command=MainUI.reset_password_action)
 reset_password_button.pack(pady=10)
 
 exit_button = Button(root, text="Exit", command=MainUI.exit_action)
 exit_button.pack(pady=10)
+
+help_button = Button(root, text="Help", command=HelpPage.help_page)
+help_button.pack(pady=10)
 
 root.mainloop()
