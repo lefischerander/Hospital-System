@@ -152,6 +152,7 @@ class Actions:
             procedures = user_service.get_procedures_by_subject_id(patient_procedures)
             print(procedures)
             print("Press 'menu' to go back to the main menu")
+            
 
         elif choice == "5":
             user = input("Enter your Subject_id: ").strip()

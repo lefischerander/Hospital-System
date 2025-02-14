@@ -303,20 +303,22 @@ class User_service:
 
     def get_procedures_by_subject_id(self, subject_id):
         try:
-            user_role = self.get_role_by_id(self.get_id(surname))
+            verifying_id= int(input("Please input your Id before doing this action: "))
+            user_role = self.get_role_by_id(verifying_id)
+            
             if user_role == "doctor" or (
-                user_role == "patient" and self.get_id(surname) == subject_id
+                user_role == "patient" and verifying_id == subject_id
             ):
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
-                query = """
+                query = f"""
                     SELECT p.subject_id, p.hadm_id, p.seq_num, p.chartdate, p.icd_code, p.icd_version, dp.long_title 
-                    FROM ? AS p
-                    INNER JOIN ? AS dp ON p.icd_code = dp.icd_code
+                    FROM {PROCEDURES} AS p
+                    INNER JOIN {PROCEDURES_DESC} AS dp ON p.icd_code = dp.icd_code
                     WHERE p.subject_id = ?
                     ORDER BY p.seq_num
                 """
-                cursor.execute(query, PROCEDURES, PROCEDURES_DESC, subject_id)
+                cursor.execute(query, subject_id)
                 results = cursor.fetchall()
                 cursor.close()
                 connection.close()
@@ -413,28 +415,28 @@ class User_service:
         except Exception as e:
             print("Error: ", e)
 
-    def login(self, subject_id, password):
-        try:
-            connection = pyodbc.connect(self.connection_string)
-            cursor = connection.cursor()
-            cursor.execute(
-                "select firstname, surname from ? where subject_id = ? and password = ?",
-                LOGIN_DATA,
-                subject_id,
-                password,
-            )
-            result = cursor.fetchone()
-            cursor.close()
-            connection.close()
-            if result:
-                print(f"Welcome {result[0]} {result[1]}")
-            else:
-                return "Invalid subject_id or password"
+    # def login(self, subject_id, password):
+    #     try:
+    #         connection = pyodbc.connect(self.connection_string)
+    #         cursor = connection.cursor()
+    #         cursor.execute(
+    #             "select firstname, surname from ? where subject_id = ? and password = ?",
+    #             LOGIN_DATA,
+    #             subject_id,
+    #             password,
+    #         )
+    #         result = cursor.fetchone()
+    #         cursor.close()
+    #         connection.close()
+    #         if result:
+    #             print(f"Welcome {result[0]} {result[1]}")
+    #         else:
+    #             return "Invalid subject_id or password"
 
-        except Exception as db_error:
-            return f"Database error: {db_error}"
-        except Exception as e:
-            return f"An unexpected error occurred: {e}"
+    #     except Exception as db_error:
+    #         return f"Database error: {db_error}"
+    #     except Exception as e:
+    #         return f"An unexpected error occurred: {e}"
 
     # usage example
 
