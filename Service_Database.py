@@ -5,7 +5,6 @@ import sqlalchemy as sa
 import pandas as pd
 
 
-
 # database tables
 LOGIN_DATA = "New_login_data"
 DOCTORS = "doctors"
@@ -18,7 +17,6 @@ PROCEDURES_DESC = "d_icd_procedures"
 EMAR = "emar"
 ADMISSIONS = "admissions"
 PHARMACY = "pharmacy"
-
 
 
 class User_service:
@@ -48,6 +46,21 @@ class User_service:
         engine = sa.create_engine(self.connection_url)
         with engine.begin() as conn:
             df = pd.read_sql_query(sa.text(f"SELECT * FROM {table_name}"), conn)
+
+        return df
+
+    def read_sa_query(self, query):
+        """Queries the database with SQLAlchemy and fills a pandas DataFrame with the data
+
+        Args:
+            query (str): The query to be executed
+
+        Returns:
+            DataFrame: The table data in a pandas DataFrame
+        """
+        engine = sa.create_engine(self.connection_url)
+        with engine.begin() as conn:
+            df = pd.read_sql_query(sa.text(query), conn)
 
         return df
 
@@ -277,10 +290,6 @@ class User_service:
             print("Invalid icd code.", e)
             User_service.read_d_icd_diagnoses()  # Call the method again if the icd code is invalid
 
-            
-
-            
-
     def create_diagnosis(self, patient_id):
         """If the user is a doctor, adds a diagnosis to a patient's record
 
@@ -293,7 +302,7 @@ class User_service:
             Exception: If the patient with the given ID can't be found
             Exception: If any other Error happens during the process
         """
-        
+
         try:
             if self.get_role_by_id(config.Subject_id_logged) != "Doctor":
                 raise Exception("Only doctors can add diagnoses")
@@ -302,55 +311,56 @@ class User_service:
             cursor = connection.cursor()
 
             check_id = self.check_id(patient_id)
-            
+
             if check_id is None:
                 raise Exception(f"Patient with subject ID {patient_id} not found")
-            
-            diagnosis_added= self.read_d_icd_diagnoses()
-            
-            cursor.execute (f"insert into diagnoses_icd (seq_num, icd_code, icd_version, long_title)",
-                            diagnosis_added,patient_id)
-            
+
+            icd_code = None
+            while (
+                self.read_sa_query(
+                    f"SELECT * FROM {DIAGNOSES_DESC} WHERE icd_code = {icd_code}"
+                )
+                is None
+            ):
+                icd_code = input("Enter the diagnosis (icd_code): ")
+
+            diagnosis_added = self.read_sa_query(
+                f"SELECT * FROM {DIAGNOSES_DESC} WHERE icd_code = {icd_code}"
+            )
+
+            hadm_id = cursor.execute(
+                "select subject_id, hadm_id from ? where subject_id = ? order by hadm_id desc",
+                patient_id,
+            ).fetchone()[0]
+            try:
+                seq_num = (
+                    cursor.execute(
+                        "select max(seq_num) from diagnoses_icd where subject_id = ? and hadm_id = ?",
+                        patient_id,
+                        hadm_id,
+                    ).fetchone()[0]
+                    + 1
+                )
+            except pyodbc.Error:
+                seq_num = 1
+            icd_code = diagnosis_added["icd_code"]
+            icd_version = diagnosis_added["icd_version"]
+
+            cursor.execute(
+                "insert into diagnoses_icd (subject_id, hadm_id, seq_num, icd_code, icd_version)",
+                patient_id,
+                hadm_id,
+                seq_num,
+                icd_code,
+                icd_version,
+            )
+
             connection.commit()
             cursor.close()
             connection.close()
-        
+
         except Exception as e:
             print("Error:  ", e)
-            
-
-            
-
-
-            # hadm_id = cursor.execute(
-            #     "select subject_id, hadm_id from ? where subject_id = ? order by hadm_id desc",
-            #     patient_id,
-            # ).fetchone()[0]
-            # try:
-            #     seq_num = (
-            #         cursor.execute(
-            #             "select max(seq_num) from diagnoses_icd where subject_id = ? and hadm_id = ?",
-            #             patient_id,
-            #             hadm_id,
-            #         ).fetchone()[0]
-            #         + 1
-            #     )
-            # except pyodbc.Error:
-            #     seq_num = 1
-
-            # cursor.execute(
-            #     "insert into diagnoses_icd (subject_id, hadm_id, seq_num, icd_code, icd_version) values (?, ?, ?, ?, ?)",
-            #     patient_id,
-            #     hadm_id,
-            #     seq_num,
-            #     icd_code,
-            #     icd_version,
-            # )
-            # connection.commit()
-            # cursor.close()
-            # connection.close()
-            # print(f" Diagnosis added for patients with subject ID: {patient_id}")
-        
 
     def get_patient_profile(self, subject_id):  # dod time must be string
         try:
