@@ -148,7 +148,7 @@ class ActionsUI:
             )
 
             back_button = Button(button_grid, text="Back", command=back_action)
-            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+            back_button.place(x=700, y=0)
 
             for i in range(len(user_profile)):
                 for j in range(2):
@@ -286,7 +286,7 @@ class ActionsUI:
                 view_profile_window.destroy()
 
             back_button = Button(text="Back", command=back_action)
-            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+            back_button.place(x=700, y=0)
 
             for i in range(len(user_profile)):
                 for j in range(2):
@@ -425,7 +425,7 @@ class ActionsUI:
                 user_table.destroy()
 
             back_button = Button(user_table, text="Back", command=back_action)
-            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+            back_button.place(x=700, y=0)
 
             for i in range(len(all_users) + 1):
                 for j in range(len(row_list)):
