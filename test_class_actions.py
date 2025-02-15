@@ -131,7 +131,9 @@ class Actions:
 
         elif choice == "3":
             try:
-                diagnosis_subject_id = int(
+                diagnosis_subject_id = None
+                while user_service.check_id(diagnosis_subject_id) is None:
+                        diagnosis_subject_id = int(
                 input(
                     " Enter the subject_id of the patient you want to add a diagnosis to: "
                      )

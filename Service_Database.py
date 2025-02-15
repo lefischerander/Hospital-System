@@ -20,13 +20,10 @@ PHARMACY = "pharmacy"
 
 
 class User_service:
-    """
-    This class is responsible for handling all database operations
-    """
+    """This class is responsible for handling all database operations"""
 
     def __init__(self):
-        """
-        Initializes the connection string to the database
+        """Initializes the connection string to the database
 
         Parameters:
         connection_string: str
@@ -38,8 +35,7 @@ class User_service:
         )
 
     def read_table_sa(self, table_name):
-        """
-        Reads an entire table from the database with SQLAlchemy and fills a pandas DataFrame with the data
+        """Reads an entire table from the database with SQLAlchemy and fills a pandas DataFrame with the data
 
         Args:
             table_name (str): The name of the table to be read
@@ -237,21 +233,56 @@ class User_service:
             connection.close()
         except Exception as e:
             print("Error changing password: ", e)
+    
+    def check_id(self, subject_id):
+        try:
+            connection= pyodbc.connect(self.connection_string)
+            cursor= connection.cursor()
+
+            cursor.execute(
+                f"select subject_id from {PATIENTS} where subject_id= ?", 
+                subject_id,
+            )
+
+            if cursor.fetchone()[0] == 0:
+                raise Exception(f" User: '{subject_id}' not found in the database")
+            
+            checked_id= cursor.fetchone()
+            connection.commit()
+            cursor.close()
+            connection.close()
+
+            return checked_id
+        except Exception as e:
+            print(f"Oups error: ", e)
+            return None
+
+
+            
+
+            
 
     def create_diagnosis(self, patient_id, icd_code, icd_version):
+        """If the user is a doctor, adds a diagnosis to a patient's record
+
+        Args:
+            patient_id (int): id of the patient
+            icd_code (int): code of the icd diagnosis
+            icd_version (str): version of the icd_code (9 or 10)
+
+        Raises:
+            Exception: If the patient with the given ID can't be found
+            Exception: If any other Error happens during the process
+        """
         try:
             if self.get_role_by_id(config.Subject_id_logged) != "Doctor":
                 raise Exception("Only doctors can add diagnoses")
 
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-
-            cursor.execute(
-                "select count(*) from ? where subject_id= ? order by hadm_id desc",
-                PATIENTS,
-                patient_id,
-            )
-            if cursor.fetchone()[0] == 0:
+  
+            check_id = self.check_id(patient_id)
+            if check_id is None:
                 raise Exception(f"Patient with subject ID {patient_id} not found")
 
             hadm_id = cursor.execute(
@@ -284,7 +315,6 @@ class User_service:
             print(f" Diagnosis added for patients with subject ID: {patient_id}")
         except Exception as e:
             print("Error:  ", e)
-            return None
 
     def get_patient_profile(self, subject_id):  # dod time must be string
         try:
@@ -306,6 +336,15 @@ class User_service:
             return None
 
     def get_diagnosis(self, patient_id):
+        """Gets the diagnosis of a patient based on the patient's subject ID
+
+        Args:
+            patient_id (int): The patient's subject ID
+
+        Returns:
+            pyodbc.row: The row containing the patient's diagnosis (pyodbc object)
+            None: If an error occurs, nothing is returned
+        """
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
