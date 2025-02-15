@@ -139,10 +139,9 @@ class Actions:
                                  " Enter the subject_id of the patient you want to add a diagnosis to: "
                                  )
                         )
-                        icd_c = input("Enter the ICD-Code: ")
-                        icd_v = input("Enter the ICD-Version: ")
+                       
                         diagnosis_added= int(
-                        user_service.create_diagnosis(diagnosis_subject_id, icd_c, icd_v)
+                        user_service.create_diagnosis(diagnosis_subject_id)
                         )
             
                 if diagnosis_added is not None:
