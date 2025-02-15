@@ -137,7 +137,7 @@ class ActionsUI:
             user_info = ["User ID", "Name", "Surname", "Department", "Age"]
 
             def back_action():
-                actions_window.deiconify
+                actions_window.deiconify()
                 view_profile_window.destroy()
 
             button_grid = Frame(
@@ -146,9 +146,10 @@ class ActionsUI:
                 borderwidth=1,
                 width=15,
             )
+            button_grid.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
             back_button = Button(button_grid, text="Back", command=back_action)
-            back_button.place(x=700, y=0)
+            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
             for i in range(len(user_profile)):
                 for j in range(2):
