@@ -1,6 +1,6 @@
 from test_class_login import AuthSystem
 import getpass
-
+import test_analyse
 
 # import hashlib
 import Service_Database
@@ -12,6 +12,7 @@ user_service = (
 )  # creating an instance of the class Userservice
 #auth_system = AuthSystem()  # instance of the class AuthSystem
 
+analyzing = test_analyse.Analyse()
 
 class Actions:
     def admin_actions():
@@ -132,17 +133,17 @@ class Actions:
         elif choice == "3":
             try:
                 diagnosis_subject_id = None
-                while user_service.check_id(diagnosis_subject_id) is None:
+                while diagnosis_subject_id is None or user_service.check_id(diagnosis_subject_id) is None:
                         diagnosis_subject_id = int(
-                input(
-                    " Enter the subject_id of the patient you want to add a diagnosis to: "
-                     )
-                )
-                icd_c = input("Enter the ICD-Code: ")
-                icd_v = input("Enter the ICD-Version: ")
-                diagnosis_added= int(
-                user_service.create_diagnosis(diagnosis_subject_id, icd_c, icd_v)
-                )
+                             input(
+                                 " Enter the subject_id of the patient you want to add a diagnosis to: "
+                                 )
+                        )
+                        icd_c = input("Enter the ICD-Code: ")
+                        icd_v = input("Enter the ICD-Version: ")
+                        diagnosis_added= int(
+                        user_service.create_diagnosis(diagnosis_subject_id, icd_c, icd_v)
+                        )
             
                 if diagnosis_added is not None:
                    print("Diagnosis added successfully")

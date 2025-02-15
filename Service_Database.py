@@ -3,6 +3,7 @@ from db_access import connection_string
 import config
 import sqlalchemy as sa
 import pandas as pd
+import test_analyse
 
 
 # database tables
@@ -18,6 +19,7 @@ EMAR = "emar"
 ADMISSIONS = "admissions"
 PHARMACY = "pharmacy"
 
+analyzing = test_analyse.Analyse()
 
 class User_service:
     """This class is responsible for handling all database operations"""
@@ -234,7 +236,7 @@ class User_service:
         except Exception as e:
             print("Error changing password: ", e)
     
-    def check_id(self, subject_id):
+    def check_id(self, subject_id):                       #just for patients
         try:
             connection= pyodbc.connect(self.connection_string)
             cursor= connection.cursor()
