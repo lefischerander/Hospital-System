@@ -1,17 +1,12 @@
-from tkinter import Tk, Button, messagebox, Label, Entry, Toplevel, Frame, RIGHT, RAISED
-
-# import getpass
+'''import all dependencies'''
+from tkinter import Tk, Button, messagebox, Label, Entry, Toplevel, Frame, RIGHT, RAISED, LEFT
 from test_class_login import AuthSystem
-
 from helppage import HelpPage
-
 import sys
 import subprocess
-
-# from test_class_actions import Actions
 from user_test import User
 import Service_Database
-# from main_ui import root
+from Analyse_ui import Analyse_ui
 
 user_service = (
     Service_Database.User_service()
@@ -25,9 +20,10 @@ class ActionsUI:
         actions_window.geometry("800x600")
 
         print("1. View patient data")
-        print("2. View your profile")
-        print("3. Change Password")
-        print("4. Logout")
+        print("2. View Diagnosis for patient")
+        print("3. View your profile")
+        print("4. Change Password")
+        print("5. Logout")
         print()
 
         def view_patient_data():
@@ -99,6 +95,38 @@ class ActionsUI:
                         label = Label(master=patient_grid, text=patient_data[i])
                         label.pack()
 
+        def view_patient_diagnosis():
+            def get_patient_id():
+                get_patient_id_window = Toplevel(actions_window)
+                get_patient_id_window.title("Patient ID")
+
+                Label(get_patient_id_window, text="Patient ID:").pack(pady=5)
+                patient_id = Entry(get_patient_id_window)
+                patient_id.pack(pady=5)
+
+                def submit_patient_id():
+                    get_patient_id_window.destroy()
+                    return patient_id
+
+                def cancel_get_patient_id():
+                    get_patient_id_window.destroy()
+
+                button_frame = Frame(get_patient_id_window)
+                button_frame.pack(pady=10)
+
+                submit_button = Button(
+                    get_patient_id_window, text="Submit", command=submit_patient_id
+                )
+                submit_button.pack(pady=5, side=RIGHT)
+
+                cancel_button = Button(
+                    get_patient_id_window, text="Cancel", command=cancel_get_patient_id
+                )
+                cancel_button.pack(pady=5, side=RIGHT)
+
+            patient_id = get_patient_id()
+            Analyse_ui.analyse_action_doctor(patient_id)
+            
         def view_profile():
             actions_window.withdraw()
             view_profile_window = Toplevel(actions_window)
@@ -214,6 +242,11 @@ class ActionsUI:
         )
         patient_data.pack(side=RIGHT, padx=5)
 
+        view_diagnosis = Button(
+            button_frame, text="View Diagnosis for patient", command=view_patient_diagnosis
+        )
+        view_diagnosis.pack(side=RIGHT, padx=5)
+
         profile = Button(button_frame, text="View your profile", command=view_profile)
         profile.pack(side=RIGHT, padx=5)
 
@@ -231,8 +264,9 @@ class ActionsUI:
         action_window.geometry("800x600")
 
         print("1. View your profile")
-        print("2. Change Password")
-        print("3. Logout")
+        print("2. View zour diagnosis")
+        print("3. Change Password")
+        print("4. Logout")
         print()
 
         def view_profile():
@@ -266,6 +300,10 @@ class ActionsUI:
                     else:
                         label = Label(master=user_grid, text=user_profile[i])
                         label.pack()
+
+        def view_diagnosis():
+            patient_id = global_username
+            Analyse_ui.analyse_action_main(patient_id)
 
         def change_password():
             action_window.withdraw()
@@ -342,6 +380,11 @@ class ActionsUI:
             button_frame, text="Change Password", command=change_password
         )
         change_password_button.pack(side=RIGHT, padx=5)
+
+        view_diagnosis_button = Button(
+            button_frame, text="View your diagnosis", command=view_diagnosis
+        )
+        view_diagnosis_button.pack(side=LEFT, padx=5)
 
         view_profile_button = Button(
             button_frame, text="View your profile", command=view_profile
