@@ -233,6 +233,34 @@ class User_service:
             connection.close()
         except Exception as e:
             print("Error changing password: ", e)
+    
+    def check_id(self, subject_id):
+        try:
+            connection= pyodbc.connect(self.connection_string)
+            cursor= connection.cursor()
+
+            cursor.execute(
+                f"select subject_id from {PATIENTS} where subject_id= ?", 
+                subject_id,
+            )
+
+            if cursor.fetchone()[0] == 0:
+                raise Exception(f" User: '{subject_id}' not found in the database")
+            
+            checked_id= cursor.fetchone()
+            connection.commit()
+            cursor.close()
+            connection.close()
+
+            return checked_id
+        except Exception as e:
+            print(f"Oups error: ", e)
+            return None
+
+
+            
+
+            
 
     def create_diagnosis(self, patient_id, icd_code, icd_version):
         """If the user is a doctor, adds a diagnosis to a patient's record
@@ -252,13 +280,9 @@ class User_service:
 
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-
-            cursor.execute(
-                "select count(*) from ? where subject_id= ? order by hadm_id desc",
-                PATIENTS,
-                patient_id,
-            )
-            if cursor.fetchone()[0] == 0:
+  
+            check_id = self.check_id(patient_id)
+            if check_id is None:
                 raise Exception(f"Patient with subject ID {patient_id} not found")
 
             hadm_id = cursor.execute(
