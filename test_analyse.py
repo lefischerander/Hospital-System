@@ -95,7 +95,7 @@ class Analyse:
         print(df.head(20))
         merged_df = pd.merge(df, df1[['icd_code', 'long_title']], on='icd_code', how='left')
         id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
-        patient = merged_df[merged_df["subject_id"] == id][["seq_num","icd_code","icd_version","long_title"]]
+        patient = merged_df[merged_df["subject_id"] == id][["seq_num","icd_code","long_title","icd_version"]]
         return patient.to_string(index=False)
 
     def read_drgcodes(self):
