@@ -11,9 +11,10 @@ class Analyse:
         self.connection_url = sa.URL.create(
             "mssql+pyodbc", query={"odbc_connect": connection_string}
         )
+        self.us = db.User_service()
 
     def read_omr(self):
-        df = db.read_table_sa("omr")
+        df = self.us.read_table_sa("omr")
 
         id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
         patient = df[
@@ -103,8 +104,8 @@ class Analyse:
         return patient.to_string(index=False)
 
     def read_diagnoses_icd(self):
-        df = db.read_table_sa("diagnoses_icd")
-        df1 = db.read_table_sa("d_icd_diagnoses")
+        df = self.us.read_table_sa("diagnoses_icd")
+        df1 = self.us.read_table_sa("d_icd_diagnoses")
         merged_df = pd.merge(
             df, df1[["icd_code", "long_title"]], on="icd_code", how="left"
         )
@@ -115,7 +116,7 @@ class Analyse:
         return patient.to_string(index=False)
 
     def read_drgcodes(self):
-        df = db.read_table_sa("drgcodes")
+        df = self.us.read_table_sa("drgcodes")
         id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
         patient = df[df["subject_id"] == id][
             ["drg_code", "description", "drg_severity", "drg_mortality"]
@@ -123,7 +124,7 @@ class Analyse:
         return patient.to_string(index=False)
 
     def read_emar(self):
-        df = db.read_table_sa("emar")
+        df = self.us.read_table_sa("emar")
         id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
         patient = df[df["subject_id"] == id][
             ["pharmacy_id", "medication", "charttime", "scheduletime", "event_txt"]
@@ -131,7 +132,7 @@ class Analyse:
         return patient.to_string(index=False)
 
     def read_patients(self):
-        df = db.read_table_sa("patients")
+        df = self.us.read_table_sa("patients")
         age = df["anchor_age"]
         gender = df["gender"]
         b_width = 5  # set the width of bin
@@ -163,7 +164,7 @@ class Analyse:
         return patient.to_string(index=False)
 
     def read_pharmacy(self):
-        df = db.read_table_sa("pharmacy")
+        df = self.us.read_table_sa("pharmacy")
         id = int(input("Enter subject_id: "))  # Ask the user to enter the subject_id
         patient = df[df["subject_id"] == id][
             [
@@ -178,8 +179,8 @@ class Analyse:
         return patient.to_string(index=False)
 
     def read_procedures_icd(self):
-        df = db.read_table_sa("procedures_icd")
-        df1 = db.read_table_sa("d_icd_procedures")
+        df = self.us.read_table_sa("procedures_icd")
+        df1 = self.us.read_table_sa("d_icd_procedures")
         merged_df = pd.merge(
             df, df1[["icd_code", "long_title"]], on="icd_code", how="left"
         )
@@ -190,7 +191,7 @@ class Analyse:
         return patient.to_string(index=False)
 
     def read_d_icd_diagnoses(self):
-        df = db.read_table_sa("d_icd_diagnoses")
+        df = self.us.read_table_sa("d_icd_diagnoses")
         icd = input("Enter icd code: ")  # Ask the user to enter the icd code
         icd_code = df[df["icd_code"].astype(str) == icd]["long_title"].values[
             0
@@ -198,7 +199,7 @@ class Analyse:
         return icd_code
 
     def read_d_icd_procedures(self):
-        df = db.read_table_sa("d_icd_procedures")
+        df = self.us.read_table_sa("d_icd_procedures")
         icd = input("Enter icd code: ")  # Ask the user to enter the icd code
         icd_code = df[df["icd_code"].astype(str) == icd]["long_title"].values[
             0
