@@ -17,7 +17,7 @@ class AuthSystem:
             connection = pyodbc.connect(connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                "select  firstname, surname, role, password FROM New_login_data WHERE subject_id = ? AND password = ?",
+                "select  firstname, surname, role, password, subject_id FROM New_login_data WHERE subject_id = ? AND password = ?",
                 subject_id,
                 password,
             )

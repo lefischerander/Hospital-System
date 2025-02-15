@@ -1,14 +1,16 @@
 from test_class_login import AuthSystem
 import getpass
 
+
 # import hashlib
 import Service_Database
 from user_test import User
+import config
 
 user_service = (
     Service_Database.User_service()
 )  # creating an instance of the class Userservice
-auth_system = AuthSystem()  # instance of the class AuthSystem
+#auth_system = AuthSystem()  # instance of the class AuthSystem
 
 
 class Actions:
@@ -24,6 +26,7 @@ class Actions:
 
         choice = input("Choose an action: \n")
         auth = AuthSystem()
+        
 
         if choice == "1":
             # We are parsing the view_all-users function to the instance of the class Service 
@@ -82,7 +85,7 @@ class Actions:
             Actions.admin_actions()  # Return to admin actions
 
         elif choice == "6":
-            auth_system.logout()
+            #auth_system.logout()
             Actions.admin_actions()  # Return to admin actions
 
     def doktor_actions():
@@ -97,6 +100,8 @@ class Actions:
         print()
 
         auth = AuthSystem()
+        
+        
         choice = input("Choose an action: ")
 
         if choice == "1":
@@ -114,12 +119,12 @@ class Actions:
                 Actions.doktor_actions()
 
         elif choice == "2":
-            doctor_id = int(
-                input(
-                    "Before you can view your profile, you need to input your subject_id first: "
-                )
-            )
-            doctor_profile = user_service.get_your_profile(doctor_id)
+            # doctor_id = int(
+            #     input(
+            #         "Before you can view your profile, you need to input your subject_id first: "
+            #     )
+            # )
+            doctor_profile = user_service.get_your_profile(config.subject_id_logged)
             print(doctor_profile)
 
             Actions.doktor_actions()
@@ -149,7 +154,7 @@ class Actions:
                     "Enter the subject_id of the patient you want to view the recent medical procedures: "
                 )
             )
-            procedures = user_service.get_procedures_by_subject_id(patient_procedures)
+            procedures = user_service.get_procedures_by_subject_id(patient_procedures, config.subject_id_logged)
             print(procedures)
             print("Press 'menu' to go back to the main menu")
             
@@ -174,6 +179,7 @@ class Actions:
         print()
 
         auth = AuthSystem()
+        #subject_id_logged_in = auth.users[4]
         choice = input("Choose an action: ")
 
         if choice == "1":

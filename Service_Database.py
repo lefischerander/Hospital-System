@@ -1,5 +1,7 @@
 import pyodbc
 from db_access import connection_string
+from test_class_login import AuthSystem
+import config
 
 
 # database tables
@@ -302,13 +304,13 @@ class User_service:
         except Exception as e:
             print("Error: user not found ", e)
 
-    def get_procedures_by_subject_id(self, subject_id):
+    def get_procedures_by_subject_id (self, subject_id, caller_id):
         try:
-            verifying_id= int(input("Please input your Id before doing this action: "))
-            user_role = self.get_role_by_id(verifying_id)
+            caller_id = config.Subject_id_logged
+            user_role = self.get_role_by_id(caller_id)
             
-            if user_role == "doctor" or (
-                user_role == "patient" and verifying_id == subject_id
+            if user_role == "Doctor" or (
+                user_role == "Patient" and caller_id == subject_id
             ):
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
@@ -319,7 +321,7 @@ class User_service:
                     WHERE p.subject_id = ?
                     ORDER BY p.seq_num
                 """
-                cursor.execute(query, subject_id)
+                cursor.execute(query, subject_id, caller_id)
                 results = cursor.fetchall()
                 cursor.close()
                 connection.close()
@@ -446,15 +448,17 @@ if __name__ == "__main__":
     user_service = User_service()
     print("Welcome to the hospital database.")
     print("Please choose an action:")
-    print()
+    
+      
+
 
     action = input(
-        "Press '1'to get id, Press '2' to view a patient's profile, Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
+        "Press '1'to get role by id, Press '2' to view a patient's profile, Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
     )
     print("Okay you chose: ", action)
     if action == "1":
-        surname = input("Give the surname: ")
-        The_role_id = user_service.get_id(surname)
+        role = input("Give the subject_id: ")
+        The_role_id = user_service.get_role_by_id(role)
         print(The_role_id)
 
     elif action == "2":
@@ -479,7 +483,7 @@ if __name__ == "__main__":
 
     elif action == "4":
         subject_id = int(input("Enter subject ID: "))
-        procedures = user_service.get_procedures_by_subject_id(subject_id)
+        procedures = user_service.get_procedures_by_subject_id(subject_id, )
         if procedures:
             print(f"Procedures record of patient {subject_id} :", procedures)
         else:

@@ -4,6 +4,7 @@ import sys
 from test_class_actions import Actions
 from test_class_login import AuthSystem
 from user_test import User
+import config
 
 
 def main():
@@ -22,10 +23,13 @@ def main():
             if not auth.logged_in:
                 main()
             while auth.logged_in:
+                print(f" {auth.users}")
                 user_role = auth.users[0][2]
-                subject_id = user
+                config.subject_id_logged= int(auth.users[0][4])
+                print(f"The user's role({user_role}) with their subject_Id: {config.subject_id_logged}")
+                
                 if user_role == "Doctor":
-                    Actions.doktor_actions()
+                    Actions.doktor_actions( )
                 elif user_role == "Patient":
                     Actions.patient_actions()
                 elif user_role == "admin":
