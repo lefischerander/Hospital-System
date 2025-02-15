@@ -22,10 +22,6 @@ PHARMACY = "pharmacy"
 class User_service:
     """
     This class is responsible for handling all database operations
-
-    Attributes:
-    connection_string: str
-        The connection string to the database
     """
 
     def __init__(self):
@@ -42,6 +38,15 @@ class User_service:
         )
 
     def read_table_sa(self, table_name):
+        """
+        Reads an entire table from the database with SQLAlchemy and fills a pandas DataFrame with the data
+
+        Args:
+            table_name (str): The name of the table to be read
+
+        Returns:
+            DataFrame: The table data in a pandas DataFrame
+        """
         engine = sa.create_engine(self.connection_url)
         with engine.begin() as conn:
             df = pd.read_sql_query(sa.text(f"SELECT * FROM {table_name}"), conn)
@@ -50,7 +55,6 @@ class User_service:
 
     def delete_user(self, user):  ##low priority
         """Deletes a user from the database based on the user's subject ID
-
 
         Args:
             user (int): the to-be-deleted user's subject ID
