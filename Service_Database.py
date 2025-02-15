@@ -337,6 +337,21 @@ class User_service:
             return None
 
     def get_procedures_by_subject_id(self, subject_id, caller_id):
+        (
+            """Reads the procedures of a patient based on the patient's subject ID
+
+        Args:
+            subject_id (int): The patient's subject ID
+            caller_id (int): The logged in user's subject ID 
+
+        Raises:
+            Exception: If the user is not a doctor or searches for another patient's procedures
+
+        Returns:
+            pyodbc.row: The row containing the patient's procedures (pyodbc object)
+        """
+            """"""
+        )
         try:
             user_role = self.get_role_by_id(caller_id)
 
