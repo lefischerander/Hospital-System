@@ -254,15 +254,15 @@ class Analyse:
         return patient.to_string(index=False)
 
     def read_d_icd_diagnoses(self):
-        """This method is used to read the d_icd_diagnoses table and return the long title of the icd code entered by the user.
+        """This method is used to read the d_icd_diagnoses table and return the data of the icd code entered by the user.
 
         Returns:
-            str: The long title of the icd code entered by the user.
+            str: The data of the icd code entered by the user.
         """
         df = self.us.read_table_sa("d_icd_diagnoses")
         try:
             icd = input("Enter icd code: ")
-            # Get the long title of the icd code
+            # Get the data of the icd code
             icd_code = df[df["icd_code"].astype(str) == icd][
                 ["icd_code", "icd_version", "long_title"]
             ]
