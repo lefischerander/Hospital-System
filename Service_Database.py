@@ -225,7 +225,7 @@ class User_service:
 
     def create_diagnosis(self, patient_id, icd_code, icd_version):
         try:
-            if self.get_role_by_id(self.get_id()) != "doctor":
+            if self.get_role_by_id(config.Subject_id_logged) != "Doctor":
                 raise Exception("Only doctors can add diagnoses")
 
             connection = pyodbc.connect(self.connection_string)
@@ -269,6 +269,7 @@ class User_service:
             print(f" Diagnosis added for patients with subject ID: {patient_id}")
         except Exception as e:
             print("Error:  ", e)
+            return None
 
     def get_patient_profile(self, subject_id):  # dod time must be string
         try:
@@ -295,7 +296,7 @@ class User_service:
             cursor = connection.cursor()
             cursor.execute(
                 "select d.subject_id, d.hadm_id, d.d_icd_diagnosis from diagnosis AS d where d.subject_id = ?",
-                ADMISSIONS.patient_id,
+                patient_id,
             )
             diagnosis = cursor.fetchone()
             cursor.close()
@@ -303,10 +304,11 @@ class User_service:
             return diagnosis
         except Exception as e:
             print("Error: user not found ", e)
+            return None
 
     def get_procedures_by_subject_id (self, subject_id, caller_id):
         try:
-            caller_id = config.Subject_id_logged
+           
             user_role = self.get_role_by_id(caller_id)
             
             if user_role == "Doctor" or (
@@ -321,10 +323,11 @@ class User_service:
                     WHERE p.subject_id = ?
                     ORDER BY p.seq_num
                 """
-                cursor.execute(query, subject_id, caller_id)
+                cursor.execute(query, subject_id)
                 results = cursor.fetchall()
                 cursor.close()
                 connection.close()
+                
                 return results
             else:
                 raise Exception(" Patients can only view their own medical procedures")
@@ -483,7 +486,7 @@ if __name__ == "__main__":
 
     elif action == "4":
         subject_id = int(input("Enter subject ID: "))
-        procedures = user_service.get_procedures_by_subject_id(subject_id, )
+        procedures = user_service.get_procedures_by_subject_id(subject_id, config.Subject_id_logged)
         if procedures:
             print(f"Procedures record of patient {subject_id} :", procedures)
         else:

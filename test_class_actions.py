@@ -130,22 +130,35 @@ class Actions:
             Actions.doktor_actions()
 
         elif choice == "3":
-            patient_diagnosis = int(
+            try:
+                diagnosis_subject_id = int(
                 input(
                     " Enter the subject_id of the patient you want to add a diagnosis to: "
+                     )
                 )
-            )
-            icd_c = input("Enter the diagnosis' ICD-Code: ")
-            icd_v = input("Enter the diagnoses' ICD-Version: ")
-            user_service.create_diagnosis(patient_diagnosis, icd_c, icd_v)
-            print("Diagnosis added successfully")
-
-            answer = print("Do you want to see the diagnosis you just added? (yes/no)")
-            if answer == "yes":
-                diagnosis = user_service.get_diagnosis(patient_diagnosis)
-                print(diagnosis)
-                print("Press 'menu' to go back to the main menu")
-            else:
+                icd_c = input("Enter the ICD-Code: ")
+                icd_v = input("Enter the ICD-Version: ")
+                diagnosis_added= int(
+                user_service.create_diagnosis(diagnosis_subject_id, icd_c, icd_v)
+                )
+            
+                if diagnosis_added is not None:
+                   print("Diagnosis added successfully")
+                
+                else:
+                    raise Exception(
+                        "Please enter a valid input (valid ICD-Code or ICD-Version)"
+                        ) 
+            
+                answer = print("Do you want to see the diagnosis you just added? (yes/no)")
+                if answer == "yes":
+                    diagnosis = user_service.get_diagnosis(diagnosis_subject_id)
+                    print(diagnosis)
+                    Actions.doktor_actions()
+                else:
+                    Actions.doktor_actions()
+            except Exception as e: 
+                print("An error occured: ", e)
                 Actions.doktor_actions()
 
         elif choice == "4":
@@ -167,7 +180,7 @@ class Actions:
             Actions.admin_actions()  # Return to admin actions
 
         elif choice == "6":
-            AuthSystem.logout()  # Logout
+            AuthSystem.logout(config.Subject_id_logged)  # Logout
 
     def patient_actions():
         # Actions for the patient
@@ -183,10 +196,9 @@ class Actions:
         choice = input("Choose an action: ")
 
         if choice == "1":
-            patient_procedures = int(
-                input("Enter your subject_id before to view your medical procedures: ")
-            )
-            user_service.get_procedures_by_subject_id(patient_procedures)
+            patient_procedures = (
+                        user_service.get_procedures_by_subject_id(config.Subject_id_logged)
+                                 )
             print(patient_procedures)
 
             answer = print("Press 'menu' to go back to the main menu")
@@ -197,12 +209,8 @@ class Actions:
                 Actions.patient_actions()
 
         elif choice == "2":
-            patient = int(
-                input(
-                    "Before you can view your profile, you need to input your subject_id first"
-                )
-            )
-            patient_profile = user_service.get_your_profile(patient)
+           
+            patient_profile = user_service.get_your_profile(config.Subject_id_logged)
             print(patient_profile)
 
             Actions.patient_actions()
