@@ -260,10 +260,16 @@ class Analyse:
             str: The long title of the icd code entered by the user.
         """
         df = self.us.read_table_sa("d_icd_diagnoses")
-        icd = input("Enter icd code: ")
-        # Get the long title of the icd code
-        icd_code = df[df["icd_code"].astype(str) == icd]["long_title"]
-        return icd_code
+        try:
+            icd = input("Enter icd code: ")
+            # Get the long title of the icd code
+            icd_code = df[df["icd_code"].astype(str) == icd][
+                ["icd_code", "icd_version", "long_title"]
+            ]
+            return icd_code.to_string(index=False)
+        except Exception as e:
+            print("Invalid icd code.", e)
+            Analyse.read_d_icd_diagnoses()  # Call the method again if the icd code is invalid
 
     def read_d_icd_procedures(self):
         """This method is used to read the d_icd_procedures table and return the long title of the icd code entered by the user.
