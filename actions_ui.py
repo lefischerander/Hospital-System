@@ -134,7 +134,7 @@ class ActionsUI:
             view_profile_window.geometry("800x600")
 
             user_profile = user_service.get_your_profile(global_username)
-            user_info = ["User ID", "Gender", "Age", "Name", "Surname"]
+            user_info = ["User ID", "Name", "Surname", "Department", "Age"]
 
             def back_action():
                 actions_window.deiconify
@@ -228,6 +228,7 @@ class ActionsUI:
 
         def logout():
             actions_window.destroy()
+            messagebox.showinfo(title=None, message="You have been logged out")
             subprocess.run(["python", "main_ui.py"])
             sys.exit()
 
@@ -257,6 +258,8 @@ class ActionsUI:
 
         help_button = Button(actions_window, text="Help", command=HelpPage.help_page)
         help_button.pack(pady=10)
+
+        actions_window.after(60*60000, logout)
 
     def patient_actions(global_username):
         action_window = Tk()
@@ -365,8 +368,11 @@ class ActionsUI:
             )
             cancel_button.pack(side=RIGHT, padx=5)
 
+            action_window.after(60*60000, logout)
+
         def logout():
             action_window.destroy()
+            messagebox.showinfo(title=None, message="You have been logged out")
             subprocess.run(["python", "main_ui.py"])
             sys.exit()
 
@@ -538,6 +544,7 @@ class ActionsUI:
 
         def logout():
             actions_window.destroy()
+            messagebox.showinfo(title=None, message="You have been logged out")
             subprocess.run(["python", "main_ui.py"])
             sys.exit()
 
@@ -564,3 +571,5 @@ class ActionsUI:
 
         help_button = Button(actions_window, text="Help", command=HelpPage.help_page)
         help_button.pack(pady=10)
+
+        actions_window.after(60*60000, logout)
