@@ -1,7 +1,8 @@
 import pyodbc
 from db_access import connection_string
-from test_class_login import AuthSystem
 import config
+import sqlalchemy as sa
+import pandas as pd
 
 
 # database tables
@@ -36,6 +37,16 @@ class User_service:
             The connection string to the database
         """
         self.connection_string = connection_string
+        self.connection_url = sa.URL.create(
+            "mssql+pyodbc", query={"odbc_connect": connection_string}
+        )
+
+    def read_table_sa(self, table_name):
+        engine = sa.create_engine(self.connection_url)
+        with engine.begin() as conn:
+            df = pd.read_sql_query(sa.text(f"SELECT * FROM {table_name}"), conn)
+
+        return df
 
     def delete_user(self, user):  ##low priority
         """Deletes a user from the database based on the user's subject ID
@@ -306,11 +317,10 @@ class User_service:
             print("Error: user not found ", e)
             return None
 
-    def get_procedures_by_subject_id (self, subject_id, caller_id):
+    def get_procedures_by_subject_id(self, subject_id, caller_id):
         try:
-           
             user_role = self.get_role_by_id(caller_id)
-            
+
             if user_role == "Doctor" or (
                 user_role == "Patient" and caller_id == subject_id
             ):
@@ -327,7 +337,7 @@ class User_service:
                 results = cursor.fetchall()
                 cursor.close()
                 connection.close()
-                
+
                 return results
             else:
                 raise Exception(" Patients can only view their own medical procedures")
@@ -451,9 +461,6 @@ if __name__ == "__main__":
     user_service = User_service()
     print("Welcome to the hospital database.")
     print("Please choose an action:")
-    
-      
-
 
     action = input(
         "Press '1'to get role by id, Press '2' to view a patient's profile, Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
@@ -486,7 +493,9 @@ if __name__ == "__main__":
 
     elif action == "4":
         subject_id = int(input("Enter subject ID: "))
-        procedures = user_service.get_procedures_by_subject_id(subject_id, config.Subject_id_logged)
+        procedures = user_service.get_procedures_by_subject_id(
+            subject_id, config.Subject_id_logged
+        )
         if procedures:
             print(f"Procedures record of patient {subject_id} :", procedures)
         else:

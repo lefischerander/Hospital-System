@@ -13,6 +13,11 @@ connection_url = sa.URL.create(
 engine = sa.create_engine(connection_url)
 
 with engine.begin() as conn:
-    df = pd.read_sql_query(sa.text("SELECT subject_id, gender FROM PATIENTS"), conn)
+    df = pd.read_sql_query(
+        sa.text(
+            "select a.*, p.gender from admissions as a inner join patients as p ON p.subject_id = a.subject_id"
+        ),
+        conn,
+    )
 
 print(df)
