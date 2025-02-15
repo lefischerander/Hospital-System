@@ -235,28 +235,28 @@ class User_service:
             connection.close()
         except Exception as e:
             print("Error changing password: ", e)
-    
-    def check_id(self, subject_id):                       #just for patients
+
+    def check_id(self, subject_id):  # just for patients
         try:
-            connection= pyodbc.connect(self.connection_string)
-            cursor= connection.cursor()
+            connection = pyodbc.connect(self.connection_string)
+            cursor = connection.cursor()
 
             cursor.execute(
-                f"select subject_id from {PATIENTS} where subject_id= ?", 
+                f"select subject_id from {PATIENTS} where subject_id= ?",
                 subject_id,
             )
 
             if cursor.fetchone()[0] == 0:
                 raise Exception(f" User: '{subject_id}' not found in the database")
-            
-            checked_id= cursor.fetchone()
+
+            checked_id = cursor.fetchone()
             connection.commit()
             cursor.close()
             connection.close()
 
             return checked_id
         except Exception as e:
-            print(f"Oups error: ", e)
+            print("Oups error: ", e)
             return None
 
     def read_d_icd_diagnoses(self):
@@ -300,7 +300,7 @@ class User_service:
 
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-  
+
             check_id = self.check_id(patient_id)
             
             if check_id is None:
