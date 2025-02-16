@@ -14,7 +14,13 @@ user_service = (
 
 
 class ActionsUI:
+    """This class is responsible for the user interface if you are logged in"""
     def doktor_actions(global_username):
+        """This method is responsible for the actions of the doctor
+        
+        Args:
+            global_username (str): The username of the user
+        """
         actions_window = Tk()
         actions_window.title("Doktor Actions")
         actions_window.geometry("800x600")
@@ -27,9 +33,11 @@ class ActionsUI:
         print()
 
         def view_patient_data():
+            """This method is responsible for viewing the patient data"""
             actions_window.withdraw
 
             def get_patient_id():
+                """This method is responsible for getting the patient id the doctor wants to view"""
                 get_patient_id_window = Toplevel(actions_window)
                 get_patient_id_window.title("Patient ID")
 
@@ -38,10 +46,12 @@ class ActionsUI:
                 patient_id.pack(pady=5)
 
                 def submit_patient_id():
+                    """This method is responsible for submitting the patient id"""
                     get_patient_id_window.destroy()
                     return patient_id
 
                 def cancel_get_patient_id():
+                    """This method is responsible for cancelling the patient id"""
                     get_patient_id_window.destroy()
                     actions_window.deiconify
 
@@ -59,6 +69,7 @@ class ActionsUI:
                 cancel_button.pack(pady=5, side=RIGHT)
 
             def back_action():
+                """This method is responsible for going back to the actions window"""
                 actions_window.deiconify
                 view_patient_data_window.destroy
 
@@ -96,7 +107,9 @@ class ActionsUI:
                         label.pack()
 
         def view_patient_diagnosis():
+            """This method is responsible for viewing the diagnosis of patients"""
             def get_patient_id():
+                """This method is responsible for getting the patient id the doctor wants to view"""
                 get_patient_id_window = Toplevel(actions_window)
                 get_patient_id_window.title("Patient ID")
 
@@ -105,10 +118,12 @@ class ActionsUI:
                 patient_id.pack(pady=5)
 
                 def submit_patient_id():
+                    """This method is responsible for submitting the patient id"""
                     get_patient_id_window.destroy()
                     return patient_id
 
                 def cancel_get_patient_id():
+                    """This method is responsible for cancelling the patient id"""
                     get_patient_id_window.destroy()
 
                 button_frame = Frame(get_patient_id_window)
@@ -128,6 +143,7 @@ class ActionsUI:
             Analyse_ui.analyse_action_doctor(patient_id)
             
         def view_profile():
+            """This method is responsible for viewing the profile of the user"""
             actions_window.withdraw()
             view_profile_window = Toplevel(actions_window)
             view_profile_window.title("Profile")
@@ -137,6 +153,7 @@ class ActionsUI:
             user_info = ["User ID", "Name", "Surname", "Department", "Age"]
 
             def back_action():
+                """This method is responsible for going back to the actions window"""
                 actions_window.deiconify()
                 view_profile_window.destroy()
 
@@ -168,6 +185,7 @@ class ActionsUI:
                         label.pack()
 
         def change_password():
+            """This method is responsible for changing the password of the user"""
             actions_window.withdraw()
             auth = AuthSystem()
             change_password_window = Toplevel(actions_window)
@@ -190,6 +208,7 @@ class ActionsUI:
             confirm_new_password_entry.pack(pady=5)
 
             def submit_change_password():
+                """This method is responsible for submitting the new password"""
                 username = username_entry.get()
                 old_password = password_entry.get()
                 new_password = new_password_entry.get()
@@ -211,6 +230,7 @@ class ActionsUI:
                 actions_window.deiconify()
 
             def cancel_change_password():
+                """This method is responsible for cancelling the password change"""
                 change_password_window.destroy()
                 actions_window.deiconify()
 
@@ -228,6 +248,7 @@ class ActionsUI:
             cancel_button.pack(side=RIGHT, padx=5)
 
         def logout():
+            """This method is responsible for logging out the user"""
             actions_window.destroy()
             messagebox.showinfo(title=None, message="You have been logged out")
             subprocess.run(["python", "main_ui.py"])
@@ -260,9 +281,15 @@ class ActionsUI:
         help_button = Button(actions_window, text="Help", command=HelpPage.help_page)
         help_button.pack(pady=10)
 
+        """auto logout after 60 minutes"""
         actions_window.after(60*60000, logout)
 
     def patient_actions(global_username):
+        """This method is responsible for the actions of the patient
+        
+        Args:
+            global_username (str): The username of the user
+        """
         action_window = Tk()
         action_window.title("Patient Actions")
         action_window.geometry("800x600")
@@ -274,6 +301,7 @@ class ActionsUI:
         print()
 
         def view_profile():
+            """This method is responsible for viewing the profile of the user"""
             action_window.withdraw()
             view_profile_window = Toplevel(action_window)
             view_profile_window.title("Profile")
@@ -283,6 +311,7 @@ class ActionsUI:
             user_info = ["User ID", "Gender", "Age", "Name", "Surname"]
 
             def back_action():
+                """This method is responsible for going back to the actions window"""
                 action_window.deiconify
                 view_profile_window.destroy()
 
@@ -314,10 +343,12 @@ class ActionsUI:
                         label.pack()
 
         def view_diagnosis():
+            """This method is responsible for viewing the diagnosis of the patient"""
             patient_id = global_username
             Analyse_ui.analyse_action_main(patient_id)
 
         def change_password():
+            """This method is responsible for changing the password of the user"""
             action_window.withdraw()
             auth = AuthSystem()
             change_password_window = Toplevel(action_window)
@@ -340,6 +371,7 @@ class ActionsUI:
             confirm_new_password_entry.pack(pady=5)
 
             def submit_change_password():
+                """This method is responsible for submitting the new password"""
                 username = username_entry.get()
                 old_password = password_entry.get()
                 new_password = new_password_entry.get()
@@ -361,6 +393,7 @@ class ActionsUI:
                 action_window.deiconify()
 
             def cancel_change_password():
+                """This method is responsible for cancelling the password change"""
                 change_password_window.destroy()
                 action_window.deiconify()
 
@@ -380,6 +413,7 @@ class ActionsUI:
             action_window.after(60*60000, logout)
 
         def logout():
+            """This method is responsible for logging out the user"""
             action_window.destroy()
             messagebox.showinfo(title=None, message="You have been logged out")
             subprocess.run(["python", "main_ui.py"])
@@ -409,7 +443,15 @@ class ActionsUI:
         help_button = Button(action_window, text="Help", command=HelpPage.help_page)
         help_button.pack(pady=10)
 
+        """auto logout after 60 minutes"""
+        action_window.after(60*60000, logout)
+
     def admin_actions(global_username):
+        """This method is responsible for the actions of the admin
+
+        Args:
+            global_username (str): The username of the user
+        """
         actions_window = Tk()
         actions_window.title("Actions")
         actions_window.geometry("800x600")
@@ -421,6 +463,7 @@ class ActionsUI:
         print()
 
         def view_all_users():
+            """This method is responsible for viewing all users"""
             actions_window.withdraw
             user_table = Toplevel(actions_window)
             user_table.title("All Users")
@@ -430,6 +473,7 @@ class ActionsUI:
             all_users = user_service.view_all_users()
 
             def back_action():
+                """This method is responsible for going back to the actions window"""
                 actions_window.deiconify
                 user_table.destroy()
 
@@ -460,9 +504,11 @@ class ActionsUI:
                     label.pack()
 
         def delete_user():
+            """This method is responsible for deleting a user"""
             actions_window.withdraw
 
             def get_user_id():
+                """This method is responsible for getting the user id the admin wants to delete"""
                 get_user_id_window = Toplevel(actions_window)
                 get_user_id_window.title("Patient ID")
 
@@ -471,6 +517,7 @@ class ActionsUI:
                 patient_id.pack(pady=5)
 
                 def submit_patient_id():
+                    """This method is responsible for submitting the user id"""
                     messagebox.askquestion(
                         title="Delete user",
                         message="Are you sure you want to continue?",
@@ -479,6 +526,7 @@ class ActionsUI:
                     return patient_id
 
                 def cancel_get_patient_id():
+                    """This method is responsible for cancelling and returning to the actions window"""
                     get_user_id_window.destroy()
                     actions_window.deiconify
 
@@ -500,6 +548,7 @@ class ActionsUI:
             messagebox.showinfo(title=None, message="User removed successfully")
 
         def change_password():
+            """This method is responsible for changing the password of the user"""
             actions_window.withdraw()
             auth = AuthSystem()
             change_password_window = Toplevel(actions_window)
@@ -522,6 +571,7 @@ class ActionsUI:
             confirm_new_password_entry.pack(pady=5)
 
             def submit_change_password():
+                """This method is responsible for submitting the new password"""
                 username = username_entry.get()
                 old_password = password_entry.get()
                 new_password = new_password_entry.get()
@@ -543,6 +593,7 @@ class ActionsUI:
                 actions_window.deiconify()
 
             def cancel_change_password():
+                """This method is responsible for cancelling the password change"""
                 change_password_window.destroy()
                 actions_window.deiconify()
 
@@ -560,6 +611,7 @@ class ActionsUI:
             cancel_button.pack(side=RIGHT, padx=5)
 
         def logout():
+            """This method is responsible for logging out the user"""
             actions_window.destroy()
             messagebox.showinfo(title=None, message="You have been logged out")
             subprocess.run(["python", "main_ui.py"])
@@ -589,4 +641,5 @@ class ActionsUI:
         help_button = Button(actions_window, text="Help", command=HelpPage.help_page)
         help_button.pack(pady=10)
 
+        """auto logout after 60 minutes"""
         actions_window.after(60*60000, logout)
