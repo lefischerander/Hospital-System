@@ -25,11 +25,13 @@ def main():
             while auth.logged_in:
                 print(f" {auth.users}")
                 user_role = auth.users[0][2]
-                config.subject_id_logged= int(auth.users[0][4])
-                print(f"The user's role({user_role}) with their subject_Id: {config.subject_id_logged}")
-                
+                config.subject_id_logged = int(auth.users[0][4])
+                print(
+                    f"The user's role({user_role}) with their subject_Id: {config.subject_id_logged}"
+                )
+
                 if user_role == "Doctor":
-                    Actions.doktor_actions( )
+                    Actions.doktor_actions()
                 elif user_role == "Patient":
                     Actions.patient_actions()
                 elif user_role == "admin":
@@ -39,9 +41,10 @@ def main():
                     break
         elif action == "2":
             user = input("Username: ").strip()
-            pw = getpass.getpass("Your currend Password: ")
+            pw = getpass.getpass("Your current Password: ")
             pw = User.hash_password(pw)
-            auth.reset_password(user, pw)
+            new_pw = getpass.getpass("New Password: ")
+            auth.reset_password(user, pw, new_pw, new_pw)
             main()
         else:
             print("\nInvalid input. Please try again.\n")
