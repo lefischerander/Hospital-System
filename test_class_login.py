@@ -121,7 +121,7 @@ class AuthSystem:
                     cursor.close()
                     connection.commit()
                     connection.close()
-                    print("\nPassword reset successful!\n")
+                    print("\nPassword reset successfull!\n")
                     break
                 except ValueError as error:
                     print(error)
