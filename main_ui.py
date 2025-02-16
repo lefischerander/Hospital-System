@@ -43,7 +43,7 @@ def login_action():
             login_action()
             login_window.destroy()
         else:
-            user_role = auth.users[0][2]
+            user_role = auth.users[0][4]
             if user_role == "Doctor":
                 ActionsUI.doktor_actions(global_username)
                 login_window.destroy()

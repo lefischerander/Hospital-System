@@ -103,8 +103,8 @@ class Analyse:
         """
         # Read the data from the admissions table and gender of the patient from the patients table
         engine = self.connect_to_db()
-        query = """select a.subject_id, a.hadm_id, a.admission_type , a.admittime, a.dischtime, a.deathtime, a.insurance, a.edregtime, a.edouttime, p.genders, a.hospital_expire_flag from admissions as a
-                inner join patients as p ON a.subject_id = p.subject_id order by d.hadm_id"""
+        query = """select a.subject_id, a.hadm_id, a.admission_type , a.admittime, a.dischtime, a.deathtime, a.insurance, a.edregtime, a.edouttime, p.gender, a.hospital_expire_flag from admissions as a
+                inner join patients as p ON a.subject_id = p.subject_id order by a.hadm_id"""
 
         with engine.begin() as conn:
             df = pd.read_sql_query(
@@ -223,7 +223,7 @@ class Analyse:
         # Read the data from the emar table
         engine = self.connect_to_db()
         query = f"""select e.hadm_id, e.pharmacy_id, e.medication, e.charttime, e.scheduletime, e.event_txt from emar as e 
-                    where subject_id = {id} order by d.hadm_id"""
+                    where subject_id = {id} order by e.hadm_id"""
 
         with engine.begin() as conn:
             df = pd.read_sql_query(
@@ -308,7 +308,7 @@ class Analyse:
         # Read the data from the pharmacy table
         engine = self.connect_to_db()
         query = f"""select p.hadm_id, p.pharmacy_id, p.medication, p.proc_type, p.frequency, p.starttime, p.stoptime from pharmacy as p 
-                    where subject_id = {id} order by d.hadm_id"""
+                    where subject_id = {id} order by p.hadm_id"""
 
         with engine.begin() as conn:
             df = pd.read_sql_query(
