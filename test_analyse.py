@@ -81,7 +81,12 @@ class Analyse:
 
         plt.tight_layout()
         plt.show()
-        if messagebox.askquestion(title="Proceed Download?", message="Do you want to download the results?", icon="question", type="yesno"):
+        if messagebox.askquestion(
+            title="Proceed Download?",
+            message="Do you want to download the results?",
+            icon="question",
+            type="yesno",
+        ):
             # Save the data of the patient as a text file and return it as a string for better visualization
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"omr_{id}.txt")
@@ -142,7 +147,12 @@ class Analyse:
         patient = df[df["subject_id"] == id][
             "hadm_id, admission_type, admittime, dischtime, deathtime, insurance, edregtime, edouttime, hospital_expire_flag"
         ]
-        if messagebox.askquestion(title="Proceed Download?", message="Do you want to download the results?", icon="question", type="yesno"):
+        if messagebox.askquestion(
+            title="Proceed Download?",
+            message="Do you want to download the results?",
+            icon="question",
+            type="yesno",
+        ):
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"admission_{id}.txt")
             with open(file_path, "w") as file:
@@ -170,7 +180,12 @@ class Analyse:
                 sa.text(query),
                 conn,
             )
-        if messagebox.askquestion(title="Proceed Download?", message="Do you want to download the results?", icon="question", type="yesno"):
+        if messagebox.askquestion(
+            title="Proceed Download?",
+            message="Do you want to download the results?",
+            icon="question",
+            type="yesno",
+        ):
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"diagnoses_{id}.txt")
             with open(file_path, "w") as file:
@@ -199,7 +214,12 @@ class Analyse:
                 sa.text(query),
                 conn,
             )
-        if messagebox.askquestion(title="Proceed Download?", message="Do you want to download the results?", icon="question", type="yesno"):
+        if messagebox.askquestion(
+            title="Proceed Download?",
+            message="Do you want to download the results?",
+            icon="question",
+            type="yesno",
+        ):
             # Save the data of the patient as a text file and return it as a string for better visualization
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"drg_codes_{id}.txt")
@@ -230,7 +250,12 @@ class Analyse:
                 sa.text(query),
                 conn,
             )
-        if messagebox.askquestion(title="Proceed Download?", message="Do you want to download the results?", icon="question", type="yesno"):
+        if messagebox.askquestion(
+            title="Proceed Download?",
+            message="Do you want to download the results?",
+            icon="question",
+            type="yesno",
+        ):
             # Save the data of the patient as a text file and return it as a string for better visualization
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"emar_{id}.txt")
@@ -308,14 +333,19 @@ class Analyse:
         # Read the data from the pharmacy table
         engine = self.connect_to_db()
         query = f"""select p.hadm_id, p.pharmacy_id, p.medication, p.proc_type, p.frequency, p.starttime, p.stoptime from pharmacy as p 
-                    where subject_id = {id} order by d.hadm_id"""
+                    where subject_id = {id} order by p.hadm_id"""
 
         with engine.begin() as conn:
             df = pd.read_sql_query(
                 sa.text(query),
                 conn,
             )
-        if messagebox.askquestion(title="Proceed Download?", message="Do you want to download the results?", icon="question", type="yesno"):
+        if messagebox.askquestion(
+            title="Proceed Download?",
+            message="Do you want to download the results?",
+            icon="question",
+            type="yesno",
+        ):
             # Save the data of the patient as a text file and return it as a string for better visualization
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"pharmacy_{id}.txt")
@@ -344,7 +374,12 @@ class Analyse:
                 sa.text(query),
                 conn,
             )
-        if messagebox.askquestion(title="Proceed Download?", message="Do you want to download the results?", icon="question", type="yesno"):
+        if messagebox.askquestion(
+            title="Proceed Download?",
+            message="Do you want to download the results?",
+            icon="question",
+            type="yesno",
+        ):
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"procedures_{id}.txt")
             with open(file_path, "w") as file:
