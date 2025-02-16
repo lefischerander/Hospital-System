@@ -31,7 +31,7 @@ class AuthSystem:
             connection = pyodbc.connect(connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                f"select  firstname, surname, role, password, subject_id FROM {LOGIN_DATA} WHERE subject_id = ? AND password = ?",
+                f"select firstname, surname, password, subject_idc, role FROM {LOGIN_DATA} WHERE subject_id = ? AND password = ?",
                 subject_id,
                 password,
             )
@@ -49,6 +49,22 @@ class AuthSystem:
             if str(i[0] == str(subject_id)):
                 user = i
                 break
+
+        if user[2] == "Doctor":
+            connection = pyodbc.connect(connection_string)
+            cursor = connection.cursor()
+            cursor.execute(
+                f"""select d.department FROM {DOCTORS} AS d 
+                INNER JOIN {LOGIN_DATA} AS l ON d.subject_id = l.subject_id 
+                WHERE subject_id = ? """,
+                subject_id,
+                password,
+            )
+            result = cursor.fetchall()
+            cursor.close()
+            connection.close()
+            for r in result:
+                user.append(r)
 
         if user is None:
             print("Invalid username or password.")
@@ -106,7 +122,7 @@ class AuthSystem:
                         raise ValueError("\nPasswords do not match!\n")
 
                     h_new_password = User.hash_password(new_password)
-                    if user[3] == h_new_password:
+                    if user[0] == h_new_password:
                         raise ValueError(
                             "\nNew password must be different from the old password.\n"
                         )
