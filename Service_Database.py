@@ -410,7 +410,7 @@ class User_service:
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
                 cursor.execute(
-                    "select d.subject_id, d.hadm_id, d.d_icd_diagnosis from diagnosis AS d where d.subject_id = ?",
+                    "select d.subject_id, d.hadm_id, d.icd_code from diagnoses_icd AS d INNER JOIN d_icd_diagnoses AS dc on d.icd_code = dc.icd_code where d.subject_id = ?",
                     patient_id,
                 )
                 diagnosis = cursor.fetchone()

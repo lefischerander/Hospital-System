@@ -104,8 +104,9 @@ class Actions:
         print("2. View your profile")
         print("3. Add diagnosis")
         print("4. View patient's recent medical procedures")
-        print("5. Change password")
-        print("6. Logout")
+        print("5. View diagnosis of a patient")
+        print("6. Change password")
+        print("7. Logout")
         
        
         print()
@@ -180,8 +181,17 @@ class Actions:
             print(procedures)
             print("Press 'menu' to go back to the main menu")
             
-
         elif choice == "5":
+            patient_diagnosis= int(input(
+                "Enter the subject_id of the patient you want to see the diagnosis: "
+                )
+            )
+
+            diagnosis= user_service.get_diagnosis(patient_diagnosis, config.subject_id_logged)
+            print(f"The diagnosis of the patient (subject_id): {patient_diagnosis} ")
+            print(diagnosis)
+       
+        elif choice == "6":
             user = input("Enter your Subject_id: ").strip()
             pw = getpass.getpass("Your currend Password: ")
             pw = User.hash_password(pw)
