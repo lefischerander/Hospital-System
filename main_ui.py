@@ -34,7 +34,7 @@ def login_action():
         username = username_entry.get()
         password = password_entry.get()
         global_username = username
-        messagebox.showinfo("Globalusername", f"Username: {username}")
+        messagebox.showinfo("Globalusername", f"Username: {global_username}")
         hash_password = User.hash_password(password)
         auth.login(username, hash_password)
         if not auth.logged_in:

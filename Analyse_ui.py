@@ -4,8 +4,15 @@ import tkinter as tk
 import tkinter.ttk as ttk
 
 class Analyse_ui:
+    """This class is responsible for the user interface of the Analyse class"""
     def analyse_action_main(subject_id):
-        def selected_option(event):
+        """This method is responsible for the main actions of the Analyse class for patients and admins
+        
+        Args:
+            subject_id (int): The id of the user
+        """
+        def selected_option(event): # arg: event might be unnecessary
+            """This method is responsible for calling the right function from the combobox input"""
             selection = combo.get()
             if selection == "omr":
                 print(Analyse.read_omr(subject_id))
@@ -32,7 +39,13 @@ class Analyse_ui:
         analyse_window.mainloop()
 
     def analyse_action_doctor(subject_id):
-        def selected_option(event):
+        """This method is responsible for the main actions of the Analyse class for doctors
+        
+        Args:
+            subject_id (int): The id of the patient the doctor wants to view
+        """
+        def selected_option(event): # arg: event might be unnecessary
+            """This method is responsible for calling the right function from the combobox input"""
             selection = combo.get()
             if selection == "omr":
                 print(Analyse.read_omr(subject_id))
@@ -60,4 +73,5 @@ class Analyse_ui:
         analyse_window.geometry("400x300")
         combo = ttk.Combobox(values=["omr", "admissions", "diagnoses_icd", "drgcodes", "emar", "patients", "pharmacy", "procedures_icd", "d_icd_diagnoses", "d_icd_procedures"])
         combo.bind("<<ComboboxSelected>>", selected_option)
+        combo.pack()
         analyse_window.mainloop()
