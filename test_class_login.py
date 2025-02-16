@@ -5,6 +5,7 @@ from user_test import User
 import datetime
 import threading
 from db_access import connection_string
+import config
 
 
 class AuthSystem:
@@ -56,7 +57,7 @@ class AuthSystem:
                         line = file.readline()
                 if not line:
                     with open("logged_in_users.txt", "a") as file:
-                        file.write(f"{user[0]} {user[1]} \n")
+                        file.write(f"{user[4]} \n")
                         print(f"\nLogin successful! Welcome, {user[0]} {user[1]}.")
                         self.logged_in = True
                         user_role = user[2]
@@ -72,6 +73,7 @@ class AuthSystem:
 
         with open("logged_in_users.txt", "w") as file:
             for line in lines:
+                subject_id= config.subject_id_logged
                 if line.strip() != subject_id:
                     file.write(line)
                 else:

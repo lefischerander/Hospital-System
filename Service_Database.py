@@ -259,15 +259,19 @@ class User_service:
                 subject_id,
             )
 
-            if cursor.fetchone()[0] == 0:
-                raise Exception(f" User: '{subject_id}' not found in the database")
-
             checked_id = cursor.fetchone()
+            
+            if checked_id is None:
+                return None
+
+           
             connection.commit()
             cursor.close()
             connection.close()
 
-            return checked_id
+            return f"Yay DB found the user!"
+
+            
         except Exception as e:
             print("Oups error: ", e)
             return None
@@ -290,7 +294,7 @@ class User_service:
             print("Invalid icd code.", e)
             User_service.read_d_icd_diagnoses()  # Call the method again if the icd code is invalid
 
-    def create_diagnosis(self, patient_id):
+    def create_diagnosis(self, patient_id, caller_id):
         """If the user is a doctor, adds a diagnosis to a patient's record
 
         Args:
@@ -304,7 +308,9 @@ class User_service:
         """
 
         try:
-            if self.get_role_by_id(config.Subject_id_logged) != "Doctor":
+            user_role= self.get_role_by_id(caller_id)
+            
+            if user_role!= "Doctor":
                 raise Exception("Only doctors can add diagnoses")
 
             connection = pyodbc.connect(self.connection_string)
@@ -364,6 +370,11 @@ class User_service:
 
     def get_patient_profile(self, subject_id):  # dod time must be string
         try:
+            check_id= self.check_id(subject_id)
+            if check_id is None:
+                raise Exception (f"The user you input is not on the database")
+             
+            
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             query = """
@@ -563,21 +574,22 @@ class User_service:
 
 if __name__ == "__main__":
     user_service = User_service()
-    print("Welcome to the hospital database.")
-    print("Please choose an action:")
-
+    print("Welcome to the hospital database.\n")
+    print("Please choose an action: ")
+    print()
+    print(config.subject_id_logged)
     action = input(
-        "Press '1'to to check the id of a patient, Press '2' to view a patient's profile, Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
+        "Press '1'to to check the id of a patient, Press '2' to view your profile , Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
     )
     print("Okay you chose: ", action)
+    
     if action == "1":
         checking_id = input("Give the subject_id: ")
         The_role_id = user_service.check_id(checking_id)
         print(The_role_id)
 
     elif action == "2":
-        subject_id = int(input("Enter subject ID: "))
-        your_profile = user_service.get_your_profile(subject_id)
+        your_profile = user_service.get_your_profile(config.subject_id_logged)
         if your_profile:
             print("Your profile", your_profile)
         else:
@@ -598,7 +610,7 @@ if __name__ == "__main__":
     elif action == "4":
         subject_id = int(input("Enter subject ID: "))
         procedures = user_service.get_procedures_by_subject_id(
-            subject_id, config.Subject_id_logged
+            subject_id, config.subject_id_logged
         )
         if procedures:
             print(f"Procedures record of patient {subject_id} :", procedures)

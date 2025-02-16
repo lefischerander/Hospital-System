@@ -24,6 +24,7 @@ class Actions:
         print("4. View doctor's profile")
         print("5. Change password")
         print("6. Logout\n")
+        print(config.Subject_id_logged)
 
         choice = input("Choose an action: \n")
         auth = AuthSystem()
@@ -98,6 +99,7 @@ class Actions:
         print("4. View patient's recent medical procedures")
         print("5. Change password")
         print("6. Logout")
+        print(config.subject_id_logged)
         print()
 
         auth = AuthSystem()
@@ -127,6 +129,7 @@ class Actions:
             # )
             doctor_profile = user_service.get_your_profile(config.subject_id_logged)
             print(doctor_profile)
+            print(config.subject_id_logged)
 
             Actions.doktor_actions()
 
@@ -182,7 +185,7 @@ class Actions:
             Actions.admin_actions()  # Return to admin actions
 
         elif choice == "6":
-            AuthSystem.logout(config.Subject_id_logged)  # Logout
+            auth.logout(config.subject_id_logged)  # Logout
 
     def patient_actions():
         # Actions for the patient
@@ -199,20 +202,15 @@ class Actions:
 
         if choice == "1":
             patient_procedures = (
-                        user_service.get_procedures_by_subject_id(config.Subject_id_logged)
+                        user_service.get_procedures_by_subject_id(config.subject_id_logged)
                                  )
             print(patient_procedures)
-
-            answer = print("Press 'menu' to go back to the main menu")
-            if answer == "menu":
-                Actions.patient_actions()
-            else:
-                print("Invalid input")
-                Actions.patient_actions()
+            Actions.patient_actions()
+            
 
         elif choice == "2":
            
-            patient_profile = user_service.get_your_profile(config.Subject_id_logged)
+            patient_profile = user_service.get_your_profile(config.subject_id_logged)
             print(patient_profile)
 
             Actions.patient_actions()
