@@ -25,9 +25,12 @@ class Analyse:
         )
         return sa.create_engine(self.connection_url)
 
-    def read_omr(self):
+    def read_omr(self, id):
         """This method is used to read the omr table and plot the data of the patient with the entered subject_id as line plot
         and return the data as a string.
+
+        Args:
+            id (int): The subject_id of the patient.
 
         Returns:
             str: The data of the patient with the entered subject_id.
@@ -35,7 +38,6 @@ class Analyse:
         df = self.us.read_table_sa("omr")
 
         # Ask to enter the subject_id and sort the data by chartdate
-        id = int(input("Enter subject_id: "))
         patient = df[df["subject_id"] == id]
         patient = patient.sort_values(by="chartdate")
 
@@ -75,9 +77,12 @@ class Analyse:
         ]
         return patient_value.to_string(index=False)
 
-    def read_admissions(self):
+    def read_admissions(self, id):
         """This method is used to read the admissions table and plot the duration of stay of all patients in the hospital as boxplot.
         It also returns the data of the patient with the entered subject_id.
+
+        Args:
+            id (int): The subject_id of the patient.
 
         Returns:
             str: The data of the patient with the entered subject_id.
@@ -119,7 +124,6 @@ class Analyse:
         plt.show()
 
         # Return the data of the patient as a string for better visualization
-        id = int(input("Enter subject_id: "))
         patient = df[df["subject_id"] == id][
             [
                 "admittime",
@@ -136,6 +140,9 @@ class Analyse:
 
     def read_diagnoses_icd(self, id):
         """This method is used to read the diagnoses_icd table and return diagnoses of the patient with the entered subject_id.
+
+        Args:
+            id (int): The subject_id of the patient.
 
         Returns:
             str: The diagnoses of the patient with the entered subject_id.
@@ -158,37 +165,44 @@ class Analyse:
             print(f"\nYour diagnoses are saved under {file_path}!")
         return df.to_string(index=False)
 
-    def read_drgcodes(self):
+    def read_drgcodes(self, id):
         """This method is used to read the drgcodes table and return the drg codes of the patient with the entered subject_id.
+
+        Args:
+            id (int): The subject_id of the patient.
 
         Returns:
             str: The drg codes of the patient with the entered subject_id.
         """
         df = self.us.read_table_sa("drgcodes")
-        id = int(input("Enter subject_id: "))
         # Return the drg codes of the patient as a string for better visualization
         patient = df[df["subject_id"] == id][
             ["drg_code", "description", "drg_severity", "drg_mortality"]
         ]
         return patient.to_string(index=False)
 
-    def read_emar(self):
+    def read_emar(self, id):
         """This method is used to read the emar table and return the medication of the patient with the entered subject_id.
+
+        Args:
+            id (int): The subject_id of the patient.
 
         Returns:
             str: The medication of the patient with the entered subject_id.
         """
         df = self.us.read_table_sa("emar")
-        id = int(input("Enter subject_id: "))
         # Return the medication of the patient as a string for better visualization
         patient = df[df["subject_id"] == id][
             ["pharmacy_id", "medication", "charttime", "scheduletime", "event_txt"]
         ]
         return patient.to_string(index=False)
 
-    def read_patients(self):
+    def read_patients(self, id):
         """This method is used to read the patients table and plot the distribution of patients by age
         and return the data of the patient with the entered subject_id.
+
+        Args:
+            id (int): The subject_id of the patient.
 
         Returns:
             str: The data of the patient with the entered subject_id.
@@ -223,19 +237,20 @@ class Analyse:
 
         plt.show()
 
-        id = int(input("Enter subject_id: "))
         # Return the data of the patient as a string for better visualization
         patient = df[df["subject_id"] == id][["gender", "anchor_age", "dod"]]
         return patient.to_string(index=False)
 
-    def read_pharmacy(self):
+    def read_pharmacy(self, id):
         """This method is used to read the pharmacy table and return the pharmacy data of the patient with the entered subject_id.
+
+        Args:
+            id (int): The subject_id of the patient.
 
         Returns:
             str: The pharmacy data of the patient with the entered subject_id.
         """
         df = self.us.read_table_sa("pharmacy")
-        id = int(input("Enter subject_id: "))
         # Return the pharmacy data of the patient as a string for better visualization
         patient = df[df["subject_id"] == id][
             [
@@ -249,9 +264,12 @@ class Analyse:
         ]
         return patient.to_string(index=False)
 
-    def read_procedures_icd(self):
+    def read_procedures_icd(self, id):
         """This method is used to read the procedures_icd table and return the procedures of the patient with the entered subject_id.
 
+        Args:
+            id (int): The subject_id of the patient.
+            
         Returns:
             str: The procedures of the patient with the entered subject_id.
         """
@@ -261,7 +279,6 @@ class Analyse:
         merged_df = pd.merge(
             df, df1[["icd_code", "long_title"]], on="icd_code", how="left"
         )
-        id = int(input("Enter subject_id: "))
         # Return the procedures of the patient as a string for better visualization
         patient = merged_df[merged_df["subject_id"] == id][
             ["chartdate", "seq_num", "icd_code", "long_title", "icd_version"]

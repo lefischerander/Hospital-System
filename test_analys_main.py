@@ -8,21 +8,21 @@ def analyse_main():
         test = input("Enter the name of the file you want to read: ")
         id = input("Enter the patient's id: ")
         if test == "omr":
-            print(analyse.read_omr())
+            print(analyse.read_omr(id))
         elif test == "admissions":
-            print(analyse.read_admissions())
+            print(analyse.read_admissions(id))
         elif test == "diagnoses_icd":
             print(analyse.read_diagnoses_icd(id))
         elif test == "drgcodes":
-            print(analyse.read_drgcodes())
+            print(analyse.read_drgcodes(id))
         elif test == "emar":
-            print(analyse.read_emar())
+            print(analyse.read_emar(id))
         elif test == "patients":
-            print(analyse.read_patients())
+            print(analyse.read_patients(id))
         elif test == "pharmacy":
-            print(analyse.read_pharmacy())
+            print(analyse.read_pharmacy(id))
         elif test == "procedures_icd":
-            print(analyse.read_procedures_icd())
+            print(analyse.read_procedures_icd(id))
         elif test == "d_icd_diagnoses":
             print(analyse.read_d_icd_diagnoses())
         elif test == "d_icd_procedures":
