@@ -146,7 +146,7 @@ class ActionsUI:
                 borderwidth=1,
                 width=15,
             )
-            button_grid.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+            button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
 
             back_button = Button(button_grid, text="Back", command=back_action)
             back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
@@ -286,8 +286,16 @@ class ActionsUI:
                 action_window.deiconify
                 view_profile_window.destroy()
 
-            back_button = Button(text="Back", command=back_action)
-            back_button.place(x=700, y=0)
+            button_grid = Frame(
+                master=view_profile_window,
+                relief=RAISED,
+                borderwidth=1,
+                width=15,
+            )
+            button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
+
+            back_button = Button(button_grid, text="Back", command=back_action)
+            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
             for i in range(len(user_profile)):
                 for j in range(2):
@@ -425,8 +433,16 @@ class ActionsUI:
                 actions_window.deiconify
                 user_table.destroy()
 
-            back_button = Button(user_table, text="Back", command=back_action)
-            back_button.place(x=700, y=0)
+            button_grid = Frame(
+                master=user_table,
+                relief=RAISED,
+                borderwidth=1,
+                width=15,
+            )
+            button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
+
+            back_button = Button(button_grid, text="Back", command=back_action)
+            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
 
             for i in range(len(all_users) + 1):
                 for j in range(len(row_list)):
