@@ -24,8 +24,8 @@ def main():
                 main()
             while auth.logged_in:
                 
-                user_role = auth.users[0][2]
-                config.subject_id_logged = int(auth.users[0][4])
+                user_role = auth.users[0][4]
+                config.subject_id_logged = int(auth.users[0][3])
                 
 
                 if user_role == "Doctor":
