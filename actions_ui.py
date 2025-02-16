@@ -27,9 +27,10 @@ class ActionsUI:
 
         print("1. View patient data")
         print("2. View Diagnosis for patient")
-        print("3. View your profile")
-        print("4. Change Password")
-        print("5. Logout")
+        print("3. Create Diagnostic Report")
+        print("4. View your profile")
+        print("5. Change Password")
+        print("6. Logout")
         print()
 
         def view_patient_data():
@@ -142,6 +143,47 @@ class ActionsUI:
                 cancel_button.pack(pady=5, side=RIGHT)
 
             get_patient_id()
+
+        def create_diagnostic_report():
+            """This method is responsible for creating a diagnostic report"""
+            actions_window.withdraw()
+
+            get_patient_id_window = Toplevel(actions_window)
+            get_patient_id_window.title("Patient ID")
+
+            Label(get_patient_id_window, text="Patient ID:").pack(pady=5)
+            patient_id = Entry(get_patient_id_window)
+            patient_id.pack(pady=5)
+
+            Label(get_patient_id_window, text="ICD Code:").pack(pady=5)
+            icd_code = Entry(get_patient_id_window)
+            icd_code.pack(pady=5)
+
+
+            def submit_patient_id():
+                """This method is responsible for submitting the patient id"""
+                id = patient_id.get()
+                icd_code = icd_code.get()
+                get_patient_id_window.destroy()
+                user_service.create_diagnosis(id, global_username, icd_code)
+
+            def cancel_get_patient_id():
+                """This method is responsible for cancelling the patient id"""
+                get_patient_id_window.destroy()
+                actions_window.deiconify
+
+            button_frame = Frame(get_patient_id_window)
+            button_frame.pack(pady=10)
+
+            submit_button = Button(
+                get_patient_id_window, text="Submit", command=submit_patient_id
+            )
+            submit_button.pack(pady=5, side=RIGHT)
+
+            cancel_button = Button(
+                get_patient_id_window, text="Cancel", command=cancel_get_patient_id
+            )
+            cancel_button.pack(pady=5, side=RIGHT)
             
         def view_profile():
             """This method is responsible for viewing the profile of the user"""
@@ -275,6 +317,11 @@ class ActionsUI:
 
         profile = Button(button_frame, text="View your profile", command=view_profile)
         profile.pack(side=RIGHT, padx=5)
+
+        create_diagnostic_report_button = Button(
+            button_frame, text="Create Diagnostic Report", command=create_diagnostic_report
+        )
+        create_diagnostic_report_button.pack(side=RIGHT, padx=5)
 
         change_password_button = Button(
             button_frame, text="Change Password", command=change_password
