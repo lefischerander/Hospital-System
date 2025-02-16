@@ -14,21 +14,21 @@ class Analyse_ui:
             """This method is responsible for calling the right function from the combobox input"""
             selection = combo.get()
             if selection == "omr":
-                print(Analyse.read_omr(subject_id))
+                Analyse.read_omr(subject_id)
             elif selection == "admissions":
-                print(Analyse.read_admissions(subject_id))
+                Analyse.read_admissions(subject_id)
             elif selection == "diagnoses_icd":
-                print(Analyse.read_diagnoses_icd(subject_id))
+                Analyse.read_diagnoses_icd(subject_id)
             elif selection == "drgcodes":
-                print(Analyse.read_drgcodes(subject_id))
+                Analyse.read_drgcodes(subject_id)
             elif selection == "emar":
-                print(Analyse.read_emar(subject_id))
+                Analyse.read_emar(subject_id)
             elif selection == "patients":
-                print(Analyse.read_patients(subject_id))
+                Analyse.read_patients(subject_id)
             elif selection == "pharmacy":
-                print(Analyse.read_pharmacy(subject_id))
+                Analyse.read_pharmacy(subject_id)
             elif selection == "procedures_icd":
-                print(Analyse.read_procedures_icd(subject_id))
+                Analyse.read_procedures_icd(subject_id)
         print(subject_id)
 
         analyse_window = Tk()  
@@ -52,25 +52,25 @@ class Analyse_ui:
             print(id)
             print(selection)
             if selection == "omr":
-                print(Analyse.read_omr(id))
+                Analyse.read_omr(id)
             elif selection == "admissions":
-                print(Analyse.read_admissions(id))
+                Analyse.read_admissions(id)
             elif selection == "diagnoses_icd":
-                print(Analyse.read_diagnoses_icd(id))
+                Analyse.read_diagnoses_icd(id)
             elif selection == "drgcodes":
-                print(Analyse.read_drgcodes(id))
+                Analyse.read_drgcodes(id)
             elif selection == "emar":
-                print(Analyse.read_emar(id))
+                Analyse.read_emar(id)
             elif selection == "patients":
-                print(Analyse.read_patients(id))
+                Analyse.read_patients(id)
             elif selection == "pharmacy":
-                print(Analyse.read_pharmacy(id))
+                Analyse.read_pharmacy(id)
             elif selection == "procedures_icd":
-                print(Analyse.read_procedures_icd(id))
+                Analyse.read_procedures_icd(id)
             elif selection == "d_icd_diagnoses":
-                print(Analyse.read_d_icd_diagnoses())
+                Analyse.read_d_icd_diagnoses()
             elif selection == "d_icd_procedures":
-                print(Analyse.read_d_icd_procedures())
+                Analyse.read_d_icd_procedures()
 
         analyse_window = Tk()  
         analyse_window.title("Analyse")
