@@ -95,10 +95,19 @@ class Actions:
             Actions.admin_actions()
         #Nante
         elif choice == "4":
-            doctor = int(input("Enter the surname of the doctor you want to view"))
-            doctor_info = user_service.get_doctor_by_name(doctor)
-            print(doctor_info)
-            print("Press 'menu' to go back to the main menu or 'logout' to logout")
+            try:
+                doctor = str(
+                    input(
+                        "Enter the surname of the doctor you want to view: "
+                        )
+                )
+                
+                doctor_info = user_service.get_doctor_by_name(doctor)
+                
+                print(doctor_info)
+            except Exception as e:
+                print("Oups user not found: ", e)
+           
         # Nante
         elif choice == "5":
             user = input("Enter your Subject_id: ").strip()
@@ -151,14 +160,10 @@ class Actions:
                 input("Enter the subject_id of the patient you want to view:  ")
             )
             patient_profile = user_service.get_patient_profile(patient)
+            
             print(patient_profile)
 
-            answer = print("Press 'menu' to go back to the main menu")
-            if answer == "menu":
-                Actions.doktor_actions()
-            else:
-                print("Invalid input")
-                Actions.doktor_actions()
+            Actions.doktor_actions()
 
         elif choice == "2":
             doctor_profile = user_service.get_your_profile(config.subject_id_logged)
@@ -252,8 +257,9 @@ class Actions:
         print("Your possible actions: ")
         print("1. View your medical procedures")
         print("2. View your profile")
-        print("3. Change password")
-        print("4. Logout")
+        print("3. View a doctor profile")
+        print("4. Change password")
+        print("5. Logout")
 
         auth = AuthSystem()
         choice = input("Choose an action: ")
@@ -274,14 +280,23 @@ class Actions:
             print(patient_profile)
 
             Actions.patient_actions()
+        
         elif choice == "3":
+             doctor_name = input(" Enter the surname of the doctor you want to view the profile: ")
+             doctor_profile= user_service.get_doctor_by_name(doctor_name)
+             print(doctor_profile)
+
+
+        
+        
+        elif choice == "4":
             user = input("Username: ").strip()
             pw = getpass.getpass("Your currend Password: ")
             pw = User.hash_password(pw)
             auth.reset_password(user, pw)
             Actions.patient_actions()
 
-        elif choice == "4":  # already implemented in the ui
+        elif choice == "5":  # already implemented in the ui
             auth.logout()  # Logout
 
         else:

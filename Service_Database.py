@@ -159,8 +159,7 @@ class User_service:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                "select firstname, surname, department_name, age from ? where surname = ?",
-                DOCTORS,
+                f"select firstname, surname, department_name, age from {DOCTORS} where surname = ?",
                 surname,
             )
             doctor = cursor.fetchone()
@@ -617,13 +616,13 @@ if __name__ == "__main__":
     print()
     print(config.subject_id_logged)
     action = input(
-        "Press '1'to to check the id of a patient, Press '2' to view your profile , Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
+        "Press '1'to a doctor profile by name , Press '2' to view your profile , Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
     )
     print("Okay you chose: ", action)
 
     if action == "1":
-        checking_id = input("Give the subject_id: ")
-        The_role_id = user_service.check_id(checking_id)
+        name = input("Give the name: ")
+        The_role_id = user_service.get_doctor_by_name(name)
         print(The_role_id)
 
     elif action == "2":
