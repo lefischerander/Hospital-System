@@ -47,8 +47,9 @@ class ActionsUI:
 
                 def submit_patient_id():
                     """This method is responsible for submitting the patient id"""
+                    id = patient_id.get()
                     get_patient_id_window.destroy()
-                    return patient_id
+                    return id
 
                 def cancel_get_patient_id():
                     """This method is responsible for cancelling the patient id"""
@@ -120,7 +121,6 @@ class ActionsUI:
                 def submit_patient_id():
                     """This method is responsible for submitting the patient id"""
                     id = patient_id.get()
-                    print(id)
                     get_patient_id_window.destroy()
                     Analyse_ui.analyse_action_doctor(id)
 
