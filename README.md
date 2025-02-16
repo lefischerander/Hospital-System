@@ -2,9 +2,9 @@
 
 A web-based project that simulates a hospital and its patients
 
-# Functionalities
+## Functionalities
 
-## Data Sources and Retrieval
+### Data Sources and Retrieval
 
 - Retrieve data from an extensive, high-quality data set [MIMIC-IV](https://www.nature.com/articles/s41597-022-01899-x):
   - real data sourced from the electronic health record of the Beth Israel Deaconess Medical Center
@@ -14,7 +14,7 @@ A web-based project that simulates a hospital and its patients
   - anonymised data set
 - Generate a data set for the doctors
 
-## Data Storage and Handling
+### Data Storage and Handling
 
 - Store the data from the external source in an SQL database
   - create a concept for the database architecture and necessary information required for the software
@@ -22,7 +22,7 @@ A web-based project that simulates a hospital and its patients
   - use built-in library [hashlib](https://docs.python.org/3/library/hashlib.html)
   - because our passwords don't need to be moved or send to another server, hashing is a good choice to safeguard sensible information
 
-## User Management
+### User Management
 
 - Log-In system
   - Patients
@@ -42,7 +42,7 @@ A web-based project that simulates a hospital and its patients
     - view and modify their own profile
 - Timed Log-Out
   
-## Interface
+### Interface
 
 - Create a GUI
   - Log-In portal
@@ -50,23 +50,23 @@ A web-based project that simulates a hospital and its patients
   - depending on user the home screen and available functions change
 - Dashboard for results of data analysis
 
-## Statistical Analysis
+### Statistical Analysis
 
 - Users can access a dashboard that displays analysed data
   - Patients can view data regarding their own medical conditions and medications
   - Doctors can view data about all patients
 
-## Visualizations
+### Visualizations
 
 - Display the data from [Statistical Analysis](#statistical_analysis) with simple graphs
   - add an interactive graph to filter for $${\color{pink}(Low \space priority)}$$
     - patient profiles (age, gender, etc.)
     - time periods
-    - medical conditions, medications, etc. \
+    - medical conditions, medications, etc. 
 
 ## Installation and Usage
 
-## SQL Server Setup
+### SQL Server Setup
 
 The system requires a working instance of our database running on your local machine. Restore the [database backup](database1.zip) according to the official [Quickstart guide](https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/quickstart-backup-restore-database?view=sql-server-ver16&tabs=ssms).  
 
@@ -82,10 +82,28 @@ The system requires a working instance of our database running on your local mac
 - Tutor responsible: Jonas Rieling
 - Group team leader: Leander Fischer
 - Group members: Konstantin Kolbek, Erik Schäfer, Nantenaina Razafindraibe
+- Contributions
+  - Leander Fischer:
+    - Data Source and Retrieval
+    - Data Storage and Handling
+    - User Management
+      - Database related functions
+    - Statistical Analysis
+      - Data retrieval into pandas DataFrames
+  - Konstantin Kolbek
+    - Statistical Analysis
+    - Visualization
+    - User Management
+      - Log-In
+      - Actions
+  - Nantenaina Razafindraibe
+    - User Management
+  - Erik Schäfer
+    - Interface
 
 ## Acknowledgements
 
-## MIMIC-IV
+### MIMIC-IV
 
 - MIMIC-IV Clinical Database Demo <https://physionet.org/content/mimic-iv-demo/2.2/>
 - Johnson, A., Bulgarelli, L., Pollard, T., Gow, B., Moody, B., Horng, S., Celi, L. A., & Mark, R. (2024). MIMIC-IV (version 3.1). PhysioNet. <https://doi.org/10.13026/kpb9-mt58>
