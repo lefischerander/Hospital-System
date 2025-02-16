@@ -44,29 +44,30 @@ class Analyse_ui:
         Args:
             subject_id (int): The id of the patient the doctor wants to view
         """
-        def selected_option(event): # arg: event might be unnecessary
+        def selected_option(event, id=subject_id): # arg: event might be unnecessary
             """This method is responsible for calling the right function from the combobox input"""
+            print(id)
             selection = combo.get()
             if selection == "omr":
-                print(Analyse.read_omr(subject_id))
+                print(Analyse.read_omr(id))
             elif selection == "admissions":
-                print(Analyse.read_admissions(subject_id))
+                print(Analyse.read_admissions(id))
             elif selection == "diagnoses_icd":
-                print(Analyse.read_diagnoses_icd(subject_id))
+                print(Analyse.read_diagnoses_icd(id))
             elif selection == "drgcodes":
-                print(Analyse.read_drgcodes(subject_id))
+                print(Analyse.read_drgcodes(id))
             elif selection == "emar":
-                print(Analyse.read_emar(subject_id))
+                print(Analyse.read_emar(id))
             elif selection == "patients":
-                print(Analyse.read_patients(subject_id))
+                print(Analyse.read_patients(id))
             elif selection == "pharmacy":
-                print(Analyse.read_pharmacy(subject_id))
+                print(Analyse.read_pharmacy(id))
             elif selection == "procedures_icd":
-                print(Analyse.read_procedures_icd(subject_id))
+                print(Analyse.read_procedures_icd(id))
             elif selection == "d_icd_diagnoses":
-                print(Analyse.read_d_icd_diagnoses(subject_id))
+                print(Analyse.read_d_icd_diagnoses())
             elif selection == "d_icd_procedures":
-                print(Analyse.read_d_icd_procedures(subject_id))
+                print(Analyse.read_d_icd_procedures())
 
         analyse_window = Tk()  
         analyse_window.title("Analyse")
