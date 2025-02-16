@@ -29,6 +29,7 @@ class Analyse_ui:
                 print(Analyse.read_pharmacy(subject_id))
             elif selection == "procedures_icd":
                 print(Analyse.read_procedures_icd(subject_id))
+        print(subject_id)
 
         analyse_window = Tk()  
         analyse_window.title("Analyse")
