@@ -13,22 +13,24 @@ class Analyse_ui:
         def selected_option(event): # arg: event might be unnecessary
             """This method is responsible for calling the right function from the combobox input"""
             selection = combo.get()
+            call_analyse = Analyse()
             if selection == "omr":
-                print(Analyse.read_omr(subject_id))
+                call_analyse.read_omr(subject_id)
             elif selection == "admissions":
-                print(Analyse.read_admissions(subject_id))
+                call_analyse.read_admissions(subject_id)
             elif selection == "diagnoses_icd":
-                print(Analyse.read_diagnoses_icd(subject_id))
+                call_analyse.read_diagnoses_icd(subject_id)
             elif selection == "drgcodes":
-                print(Analyse.read_drgcodes(subject_id))
+                call_analyse.read_drgcodes(subject_id)
             elif selection == "emar":
-                print(Analyse.read_emar(subject_id))
+                call_analyse.read_emar(subject_id)
             elif selection == "patients":
-                print(Analyse.read_patients(subject_id))
+                call_analyse.read_patients(subject_id)
             elif selection == "pharmacy":
-                print(Analyse.read_pharmacy(subject_id))
+                call_analyse.read_pharmacy(subject_id)
             elif selection == "procedures_icd":
-                print(Analyse.read_procedures_icd(subject_id))
+                call_analyse.read_procedures_icd(subject_id)
+        print(subject_id)
 
         analyse_window = Tk()  
         analyse_window.title("Analyse")
@@ -44,29 +46,33 @@ class Analyse_ui:
         Args:
             subject_id (int): The id of the patient the doctor wants to view
         """
-        def selected_option(event): # arg: event might be unnecessary
+        def selected_option(event): # arg: event is necessary
             """This method is responsible for calling the right function from the combobox input"""
             selection = combo.get()
+            id = int(subject_id)
+            call_analyse = Analyse()
+            print(id)
+            print(selection)
             if selection == "omr":
-                print(Analyse.read_omr(subject_id))
+                call_analyse.read_omr(id)
             elif selection == "admissions":
-                print(Analyse.read_admissions(subject_id))
+                call_analyse.read_admissions(id)
             elif selection == "diagnoses_icd":
-                print(Analyse.read_diagnoses_icd(subject_id))
+                call_analyse.read_diagnoses_icd(id)
             elif selection == "drgcodes":
-                print(Analyse.read_drgcodes(subject_id))
+                call_analyse.read_drgcodes(id)
             elif selection == "emar":
-                print(Analyse.read_emar(subject_id))
+                call_analyse.read_emar(id)
             elif selection == "patients":
-                print(Analyse.read_patients(subject_id))
+                call_analyse.read_patients(id)
             elif selection == "pharmacy":
-                print(Analyse.read_pharmacy(subject_id))
+                call_analyse.read_pharmacy(id)
             elif selection == "procedures_icd":
-                print(Analyse.read_procedures_icd(subject_id))
+                call_analyse.read_procedures_icd(id)
             elif selection == "d_icd_diagnoses":
-                print(Analyse.read_d_icd_diagnoses(subject_id))
+                call_analyse.read_d_icd_diagnoses()
             elif selection == "d_icd_procedures":
-                print(Analyse.read_d_icd_procedures(subject_id))
+                call_analyse.read_d_icd_procedures()
 
         analyse_window = Tk()  
         analyse_window.title("Analyse")

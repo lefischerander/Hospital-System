@@ -23,12 +23,10 @@ def main():
             if not auth.logged_in:
                 main()
             while auth.logged_in:
-                print(f" {auth.users}")
+                
                 user_role = auth.users[0][2]
                 config.subject_id_logged = int(auth.users[0][4])
-                print(
-                    f"The user's role({user_role}) with their subject_Id: {config.subject_id_logged}"
-                )
+                
 
                 if user_role == "Doctor":
                     Actions.doktor_actions()
