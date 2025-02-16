@@ -6,7 +6,19 @@ from user_test import User
 # import datetime
 # import threading
 from db_access import connection_string
-import config
+
+# database tables
+LOGIN_DATA = "New_login_data"
+DOCTORS = "doctors"
+PATIENTS = "patients"
+DIAGNOSES = "diagnoses_icd"
+PROCEDURES = "procedures_icd"
+OMR = "omr"
+DIAGNOSES_DESC = "d_icd_diagnoses"
+PROCEDURES_DESC = "d_icd_procedures"
+EMAR = "emar"
+ADMISSIONS = "admissions"
+PHARMACY = "pharmacy"
 
 
 class AuthSystem:
@@ -14,14 +26,12 @@ class AuthSystem:
         self.users = []
         self.logged_in = False
 
-        
-
-    def login(self, subject_id, password):
+    def check_user(self, subject_id, password):
         try:
             connection = pyodbc.connect(connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                "select  firstname, surname, role, password, subject_id FROM New_login_data WHERE subject_id = ? AND password = ?",
+                f"select  firstname, surname, role, password, subject_id FROM {LOGIN_DATA} WHERE subject_id = ? AND password = ?",
                 subject_id,
                 password,
             )
@@ -32,7 +42,7 @@ class AuthSystem:
             print(f" Db error: {db_error}")
         except Exception as e:
             print(f"An unexpected error occured: {e}")
-        
+
         user = None
 
         for i in self.users:
@@ -41,11 +51,12 @@ class AuthSystem:
                 break
 
         if user is None:
-            print(f"\nUsername {subject_id} not found.")
-        elif password != user[3]:
-          
-            print("\nInvalid password.\n")
-        else:
+            print("Invalid username or password.")
+        return user
+
+    def login(self, subject_id, password):
+        user = self.check_user(subject_id, password)
+        if user:
             print(f"\nLogin successful! Welcome, {user[0]} {user[1]}.")
             self.logged_in = True
             user_role = user[2]
@@ -60,11 +71,9 @@ class AuthSystem:
 
     def reset_password(self, subject_id, password, new_password, confirm_new_password):
         try:
-            if subject_id not in self.users:
-                raise ValueError("Invalid username.\n")
-
-            if self.users[subject_id].password != User.hash_password(password):
-                raise ValueError("\nInvalid password.\n")
+            user = self.check_user(subject_id, password)
+            if user is None:
+                raise ValueError("\nInvalid username or password.\n")
 
             while True:
                 try:
@@ -97,16 +106,22 @@ class AuthSystem:
                         raise ValueError("\nPasswords do not match!\n")
 
                     h_new_password = User.hash_password(new_password)
-                    if self.users[subject_id].password == User.hash_password(
-                        h_new_password
-                    ):
+                    if user[3] == h_new_password:
                         raise ValueError(
                             "\nNew password must be different from the old password.\n"
                         )
 
-                  
+                    connection = pyodbc.connect(connection_string)
+                    cursor = connection.cursor()
+                    cursor.execute(
+                        f"UPDATE {LOGIN_DATA} SET password = ? WHERE subject_id = ?",
+                        h_new_password,
+                        subject_id,
+                    )
+                    cursor.close()
+                    connection.commit()
+                    connection.close()
                     print("\nPassword reset successful!\n")
-
                     break
                 except ValueError as error:
                     print(error)
