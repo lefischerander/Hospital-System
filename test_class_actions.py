@@ -10,35 +10,35 @@ import config
 user_service = (
     Service_Database.User_service()
 )  # creating an instance of the class Userservice
-#auth_system = AuthSystem()  # instance of the class AuthSystem
+# auth_system = AuthSystem()  # instance of the class AuthSystem
 
 analyzing = test_analyse.Analyse()
 
+
 class Actions:
-    #Konstantin, Nante
+    # Konstantin, Nante
     def admin_actions():
-        # Actions for the admin
+        """Actions for the admin"""
         print("Your possible actions: \n")
         print("1. View all users")
-        print("2. Delete an account") #low priority
+        print("2. Delete an account")  # low priority
         print("3. View patient's profile")
         print("4. View doctor's profile")
         print("5. Change password")
         print("6. Logout\n")
-        
 
         choice = input("Choose an action: \n")
         auth = AuthSystem()
-        
-        #Nante
+
+        # Nante
         if choice == "1":
-            # We are parsing the view_all-users function to the instance of the class Service 
+            # We are parsing the view_all-users function to the instance of the class Service
             user_service.view_all_users()
             print("All users: ", user_service.view_all_users())
             # After tah
             Actions.admin_actions()
-        #Nante
-        elif choice == "2":              #low priority
+        # Nante
+        elif choice == "2":  # low priority
             user_to_be_deleted = int(
                 int(input("Enter the subject_id of the user you want to delete: "))
             )
@@ -62,8 +62,8 @@ class Actions:
                 else:
                     print("Invalid input")
                     Actions.admin_actions()
-        
-        #Nante
+
+        # Nante
         elif choice == "3":
             patient = int(
                 input("Enter the subject_id of the patient you want to view:  \n")
@@ -74,31 +74,31 @@ class Actions:
             answer = print("Press 'menu' to go back to the main menu")
             if answer == "menu":
                 Actions.admin_actions()
-        #Nante
+        # Nante
         elif choice == "4":
             doctor = int(input("Enter the surname of the doctor you want to view"))
             doctor_info = user_service.get_doctor_by_name(doctor)
             print(doctor_info)
             print("Press 'menu' to go back to the main menu or 'logout' to logout")
-        #Nante
+        # Nante
         elif choice == "5":
             user = input("Enter your Subject_id: ").strip()
             pw = getpass.getpass("Your currend Password: ")
             pw = User.hash_password(pw)
             auth.reset_password(user, pw)
             Actions.admin_actions()  # Return to admin actions
-        #Nante
+        # Nante
         elif choice == "6":
-            #auth_system.logout()
+            # auth_system.logout()
             Actions.admin_actions()  # Return to admin actions
-        #Nante
+        # Nante
         else:
             print("Invalid please choose one of the above possibles actions")
             print()
-    
-    #Nante 
+
+    # Nante
     def doktor_actions():
-        # Actions for the doctor
+        """Actions for the doctor"""
         print("Your possible actions: ")
         print("1. View patient's profile")
         print("2. View your profile")
@@ -107,13 +107,11 @@ class Actions:
         print("5. View diagnosis of a patient")
         print("6. Change password")
         print("7. Logout")
-        
-       
+
         print()
 
         auth = AuthSystem()
-        
-        
+
         choice = input("Choose an action: ")
 
         if choice == "1":
@@ -131,43 +129,43 @@ class Actions:
                 Actions.doktor_actions()
 
         elif choice == "2":
-           
-           
             doctor_profile = user_service.get_your_profile(config.subject_id_logged)
             print(doctor_profile)
-            print("Your subject_id: " , config.subject_id_logged)
+            print("Your subject_id: ", config.subject_id_logged)
 
             Actions.doktor_actions()
 
         elif choice == "3":
             try:
                 diagnosis_subject_id = None
-                while diagnosis_subject_id is None or user_service.check_id(diagnosis_subject_id) is None:
-                        diagnosis_subject_id = str(
-                            input(
-                                " Enter the subject_id of the patient you want to add a diagnosis to: "
-                                )
+                while (
+                    diagnosis_subject_id is None
+                    or user_service.check_id(diagnosis_subject_id) is None
+                ):
+                    diagnosis_subject_id = str(
+                        input(
+                            " Enter the subject_id of the patient you want to add a diagnosis to: "
+                        )
+                    )
+
+                    icd_code = int(input("Enter the diagnosis (icd_code): "))
+
+                    diagnosis_added = str(
+                        (
+                            user_service.create_diagnosis(
+                                diagnosis_subject_id, config.subject_id_logged, icd_code
                             )
-                    
-                        icd_code = int(input("Enter the diagnosis (icd_code): ")
-)
-                       
-                        diagnosis_added= str(
-                            (user_service.create_diagnosis(diagnosis_subject_id, config.subject_id_logged, icd_code)
-                                 )
-                            )
-                      
+                        )
+                    )
+
                 if diagnosis_added is not None:
-                   print("Diagnosis added successfully")
-                
+                    print("Diagnosis added successfully")
+
                 else:
-                    raise Exception(
-                        "Please enter a valid input (valid ICD-Code)"
-                        ) 
-            
-                
+                    raise Exception("Please enter a valid input (valid ICD-Code)")
+
                 Actions.doktor_actions()
-            except Exception as e: 
+            except Exception as e:
                 print("An error occured: ", e)
                 Actions.doktor_actions()
 
@@ -177,20 +175,25 @@ class Actions:
                     "Enter the subject_id of the patient you want to view the recent medical procedures: "
                 )
             )
-            procedures = user_service.get_procedures_by_subject_id(patient_procedures, config.subject_id_logged)
+            procedures = user_service.get_procedures_by_subject_id(
+                patient_procedures, config.subject_id_logged
+            )
             print(procedures)
             print("Press 'menu' to go back to the main menu")
-            
+
         elif choice == "5":
-            patient_diagnosis= int(input(
-                "Enter the subject_id of the patient you want to see the diagnosis: "
+            patient_diagnosis = int(
+                input(
+                    "Enter the subject_id of the patient you want to see the diagnosis: "
                 )
             )
 
-            diagnosis= user_service.get_diagnosis(patient_diagnosis, config.subject_id_logged)
+            diagnosis = user_service.get_diagnosis(
+                patient_diagnosis, config.subject_id_logged
+            )
             print(f"The diagnosis of the patient (subject_id): {patient_diagnosis} ")
             print(diagnosis)
-       
+
         elif choice == "6":
             user = input("Enter your Subject_id: ").strip()
             pw = getpass.getpass("Your currend Password: ")
@@ -201,10 +204,8 @@ class Actions:
             print("Invalid please choose one of the above possibles actions")
             print()
 
-       
-
     def patient_actions():
-        # Actions for the patient
+        """Actions for the patient"""
         print("Your possible actions: ")
         print("1. View your medical procedures")
         print("2. View your profile")
@@ -216,20 +217,16 @@ class Actions:
 
         if choice == "1":
             try:
-                patient_procedures = (
-                        user_service.get_procedures_by_subject_id(config.subject_id_logged, config.subject_id_logged)
-                                 )
+                patient_procedures = user_service.get_procedures_by_subject_id(
+                    config.subject_id_logged, config.subject_id_logged
+                )
                 print("Your recent procedures: ", patient_procedures)
-            
-            
+
             except Exception as e:
                 print("An unexpected error occured: ", e)
                 Actions.patient_actions()
-        
-            
 
         elif choice == "2":
-           
             patient_profile = user_service.get_your_profile(config.subject_id_logged)
             print(patient_profile)
 
@@ -241,9 +238,9 @@ class Actions:
             auth.reset_password(user, pw)
             Actions.patient_actions()
 
-        elif choice == "4":#already implemented in the ui
+        elif choice == "4":  # already implemented in the ui
             auth.logout()  # Logout
-        
+
         else:
             print("Invalid please choose one of the above possibles actions")
             print()

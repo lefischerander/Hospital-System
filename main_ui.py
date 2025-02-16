@@ -14,6 +14,7 @@ def home_action():
 
 
 def login_action():
+    """Create a login window to authenticate users."""
     global global_username, global_password
     root.withdraw()
     auth = AuthSystem()
@@ -30,6 +31,7 @@ def login_action():
     password_entry.pack(pady=5)
 
     def submit_login():
+        """Submit the login form and authenticate the user."""
         global global_username
         username = username_entry.get()
         password = password_entry.get()
@@ -73,6 +75,7 @@ def login_action():
 
 
 def reset_password_action():
+    """Create a reset password window to reset the user's password."""
     root.withdraw()
     auth = AuthSystem()
     reset_password_window = Toplevel(root)
@@ -95,6 +98,7 @@ def reset_password_action():
     confirm_new_password_entry.pack(pady=5)
 
     def submit_reset_password():
+        """Submit the reset password form and reset the user's password."""
         username = username_entry.get()
         old_password = password_entry.get()
         new_password = new_password_entry.get()
@@ -125,6 +129,7 @@ def exit_action():
     root.quit()
 
 
+# Main program
 root = Tk()
 root.title("My Tkinter App")
 root.geometry("800x600")
