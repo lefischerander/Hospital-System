@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import Service_Database as db
+import os
+from pathlib import Path
 import sqlalchemy as sa
 from db_access import connection_string
 
@@ -141,6 +143,11 @@ class Analyse:
         patient = merged_df[merged_df["subject_id"] == id][
             ["seq_num", "icd_code", "icd_version", "long_title"]
         ]
+        downloads_path = str(Path.home() / "Downloads")
+        file_path = os.path.join(downloads_path, f"diagnoses_{id}.txt")
+        with open(file_path, "w") as file:
+            file.write(patient.to_string(index=False))
+            print(f"\nYour diagnoses are saved under {file_path}!")
         return patient.to_string(index=False)
 
     def read_drgcodes(self):
