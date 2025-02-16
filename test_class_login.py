@@ -31,7 +31,7 @@ class AuthSystem:
             connection = pyodbc.connect(connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                f"select password, subject_idc, role FROM {LOGIN_DATA} WHERE subject_id = ? AND password = ?",
+                f"select firstname, surname, password, subject_idc, role FROM {LOGIN_DATA} WHERE subject_id = ? AND password = ?",
                 subject_id,
                 password,
             )
@@ -49,6 +49,7 @@ class AuthSystem:
             if str(i[0] == str(subject_id)):
                 user = i
                 break
+
         if user[2] == "Doctor":
             connection = pyodbc.connect(connection_string)
             cursor = connection.cursor()
@@ -64,6 +65,7 @@ class AuthSystem:
             connection.close()
             for r in result:
                 user.append(r)
+
         if user is None:
             print("Invalid username or password.")
         return user
