@@ -13,7 +13,9 @@ class AuthSystem:
         self.users = []
         self.logged_in = False
 
-    def data_base_log(self, subject_id, password):
+        
+
+    def login(self, subject_id, password):
         try:
             connection = pyodbc.connect(connection_string)
             cursor = connection.cursor()
@@ -29,9 +31,7 @@ class AuthSystem:
             print(f" Db error: {db_error}")
         except Exception as e:
             print(f"An unexpected error occured: {e}")
-
-    def login(self, subject_id, password):
-        self.data_base_log(subject_id, password)
+        
         user = None
 
         for i in self.users:
@@ -42,46 +42,20 @@ class AuthSystem:
         if user is None:
             print(f"\nUsername {subject_id} not found.")
         elif password != user[3]:
-            print(User.hash_password(password))
+          
             print("\nInvalid password.\n")
         else:
-            with open("logged_in_users.txt", "r") as file:
-                line = file.readline()
-                while line:
-                    if subject_id == line.strip():
-                        print(
-                            f"\nUser {user[0]} {user[1]} (role: {user[2]}  already logged in.\n"
-                        )
-                        break
-                    else:
-                        line = file.readline()
-                if not line:
-                    with open("logged_in_users.txt", "a") as file:
-                        file.write(f"{user[4]} \n")
-                        print(f"\nLogin successful! Welcome, {user[0]} {user[1]}.")
-                        self.logged_in = True
-                        user_role = user[2]
-                        if user_role == "Doctor":
-                            print(f"You are {user_role} in this hospital")
-                            print("Your department: \n")  # edit department later
-                        else:
-                            print(f"You are {user_role} in this hospital\n")
+            print(f"\nLogin successful! Welcome, {user[0]} {user[1]}.")
+            self.logged_in = True
+            user_role = user[2]
+            if user_role == "Doctor":
+                print(f"Your role in this hospital: {user_role}")
+                print("Your department: \n")
+            else:
+                print(f"Your role in this hospital: {user_role}")
 
-    def logout(self, subject_id):
-        with open("logged_in_users.txt", "r") as file:
-            lines = file.readlines()
-
-        with open("logged_in_users.txt", "w") as file:
-            for line in lines:
-                subject_id= config.subject_id_logged
-                if line.strip() != subject_id:
-                    file.write(line)
-                else:
-                    print(
-                        f"\nUser {subject_id} logged out successfully. Thank you for using our services.\n"
-                    )
-                    self.logged_in = False
-            sys.exit()
+    def logout():
+        sys.exit()
 
     def reset_password(self, subject_id, password, new_password, confirm_new_password):
         try:
@@ -129,8 +103,7 @@ class AuthSystem:
                             "\nNew password must be different from the old password.\n"
                         )
 
-                    # with open('test_class_login.py', 'w') as file:
-                    # User.hash_password[username] = file.write(f"{h_new_password}")
+                  
                     print("\nPassword reset successful!\n")
 
                     break
