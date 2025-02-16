@@ -120,7 +120,7 @@ class ActionsUI:
                 def submit_patient_id():
                     """This method is responsible for submitting the patient id"""
                     get_patient_id_window.destroy()
-                    return patient_id
+                    Analyse_ui.analyse_action_doctor(patient_id)
 
                 def cancel_get_patient_id():
                     """This method is responsible for cancelling the patient id"""
@@ -139,8 +139,7 @@ class ActionsUI:
                 )
                 cancel_button.pack(pady=5, side=RIGHT)
 
-            patient_id = get_patient_id()
-            Analyse_ui.analyse_action_doctor(patient_id)
+            get_patient_id()
             
         def view_profile():
             """This method is responsible for viewing the profile of the user"""
