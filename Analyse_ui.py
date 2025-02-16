@@ -47,8 +47,9 @@ class Analyse_ui:
         """
         def selected_option(event, id=subject_id): # arg: event might be unnecessary
             """This method is responsible for calling the right function from the combobox input"""
-            print(id)
             selection = combo.get()
+            print(id)
+            print(selection)
             if selection == "omr":
                 print(Analyse.read_omr(id))
             elif selection == "admissions":
@@ -69,7 +70,7 @@ class Analyse_ui:
                 print(Analyse.read_d_icd_diagnoses())
             elif selection == "d_icd_procedures":
                 print(Analyse.read_d_icd_procedures())
-        print(subject_id)
+
         analyse_window = Tk()  
         analyse_window.title("Analyse")
         analyse_window.geometry("400x300")
