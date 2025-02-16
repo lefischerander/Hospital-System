@@ -1,6 +1,5 @@
 from test_analyse import Analyse
 from tkinter import *
-import tkinter as tk
 import tkinter.ttk as ttk
 
 class Analyse_ui:
@@ -31,10 +30,11 @@ class Analyse_ui:
             elif selection == "procedures_icd":
                 print(Analyse.read_procedures_icd(subject_id))
 
-        analyse_window = tk.Tk()  
+        analyse_window = Tk()  
         analyse_window.title("Analyse")
         analyse_window.geometry("400x300")
-        combo = ttk.Combobox(values=["omr", "admissions", "diagnoses_icd", "drgcodes", "emar", "patients", "pharmacy", "procedures_icd"])
+        combo = ttk.Combobox(master=analyse_window, values=["omr", "admissions", "diagnoses_icd", "drgcodes", "emar", "patients", "pharmacy", "procedures_icd"])
+        combo.pack()
         combo.bind("<<ComboboxSelected>>", selected_option)
         analyse_window.mainloop()
 
@@ -68,10 +68,10 @@ class Analyse_ui:
             elif selection == "d_icd_procedures":
                 print(Analyse.read_d_icd_procedures(subject_id))
 
-        analyse_window = tk.Tk()  
+        analyse_window = Tk()  
         analyse_window.title("Analyse")
         analyse_window.geometry("400x300")
-        combo = ttk.Combobox(values=["omr", "admissions", "diagnoses_icd", "drgcodes", "emar", "patients", "pharmacy", "procedures_icd", "d_icd_diagnoses", "d_icd_procedures"])
-        combo.bind("<<ComboboxSelected>>", selected_option)
+        combo = ttk.Combobox(master=analyse_window, values=["omr", "admissions", "diagnoses_icd", "drgcodes", "emar", "patients", "pharmacy", "procedures_icd", "d_icd_diagnoses", "d_icd_procedures"])
         combo.pack()
+        combo.bind("<<ComboboxSelected>>", selected_option)
         analyse_window.mainloop()
