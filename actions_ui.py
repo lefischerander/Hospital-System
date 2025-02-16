@@ -120,7 +120,8 @@ class ActionsUI:
                 def submit_patient_id():
                     """This method is responsible for submitting the patient id"""
                     get_patient_id_window.destroy()
-                    Analyse_ui.analyse_action_doctor(patient_id.get())
+                    id = patient_id.get()
+                    Analyse_ui.analyse_action_doctor(id)
 
                 def cancel_get_patient_id():
                     """This method is responsible for cancelling the patient id"""
