@@ -234,7 +234,7 @@ class User_service:
         except Exception as e:
             print("Error creating user: ", e)
 
-    def change_password(self, username, password):  ##low priority
+    def change_password(self, username, password):  #Not necessary
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
@@ -251,6 +251,19 @@ class User_service:
             print("Error changing password: ", e)
 
     def check_id(self, subject_id):  # just for patients
+        """ 
+            This method is used to verify if a input subject_id exists in the database based on the subject_id.
+            The patient user is most likely to be checked.
+
+            Args:
+                subject_id (int): the user's subject ID
+            
+            Returns:
+                none if the entered subject_id does not exist in the database
+            
+            Raises:
+                Exception: any database inconvenience
+        """
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
@@ -367,6 +380,21 @@ class User_service:
             print("Error:  ", e)
 
     def get_patient_profile(self, subject_id):  # dod time must be string
+        """Gets a patient's profile based on the patient's subject_id.
+           
+           Before making any connection with the database, the entered subject_id need to be checked first.
+           
+           Args:
+              entered subject_id
+            
+           Returns:
+            pyodbc.row: the row containing the user's profile (pyodbc object)
+           
+           Raises:
+              Exception: if the checked subject_id does not exist on the database
+                         if the database could not fetch the patient profile
+
+        """
         try:
             check_id = self.check_id(subject_id)
             if check_id is None:
@@ -522,6 +550,12 @@ class User_service:
             return None
 
     def view_all_users(self):
+        """ Sees all the users present in the database.
+            
+            Returns:
+                   pyodbc.row: The row containing the users in the database (pyodbc object)
+            
+        """
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()

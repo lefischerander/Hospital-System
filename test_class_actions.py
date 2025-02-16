@@ -15,9 +15,29 @@ user_service = (
 analyzing = test_analyse.Analyse()
 
 class Actions:
+    """This class is reponsible for handling all possible actions of each user:
+                    
+                    Admin, Doctor and Patient 
+    """
+    
+    
     #Konstantin, Nante
+    
+    
     def admin_actions():
-        # Actions for the admin
+        
+        """ This function takes no parameter (or arguments) 
+             
+            The admin user can perform 6 possible actions. From 1 to 6.
+             
+            Each time the user is done doing his action, 
+            he can go back to the menu by clicking on the back button (UI).
+            If the user is using a console, he will be sent directly back to the menu (this function)
+            
+            (This function)
+                                   
+        """
+        
         print("Your possible actions: \n")
         print("1. View all users")
         print("2. Delete an account") #low priority
@@ -71,9 +91,8 @@ class Actions:
             patient_info = user_service.get_patient_profile(patient)
             print(patient_info)
 
-            answer = print("Press 'menu' to go back to the main menu")
-            if answer == "menu":
-                Actions.admin_actions()
+            
+            Actions.admin_actions()
         #Nante
         elif choice == "4":
             doctor = int(input("Enter the surname of the doctor you want to view"))
@@ -98,7 +117,20 @@ class Actions:
     
     #Nante 
     def doktor_actions():
-        # Actions for the doctor
+        
+        """ This function takes no parameter (or arguments) 
+             
+            The doctor user can perform 7 possible actions. From 1 to 7.
+             
+            Each time the user is done doing his action, 
+            he can go back to the menu by clicking on the back button (UI).
+            If the user is using a console, he will be sent directly back to the menu (this function)
+            
+            
+                                   
+        """
+        
+        
         print("Your possible actions: ")
         print("1. View patient's profile")
         print("2. View your profile")
@@ -204,7 +236,18 @@ class Actions:
        
 
     def patient_actions():
-        # Actions for the patient
+        
+        """ This function takes no parameter (or arguments) 
+             
+            The patient user can perform 4 possible actions. From 1 to 4.
+             
+            Each time the user is done doing his action, 
+            he can go back to the menu by clicking on the back button (UI).
+            If the user is using a console, he will be sent directly back to the menu (this function)
+            
+            
+                                   
+        """
         print("Your possible actions: ")
         print("1. View your medical procedures")
         print("2. View your profile")
