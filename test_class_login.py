@@ -23,13 +23,22 @@ PHARMACY = "pharmacy"
 
 
 class AuthSystem:
-    #Nante
+    # Nante
     def __init__(self):
         self.users = []
         self.logged_in = False
 
     def check_user(self, subject_id, password):
-        #Nante, Leander
+        # Nante, Leander
+        """Checks if the user exists in the database.
+
+        Args:
+            subject_id (int): The subject id of the user
+            password (str): The password of the user
+
+        Returns:
+            list: User data if the user exists, None otherwise
+        """
         try:
             connection = pyodbc.connect(connection_string)
             cursor = connection.cursor()
@@ -53,7 +62,7 @@ class AuthSystem:
             if str(i[0] == str(subject_id)):
                 temp_user = i
                 break
-        
+
         if temp_user:
             for i in temp_user:
                 user.append(i)
@@ -76,9 +85,15 @@ class AuthSystem:
         if user is None:
             print("Invalid username or password.")
         return user
-    
-    #Konstantin, Leander, Nante
+
+    # Konstantin, Leander, Nante
     def login(self, subject_id, password):
+        """Logs the user into the system if the credentials are correct.
+
+        Args:
+            subject_id (int): The user's subject id
+            password (str): The user's password
+        """
         user = self.check_user(subject_id, password)
         if user:
             print(f"\nLogin successful! Welcome, {user[0]} {user[1]}.")
@@ -94,19 +109,31 @@ class AuthSystem:
         sys.exit()
 
     def reset_password(self, subject_id, password, new_password, confirm_new_password):
-        #Leander, Nante
+        """Resets the user's password.
+
+        Args:
+            subject_id (int): The user's subject id
+            password (str): The user's password
+            new_password (str): The user's new password
+            confirm_new_password (str): The user's new password confirmation
+
+        Raises:
+            ValueError: If the password doesn't meet the requirements
+        """
+        # Leander, Nante
         try:
             user = self.check_user(subject_id, password)
             if user is None:
                 raise ValueError("\nInvalid username or password.\n")
 
-            #while True:
-            #Konstantin
+            # while True:
+            # Konstantin
             try:
                 if len(new_password) < 8:
-                    messagebox.showinfo ("Invalid password", 
-                        "Password must be at least 8 characters long."
-                    )                     
+                    messagebox.showinfo(
+                        "Invalid password",
+                        "Password must be at least 8 characters long.",
+                    )
                 if new_password.islower():
                     messagebox.showinfo(
                         "Password must contain at least one uppercase letter."
@@ -116,13 +143,9 @@ class AuthSystem:
                         "Password must contain at least one lowercase letter."
                     )
                 if new_password.isdigit():
-                    messagebox.showinfo(
-                        "Password must contain at least one letter."
-                    )
+                    messagebox.showinfo("Password must contain at least one letter.")
                 if new_password.isalpha():
-                   messagebox.showinfo(
-                        "Password must contain at least one number."
-                    )
+                    messagebox.showinfo("Password must contain at least one number.")
                 if new_password.isalnum():
                     messagebox.showinfo(
                         "Password must contain at least one special character."
@@ -148,7 +171,7 @@ class AuthSystem:
                 connection.commit()
                 connection.close()
                 print("\nPassword reset successfull!\n")
-                #break
+                # break
             except ValueError as error:
                 print(error)
         except ValueError as error:
