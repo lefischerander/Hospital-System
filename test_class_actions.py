@@ -129,7 +129,7 @@ class Actions:
             # )
             doctor_profile = user_service.get_your_profile(config.subject_id_logged)
             print(doctor_profile)
-            print(config.subject_id_logged)
+            print("Your subjcet_id: " , config.subject_id_logged)
 
             Actions.doktor_actions()
 
@@ -137,22 +137,26 @@ class Actions:
             try:
                 diagnosis_subject_id = None
                 while diagnosis_subject_id is None or user_service.check_id(diagnosis_subject_id) is None:
-                        diagnosis_subject_id = int(
-                             input(
-                                 " Enter the subject_id of the patient you want to add a diagnosis to: "
-                                 )
-                        )
+                        diagnosis_subject_id = str(
+                            input(
+                                " Enter the subject_id of the patient you want to add a diagnosis to: "
+                                )
+                            )
+                    
+                        icd_code = int(input("Enter the diagnosis (icd_code): ")
+)
                        
-                        diagnosis_added= int(
-                        user_service.create_diagnosis(diagnosis_subject_id)
-                        )
-            
+                        diagnosis_added= str(
+                            (user_service.create_diagnosis(diagnosis_subject_id, config.subject_id_logged, icd_code)
+                                 )
+                            )
+                      
                 if diagnosis_added is not None:
                    print("Diagnosis added successfully")
                 
                 else:
                     raise Exception(
-                        "Please enter a valid input (valid ICD-Code or ICD-Version)"
+                        "Please enter a valid input (valid ICD-Code)"
                         ) 
             
                 answer = print("Do you want to see the diagnosis you just added? (yes/no)")

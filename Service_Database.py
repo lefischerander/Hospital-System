@@ -294,7 +294,7 @@ class User_service:
             print("Invalid icd code.", e)
             User_service.read_d_icd_diagnoses()  # Call the method again if the icd code is invalid
 
-    def create_diagnosis(self, patient_id, caller_id):
+    def create_diagnosis(self, patient_id, caller_id, icd_code):
         """If the user is a doctor, adds a diagnosis to a patient's record
 
         Args:
@@ -321,21 +321,19 @@ class User_service:
             if check_id is None:
                 raise Exception(f"Patient with subject ID {patient_id} not found")
 
-            icd_code = None
-            while (
-                self.read_sa_query(
-                    f"SELECT * FROM {DIAGNOSES_DESC} WHERE icd_code = {icd_code}"
+           
+            diagnosis_added= self.read_sa_query(
+                f"SELECT * FROM {DIAGNOSES_DESC} WHERE icd_code = '{icd_code}'" 
                 )
-                is None
-            ):
-                icd_code = input("Enter the diagnosis (icd_code): ")
+            
+            if diagnosis_added.empty:
+                
+                raise Exception ("Invalid icd_code. Please retry ")
+            
 
-            diagnosis_added = self.read_sa_query(
-                f"SELECT * FROM {DIAGNOSES_DESC} WHERE icd_code = {icd_code}"
-            )
 
             hadm_id = cursor.execute(
-                "select subject_id, hadm_id from ? where subject_id = ? order by hadm_id desc",
+                f"select hadm_id from {ADMISSIONS} where subject_id = ? order by hadm_id desc",
                 patient_id,
             ).fetchone()[0]
             try:
@@ -349,16 +347,16 @@ class User_service:
                 )
             except pyodbc.Error:
                 seq_num = 1
-            icd_code = diagnosis_added["icd_code"]
-            icd_version = diagnosis_added["icd_version"]
+            icd_code = str(diagnosis_added.iloc[0]["icd_code"])
+            icd_version = str(diagnosis_added.iloc[0]["icd_version"])
 
             cursor.execute(
-                "insert into diagnoses_icd (subject_id, hadm_id, seq_num, icd_code, icd_version)",
-                patient_id,
-                hadm_id,
-                seq_num,
-                icd_code,
-                icd_version,
+                "insert into diagnoses_icd (subject_id, hadm_id, seq_num, icd_code, icd_version) values(?, ?, ?, ?, ?)",
+                str(patient_id),
+                str(hadm_id),
+                str(seq_num),
+                str(icd_code),
+                str(icd_version),
             )
 
             connection.commit()
@@ -392,7 +390,7 @@ class User_service:
             print("Error fetching patient profile: ", e)
             return None
 
-    def get_diagnosis(self, patient_id):
+    def get_diagnosis(self, patient_id, caller_id):
         """Gets the diagnosis of a patient based on the patient's subject ID
 
         Args:
@@ -403,16 +401,23 @@ class User_service:
             None: If an error occurs, nothing is returned
         """
         try:
-            connection = pyodbc.connect(self.connection_string)
-            cursor = connection.cursor()
-            cursor.execute(
-                "select d.subject_id, d.hadm_id, d.d_icd_diagnosis from diagnosis AS d where d.subject_id = ?",
-                patient_id,
-            )
-            diagnosis = cursor.fetchone()
-            cursor.close()
-            connection.close()
-            return diagnosis
+            
+            user_role= self.get_role_by_id(caller_id)
+            if user_role == "Doctor" or user_role == "admin" or ( 
+                user_role == "Patient" and caller_id == patient_id
+            ):
+                
+            
+                connection = pyodbc.connect(self.connection_string)
+                cursor = connection.cursor()
+                cursor.execute(
+                    "select d.subject_id, d.hadm_id, d.d_icd_diagnosis from diagnosis AS d where d.subject_id = ?",
+                    patient_id,
+                )
+                diagnosis = cursor.fetchone()
+                cursor.close()
+                connection.close()
+                return diagnosis
         except Exception as e:
             print("Error: user not found ", e)
             return None
