@@ -45,9 +45,10 @@ class Analyse_ui:
         Args:
             subject_id (int): The id of the patient the doctor wants to view
         """
-        def selected_option(event, id=subject_id): # arg: event might be unnecessary
+        def selected_option(): # arg: event might be unnecessary
             """This method is responsible for calling the right function from the combobox input"""
             selection = combo.get()
+            id = int(subject_id)
             print(id)
             print(selection)
             if selection == "omr":
