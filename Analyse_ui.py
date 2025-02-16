@@ -69,7 +69,7 @@ class Analyse_ui:
                 print(Analyse.read_d_icd_diagnoses())
             elif selection == "d_icd_procedures":
                 print(Analyse.read_d_icd_procedures())
-
+        print(subject_id)
         analyse_window = Tk()  
         analyse_window.title("Analyse")
         analyse_window.geometry("400x300")
