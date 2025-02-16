@@ -3,6 +3,7 @@ from db_access import connection_string
 import config
 import sqlalchemy as sa
 import pandas as pd
+from tkinter import messagebox
 
 
 # database tables
@@ -359,6 +360,8 @@ class User_service:
             connection.commit()
             cursor.close()
             connection.close()
+            
+            messagebox.showinfo("Diagnosis added successfully")
 
         except Exception as e:
             print("Error:  ", e)
