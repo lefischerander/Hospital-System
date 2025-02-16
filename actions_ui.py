@@ -151,6 +151,8 @@ class ActionsUI:
 
             user_profile = user_service.get_your_profile(global_username)
             user_info = ["User ID", "Name", "Surname", "Department", "Age"]
+            print(global_username)
+            print(user_profile)
 
             def back_action():
                 """This method is responsible for going back to the actions window"""
