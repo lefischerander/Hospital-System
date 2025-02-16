@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import Service_Database as db
+import os
+from pathlib import Path
 import sqlalchemy as sa
 from db_access import connection_string
 
@@ -15,6 +17,13 @@ class Analyse:
             "mssql+pyodbc", query={"odbc_connect": connection_string}
         )
         self.us = db.User_service()
+
+    def connect_to_db(self):
+        self.connection_string = connection_string
+        self.connection_url = sa.URL.create(
+            "mssql+pyodbc", query={"odbc_connect": connection_string}
+        )
+        return sa.create_engine(self.connection_url)
 
     def read_omr(self):
         """This method is used to read the omr table and plot the data of the patient with the entered subject_id as line plot
@@ -125,23 +134,29 @@ class Analyse:
         ]
         return patient.to_string(index=False)
 
-    def read_diagnoses_icd(self):
+    def read_diagnoses_icd(self, id):
         """This method is used to read the diagnoses_icd table and return diagnoses of the patient with the entered subject_id.
 
         Returns:
             str: The diagnoses of the patient with the entered subject_id.
         """
-        df = self.us.read_table_sa("diagnoses_icd")
-        df1 = self.us.read_table_sa("d_icd_diagnoses")
-        merged_df = pd.merge(
-            df, df1[["icd_code", "long_title"]], on="icd_code", how="left"
-        )
-        id = int(input("Enter subject_id: "))
-        # Return the diagnoses of the patient as a string for better visualization
-        patient = merged_df[merged_df["subject_id"] == id][
-            ["seq_num", "icd_code", "icd_version", "long_title"]
-        ]
-        return patient.to_string(index=False)
+
+        engine = self.connect_to_db()
+        query = f"""select d.hadm_id, d.seq_num, d.icd_code, d.icd_version, id.long_title from diagnoses_icd as d 
+                    inner join d_icd_diagnoses as id ON d.icd_code = id.icd_code 
+                    where subject_id = {id} order by d.hadm_id, seq_num"""
+        with engine.begin() as conn:
+            df = pd.read_sql_query(
+                sa.text(query),
+                conn,
+            )
+
+        downloads_path = str(Path.home() / "Downloads")
+        file_path = os.path.join(downloads_path, f"diagnoses_{id}.txt")
+        with open(file_path, "w") as file:
+            file.write(df.to_string(index=False))
+            print(f"\nYour diagnoses are saved under {file_path}!")
+        return df.to_string(index=False)
 
     def read_drgcodes(self):
         """This method is used to read the drgcodes table and return the drg codes of the patient with the entered subject_id.

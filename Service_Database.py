@@ -260,23 +260,21 @@ class User_service:
             )
 
             checked_id = cursor.fetchone()
-            
+
             if checked_id is None:
                 return None
 
-           
             connection.commit()
             cursor.close()
             connection.close()
 
-            return f"Yay DB found the user!"
+            return "Yay DB found the user!"
 
-            
         except Exception as e:
             print("Oups error: ", e)
             return None
 
-    def read_d_icd_diagnoses(self):
+    def read_d_icd_diagnoses(self, icd_code):
         """This method is used to read the d_icd_diagnoses table and return the long title of the icd code entered by the user.
 
         Returns:
@@ -284,9 +282,8 @@ class User_service:
         """
         df = self.us.read_table_sa("d_icd_diagnoses")
         try:
-            icd = input("Enter icd code: ")
             # Get the long title of the icd code
-            icd_code = df[df["icd_code"].astype(str) == icd][
+            icd_code = df[df["icd_code"].astype(str) == icd_code][
                 ["icd_code", "icd_version", "long_title"]
             ]
             return icd_code.to_string(index=False)
@@ -308,9 +305,9 @@ class User_service:
         """
 
         try:
-            user_role= self.get_role_by_id(caller_id)
-            
-            if user_role!= "Doctor":
+            user_role = self.get_role_by_id(caller_id)
+
+            if user_role != "Doctor":
                 raise Exception("Only doctors can add diagnoses")
 
             connection = pyodbc.connect(self.connection_string)
@@ -368,11 +365,10 @@ class User_service:
 
     def get_patient_profile(self, subject_id):  # dod time must be string
         try:
-            check_id= self.check_id(subject_id)
+            check_id = self.check_id(subject_id)
             if check_id is None:
-                raise Exception (f"The user you input is not on the database")
-             
-            
+                raise Exception("The user you input is not on the database")
+
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             query = """
@@ -587,7 +583,7 @@ if __name__ == "__main__":
         "Press '1'to to check the id of a patient, Press '2' to view your profile , Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
     )
     print("Okay you chose: ", action)
-    
+
     if action == "1":
         checking_id = input("Give the subject_id: ")
         The_role_id = user_service.check_id(checking_id)

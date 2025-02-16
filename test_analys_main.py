@@ -6,12 +6,13 @@ def analyse_main():
     analyse = Analyse()
     try:
         test = input("Enter the name of the file you want to read: ")
+        id = input("Enter the patient's id: ")
         if test == "omr":
             print(analyse.read_omr())
         elif test == "admissions":
             print(analyse.read_admissions())
         elif test == "diagnoses_icd":
-            print(analyse.read_diagnoses_icd())
+            print(analyse.read_diagnoses_icd(id))
         elif test == "drgcodes":
             print(analyse.read_drgcodes())
         elif test == "emar":
