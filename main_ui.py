@@ -131,7 +131,7 @@ def exit_action():
 
 # Main program
 root = Tk()
-root.title("My Tkinter App")
+root.title("Hospital Management")
 root.geometry("800x600")
 
 login_button = Button(root, text="Login", command=login_action)
