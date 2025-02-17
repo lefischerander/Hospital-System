@@ -642,50 +642,50 @@ class User_service:
     # usage example
 
 
-if __name__ == "__main__":
-    user_service = User_service()
-    print("Welcome to the hospital database.\n")
-    print("Please choose an action: ")
-    print()
-    print(config.subject_id_logged)
-    action = input(
-        "Press '1'to a doctor profile by name , Press '2' to view your profile , Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
-    )
-    print("Okay you chose: ", action)
+# if __name__ == "__main__":
+#     user_service = User_service()
+#     print("Welcome to the hospital database.\n")
+#     print("Please choose an action: ")
+#     print()
+#     print(config.subject_id_logged)
+#     action = input(
+#         "Press '1'to a doctor profile by name , Press '2' to view your profile , Press '3' to create a diagnosis:, Press '4' to view procedures record of a patient "
+#     )
+#     print("Okay you chose: ", action)
 
-    if action == "1":
-        name = input("Give the name: ")
-        The_role_id = user_service.get_doctor_by_name(name)
-        print(The_role_id)
+#     if action == "1":
+#         name = input("Give the name: ")
+#         The_role_id = user_service.get_doctor_by_name(name)
+#         print(The_role_id)
 
-    elif action == "2":
-        your_profile = user_service.get_your_profile(config.subject_id_logged)
-        if your_profile:
-            print("Your profile", your_profile)
-        else:
-            print("No patient information found or an error occurred.")
-    elif action == "3":
-        subject_id = int(input("Enter subject ID: "))
-        icd_code = input("Enter ICD code: ")
-        icd_version = input("Enter ICD version: ")
-        user_service.create_diagnosis(subject_id, icd_code, icd_version)
+#     elif action == "2":
+#         your_profile = user_service.get_your_profile(config.subject_id_logged)
+#         if your_profile:
+#             print("Your profile", your_profile)
+#         else:
+#             print("No patient information found or an error occurred.")
+#     elif action == "3":
+#         subject_id = int(input("Enter subject ID: "))
+#         icd_code = input("Enter ICD code: ")
+#         icd_version = input("Enter ICD version: ")
+#         user_service.create_diagnosis(subject_id, icd_code, icd_version)
 
-        sub_action = input("Do you want to view the diagnosis? (yes/no): ")
-        if sub_action == "yes":
-            diagnosis = user_service.get_diagnosis(subject_id)
-            print("Diagnosis:", diagnosis)
-        else:
-            print("Okay")
+#         sub_action = input("Do you want to view the diagnosis? (yes/no): ")
+#         if sub_action == "yes":
+#             diagnosis = user_service.get_diagnosis(subject_id)
+#             print("Diagnosis:", diagnosis)
+#         else:
+#             print("Okay")
 
-    elif action == "4":
-        subject_id = int(input("Enter subject ID: "))
-        procedures = user_service.get_procedures_by_subject_id(
-            subject_id, config.subject_id_logged
-        )
-        if procedures:
-            print(f"Procedures record of patient {subject_id} :", procedures)
-        else:
-            print("No procedures found or an error occurred.")
+#     elif action == "4":
+#         subject_id = int(input("Enter subject ID: "))
+#         procedures = user_service.get_procedures_by_subject_id(
+#             subject_id, config.subject_id_logged
+#         )
+#         if procedures:
+#             print(f"Procedures record of patient {subject_id} :", procedures)
+#         else:
+#             print("No procedures found or an error occurred.")
 
     # elif action == '2':
     #     subject_id = input("Enter subject ID: ")

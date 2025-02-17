@@ -1,6 +1,7 @@
+#This is a backup file
 from test_class_login import AuthSystem
 import getpass
-import test_analyse
+
 
 # import hashlib
 import Service_Database
@@ -10,9 +11,9 @@ import config
 user_service = (
     Service_Database.User_service()
 )  # creating an instance of the class Userservice
-# auth_system = AuthSystem()  # instance of the class AuthSystem
+   
 
-analyzing = test_analyse.Analyse()
+
 
 
 class Actions:
@@ -34,15 +35,13 @@ class Actions:
             Each time the user is done doing his action, 
             he can go back to the menu by clicking on the back button (UI).
             If the user is using a console, he will be sent directly back to the menu (this function)
-            
-            (This function)
                                    
         """
         
         print("Your possible actions: \n")
         print("1. View all users")
         print("2. Create an user account")
-        print("3. Delete an account")  # low priority
+        print("3. Delete an account")  
         print("4. View patient's profile")
         print("5. View doctor's profile")
         print("6. Change password")
@@ -53,33 +52,47 @@ class Actions:
 
         # Nante
         if choice == "1":
-            # We are parsing the view_all-users function to the instance of the class Service
-            user_service.view_all_users()
+            
+            # We are parsing the view_all-users function to the instance of the class User?Service
+            # The function takes no argument
+            user_service.view_all_users() 
+            
             print("All users: ", user_service.view_all_users())
-            # After tah
-            Actions.admin_actions()
-        
+            
+            #By calling this method the admin user is sent directly to the user menu
+            Actions.admin_actions() 
         
         elif choice =="2":
             try:
-                username = input ("Set the username (subject_id) of the user: ")
+                # Username variable stores the input subject_id 
+                # We are making sure that the input is an integer
+                username = int(input ("Set the username (subject_id) of the user: "))
+                
+                # This variable stores the input password of the user by using getpass module
                 password_input = getpass.getpass("Set the password of the user: ")
+                
+                # The password variable stores then the hashed password
+                ## The hash_password function is being parsed to the User object
                 password = User.hash_password(password_input)
+                
                 role = input("Set the role of the user: ")
                 firstname = input("Set the firstname of the user: ")
                 surname = input("Set the surname of the user: ")
                 
+                #The function create_user is being parsed to the instance of the class User_service and takes 5 parameters
                 user_service.create_user(username, password, role, firstname, surname)
+            
             except Exception as e:
                 print("Error: ", e)
-            
+                 
             Actions.admin_actions()
             
 
 
-        # Nante
-        elif choice == "3":  # low priority
+        
+        elif choice == "3":  
             try:
+                #The input will be directly convert to an integer
                 user_to_be_deleted = int(
                 input(
                     "Enter the subject_id of the user you want to delete: "
@@ -87,7 +100,7 @@ class Actions:
                 )
                 
             
-                answer = input("Are you sure you want to do delete an user? (yes/no)")
+                answer = input("Are you sure you want to do delete an user? (yes/no): ")
             
                 if answer == "yes":
                     user_service.delete_user(user_to_be_deleted, config.subject_id_logged)
