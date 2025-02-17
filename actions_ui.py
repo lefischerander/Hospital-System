@@ -164,14 +164,14 @@ class ActionsUI:
             patient_id.pack(pady=5)
 
             Label(get_patient_id_window, text="ICD Code:").pack(pady=5)
-            icd_code = Entry(get_patient_id_window)
-            icd_code.pack(pady=5)
+            icd_code_entry = Entry(get_patient_id_window)
+            icd_code_entry.pack(pady=5)
 
 
             def submit_patient_id():
                 """This method is responsible for submitting the patient id"""
                 id = patient_id.get()
-                icd_code = icd_code.get()
+                icd_code = icd_code_entry.get()
                 get_patient_id_window.destroy()
                 user_service.create_diagnosis(id, global_username, icd_code)
 
