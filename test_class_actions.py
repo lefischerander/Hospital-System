@@ -63,6 +63,8 @@ class Actions:
             Actions.admin_actions() 
         
         elif choice =="2":
+            
+            # We are making the code robust so it does not crash if an error occured
             try:
                 # Username variable stores the input subject_id 
                 # We are making sure that the input is an integer
@@ -82,9 +84,11 @@ class Actions:
                 #The function create_user is being parsed to the instance of the class User_service and takes 5 parameters
                 user_service.create_user(username, password, role, firstname, surname)
             
+            # An Exception will be raised in case an error occurs
             except Exception as e:
                 print("Error: ", e)
-                 
+            
+            #By calling this method the admin user is sent directly to the user menu     
             Actions.admin_actions()
             
 
@@ -92,18 +96,23 @@ class Actions:
         
         elif choice == "3":  
             try:
-                #The input will be directly convert to an integer
+                # The input will be directly convert to an integer
                 user_to_be_deleted = int(
                 input(
                     "Enter the subject_id of the user you want to delete: "
                         )
                 )
                 
-            
+                # The user is asked to confirm his choice before performing the action 
                 answer = input("Are you sure you want to do delete an user? (yes/no): ")
-            
+                
+                # If the admin is sure then the function will delete the patient or doctor user from the database
                 if answer == "yes":
+                    
+                    # The function delete_user takes two parameters and is parsed to the instance 
                     user_service.delete_user(user_to_be_deleted, config.subject_id_logged)
+                    
+                    #Back to the menu
                     Actions.admin_actions()
                 
                 elif answer == "no":
@@ -116,20 +125,25 @@ class Actions:
                 
             except Exception as e:
                 print("Oups error: " , e)
+                
+                #By calling this method the admin user is sent directly to the user menu
                 Actions.admin_actions()
         
         # Nante
         
         elif choice == "4":
+            # The input will be directly convert to an integer
             patient = int(
                 input("Enter the subject_id of the patient you want to view:  \n")
             )
             patient_info = user_service.get_patient_profile(patient)
+            
+            # A row from the database will be output
             print(patient_info)
 
-            
+            #By calling this method the admin user is sent directly to the user menu
             Actions.admin_actions()
-        #Nante
+        
         elif choice == "5":
             try:
                 doctor = str(
@@ -142,7 +156,7 @@ class Actions:
                 
                 print(doctor_info)
             except Exception as e:
-                print("Oups user not found: ", e)
+                print("Oups Error: ", e)
            
         # Nante
         elif choice == "6":
