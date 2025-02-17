@@ -172,7 +172,7 @@ class Analyse:
         """
         # Read the data from the diagnoses_icd table and save the data as a text file
         engine = self.connect_to_db()
-        query = f"""select d.hadm_id, d.seq_num, d.icd_code, id.long_title, d.icd_version from diagnoses_icd as d 
+        query = f"""select d.hadm_id, d.seq_num, d.icd_code, d.icd_version, id.long_title from diagnoses_icd as d 
                     inner join d_icd_diagnoses as id ON d.icd_code = id.icd_code 
                     where subject_id = {id} order by d.hadm_id, seq_num"""
         with engine.begin() as conn:
@@ -189,7 +189,7 @@ class Analyse:
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"diagnoses_{id}.txt")
             with open(file_path, "w") as file:
-                file.write(df.to_string(index=False))
+                file.write(df.to_string(index=False, line_width=1000))
                 print(f"\nYour diagnoses are saved under {file_path}!")
 
         # Return the diagnoses of the patient as a string for better visualization
