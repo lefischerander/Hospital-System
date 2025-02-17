@@ -38,13 +38,10 @@ class ActionsUI:
         actions_window.title("Doktor Actions")
         actions_window.geometry("800x600")
 
-        print("1. View patient data")
-        print("2. View Diagnosis for patient")
-        print("3. Create Diagnostic Report")
-        print("4. View your profile")
-        print("5. Change Password")
-        print("6. Logout")
-        print()
+        # get name and surname of user
+        user = user_service.get_your_profile(global_username)
+        name = user[1]
+        surname = user[2]
 
         def view_patient_data():
             """This method is responsible for viewing the patient data"""
@@ -61,9 +58,51 @@ class ActionsUI:
 
                 def submit_patient_id():
                     """This method is responsible for submitting the patient id"""
-                    id = patient_id.get()
-                    get_patient_id_window.destroy()
-                    return id
+
+                    def back_action():
+                        """This method is responsible for going back to the actions window"""
+                        actions_window.deiconify
+                        view_patient_data_window.destroy
+
+                    view_patient_data_window = Toplevel(actions_window)
+                    view_patient_data_window.title("Patient Data")
+                    view_patient_data_window.geometry("800x600")
+
+                    button_grid = Frame(
+                        master=view_patient_data_window,
+                        relief=RAISED,
+                        borderwidth=1,
+                        width=15,
+                    )
+                    button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
+
+                    back_button = Button(button_grid, text="Back", command=back_action)
+                    back_button.grid(row=0, column=0, padx=10, pady=10, sticky="ne")
+
+                    patient_data = user_service.get_patient_profile(patient_id)
+                    patient_info = [
+                        "Patient_ID",
+                        "Gender",
+                        "Age",
+                        "Name",
+                        "Surname",
+                        "Date of Death",
+                    ]
+                    for i in range(len(patient_data)):
+                        for j in range(2):
+                            patient_grid = Frame(
+                                master=view_patient_data_window,
+                                relief=RAISED,
+                                borderwidth=1,
+                                width=15,
+                            )
+                            patient_grid.grid(row=i + 1, column=j, padx=5, pady=5)
+                            if j == 0:
+                                label = Label(master=patient_grid, text=patient_info[i])
+                                label.pack()
+                            else:
+                                label = Label(master=patient_grid, text=patient_data[i])
+                                label.pack()
 
                 def cancel_get_patient_id():
                     """This method is responsible for cancelling the patient id"""
@@ -83,51 +122,9 @@ class ActionsUI:
                 )
                 cancel_button.pack(pady=5, side=RIGHT)
 
-            def back_action():
-                """This method is responsible for going back to the actions window"""
-                actions_window.deiconify
-                view_patient_data_window.destroy
+            
 
-            patient_id = get_patient_id()
-            view_patient_data_window = Toplevel(actions_window)
-            view_patient_data_window.title("Patient Data")
-            view_patient_data_window.geometry("800x600")
-
-            button_grid = Frame(
-                master=view_patient_data_window,
-                relief=RAISED,
-                borderwidth=1,
-                width=15,
-            )
-            button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
-
-            back_button = Button(button_grid, text="Back", command=back_action)
-            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="ne")
-
-            patient_data = user_service.get_patient_profile(patient_id)
-            patient_info = [
-                "Patient_ID",
-                "Gender",
-                "Age",
-                "Name",
-                "Surname",
-                "Date of Death",
-            ]
-            for i in range(len(patient_data)):
-                for j in range(2):
-                    patient_grid = Frame(
-                        master=view_patient_data_window,
-                        relief=RAISED,
-                        borderwidth=1,
-                        width=15,
-                    )
-                    patient_grid.grid(row=i + 1, column=j, padx=5, pady=5)
-                    if j == 0:
-                        label = Label(master=patient_grid, text=patient_info[i])
-                        label.pack()
-                    else:
-                        label = Label(master=patient_grid, text=patient_data[i])
-                        label.pack()
+            get_patient_id()
 
         def view_patient_diagnosis():
             """This method is responsible for viewing the diagnosis of patients"""
@@ -318,6 +315,12 @@ class ActionsUI:
             subprocess.run(["python", "main_ui.py"])
             sys.exit()
 
+        Label(
+            actions_window, 
+            text=f"Welcome {name} {surname}", 
+            font=("Arial", 20)
+        ).pack(pady=10)
+
         button_frame = Frame(actions_window)
         button_frame.pack(pady=10)
 
@@ -367,11 +370,10 @@ class ActionsUI:
         action_window.title("Patient Actions")
         action_window.geometry("800x600")
 
-        print("1. View your profile")
-        print("2. View zour diagnosis")
-        print("3. Change Password")
-        print("4. Logout")
-        print()
+        # get name and surname of user
+        user = user_service.get_your_profile(global_username)
+        name = user[3]
+        surname = user[4]
 
         def view_profile():
             """This method is responsible for viewing the profile of the user"""
@@ -499,6 +501,12 @@ class ActionsUI:
             subprocess.run(["python", "main_ui.py"])
             sys.exit()
 
+        Label(
+            action_window, 
+            text=f"Welcome {name} {surname}", 
+            font=("Arial", 20)
+        ).pack(pady=10)
+
         button_frame = Frame(action_window)
         button_frame.pack(pady=10)
 
@@ -535,13 +543,7 @@ class ActionsUI:
         actions_window = Tk()
         actions_window.title("Actions")
         actions_window.geometry("800x600")
-
-        print("1. View all users")
-        print("2. Delete a user")
-        print("3. Change Password")
-        print("4. Logout")
-        print()
-
+        
         def view_all_users():
             """This method is responsible for viewing all users"""
             actions_window.withdraw
@@ -585,7 +587,6 @@ class ActionsUI:
 
         def delete_user():
             """This method is responsible for deleting a user"""
-            actions_window.withdraw
 
             def get_user_id():
                 """This method is responsible for getting the user id the admin wants to delete"""
@@ -598,17 +599,18 @@ class ActionsUI:
 
                 def submit_patient_id():
                     """This method is responsible for submitting the user id"""
-                    messagebox.askquestion(
+                    if messagebox.askquestion(
                         title="Delete user",
                         message="Are you sure you want to continue?",
-                    )
-                    get_user_id_window.destroy()
-                    return patient_id
+                    ):
+                        user_service.delete_user(patient_id.get())
+                        messagebox.showinfo(title=None, message="User removed successfully")
+                
+                    get_user_id_window.destroy()    
 
                 def cancel_get_patient_id():
                     """This method is responsible for cancelling and returning to the actions window"""
                     get_user_id_window.destroy()
-                    actions_window.deiconify
 
                 button_frame = Frame(get_user_id_window)
                 button_frame.pack(pady=10)
@@ -623,9 +625,8 @@ class ActionsUI:
                 )
                 cancel_button.pack(pady=5, side=RIGHT)
 
-            user_id = get_user_id()
-            user_service.delete_user(user_id)
-            messagebox.showinfo(title=None, message="User removed successfully")
+            get_user_id()
+            
 
         def change_password():
             """This method is responsible for changing the password of the user"""
