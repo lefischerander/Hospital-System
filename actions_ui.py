@@ -35,7 +35,7 @@ class ActionsUI:
             global_username (str): The username of the user
         """
         actions_window = Tk()
-        actions_window.title("Doktor Actions")
+        actions_window.title("Homepage")
         actions_window.geometry("800x600")
 
         # get name and surname of user
@@ -328,7 +328,7 @@ class ActionsUI:
         logout_button.pack(side=RIGHT, padx=5)
 
         patient_data = Button(
-            button_frame, text="View patiant data", command=view_patient_data
+            button_frame, text="View patient data", command=view_patient_data
         )
         patient_data.pack(side=RIGHT, padx=5)
 
@@ -367,7 +367,7 @@ class ActionsUI:
             global_username (str): The username of the user
         """
         action_window = Tk()
-        action_window.title("Patient Actions")
+        action_window.title("Homepage")
         action_window.geometry("800x600")
 
         # get name and surname of user
@@ -459,7 +459,7 @@ class ActionsUI:
                 new_password = new_password_entry.get()
                 confirm_new_password = confirm_new_password_entry.get()
                 hash_password = User.hash_password(old_password)
-                auth.reset_password(username, hash_password)
+                # auth.reset_password(username, hash_password)
                 messagebox.showinfo(
                     "Reset Password Info",
                     f"Username: {username}\nPassword: {old_password}",
@@ -541,7 +541,7 @@ class ActionsUI:
             global_username (str): The username of the user
         """
         actions_window = Tk()
-        actions_window.title("Actions")
+        actions_window.title("Homepage")
         actions_window.geometry("800x600")
         
         def view_all_users():
@@ -551,7 +551,7 @@ class ActionsUI:
             user_table.title("All Users")
             user_table.geometry("800x600")
 
-            row_list = ["User ID", "Name", "Surname", "Role"]
+            row_list = ["User ID", "Role"]
             all_users = user_service.view_all_users()
 
             def back_action():

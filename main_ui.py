@@ -60,7 +60,7 @@ def login_action():
             elif user_role == "Patient":
                 ActionsUI.patient_actions(global_username)
                 login_window.destroy()
-            elif user_role == "admin":
+            elif user_role == "Admin":
                 ActionsUI.admin_actions(global_username)
                 login_window.destroy()
             else:
@@ -148,7 +148,7 @@ def exit_action():
 
 # Main program
 root = Tk()
-root.title("My Tkinter App")
+root.title("Hospital Management")
 root.geometry("800x600")
 
 def on_closing():
