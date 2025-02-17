@@ -25,7 +25,7 @@ class AuthSystem:
         self.logged_in = False
 
     def check_user(self, subject_id, password):
-        # Nante, Leander
+   
         """Checks if the user exists in the database.
 
         Args:
