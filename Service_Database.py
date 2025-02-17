@@ -371,7 +371,7 @@ class User_service:
             )
 
             if diagnosis_added.empty:
-                raise Exception("Invalid icd_code. Please retry ")
+                raise Exception("Invalid icd_code. Please retry")
 
             hadm_id = cursor.execute(
                 f"select hadm_id from {ADMISSIONS} where subject_id = ? order by hadm_id desc",
@@ -388,6 +388,7 @@ class User_service:
                 )
             except pyodbc.Error:
                 seq_num = 1
+
             icd_code = str(diagnosis_added.iloc[0]["icd_code"])
             icd_version = str(diagnosis_added.iloc[0]["icd_version"])
 
@@ -404,7 +405,7 @@ class User_service:
             cursor.close()
             connection.close()
 
-            messagebox.showinfo(title="Success", text="Diagnosis added successfully")
+            messagebox.showinfo(title="Success", message="Diagnosis added successfully")
 
         except Exception as e:
             print("Error:  ", e)

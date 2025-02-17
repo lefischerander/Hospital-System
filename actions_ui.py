@@ -75,7 +75,9 @@ class ActionsUI:
                 view_patient_data_window.title("Patient Data")
                 view_patient_data_window.geometry("800x600")
 
-                view_patient_data_window.protocol("WM_DELETE_WINDOW", actions_window.deiconify)
+                view_patient_data_window.protocol(
+                    "WM_DELETE_WINDOW", actions_window.deiconify
+                )
 
                 button_grid = Frame(
                     master=view_patient_data_window,
@@ -266,7 +268,9 @@ class ActionsUI:
             change_password_window.title("Change Password")
             change_password_window.geometry("500x300")
 
-            change_password_window.protocol("WM_DELETE_WINDOW", actions_window.deiconify)
+            change_password_window.protocol(
+                "WM_DELETE_WINDOW", actions_window.deiconify
+            )
 
             Label(change_password_window, text="Username:").pack(pady=5)
             username_entry = Entry(change_password_window)
@@ -291,18 +295,10 @@ class ActionsUI:
                 new_password = new_password_entry.get()
                 confirm_new_password = confirm_new_password_entry.get()
                 hash_password = User.hash_password(old_password)
-                auth.reset_password(username, hash_password)
-                messagebox.showinfo(
-                    "Reset Password Info",
-                    f"Username: {username}\nPassword: {old_password}",
-                )
                 auth.reset_password(
                     username, hash_password, new_password, confirm_new_password
                 )
-                messagebox.showinfo(
-                    "Reset Password Info",
-                    f"Username: {username}\nPassword: {old_password}",
-                )
+                messagebox.showinfo("Password Reset Successful!")
                 change_password_window.destroy()
                 actions_window.deiconify()
 
@@ -332,9 +328,7 @@ class ActionsUI:
             sys.exit()
 
         Label(
-            actions_window, 
-            text=f"Welcome {name} {surname}", 
-            font=("Arial", 20)
+            actions_window, text=f"Welcome {name} {surname}", font=("Arial", 20)
         ).pack(pady=10)
 
         button_frame = Frame(actions_window)
@@ -342,11 +336,6 @@ class ActionsUI:
 
         logout_button = Button(button_frame, text="Logout", command=logout)
         logout_button.pack(side=RIGHT, padx=5)
-
-        patient_data = Button(
-            button_frame, text="View patient data", command=view_patient_data
-        )
-        patient_data.pack(side=RIGHT, padx=5)
 
         view_diagnosis = Button(
             button_frame,
@@ -367,15 +356,13 @@ class ActionsUI:
 
         view_all_patient_addmissions_button = Button(
             button_frame,
-            text="All Admissions",
+            text="Average Length of Hospital Stays",
             command=view_all_patient_addmissions,
         )
         view_all_patient_addmissions_button.pack(side=RIGHT, padx=5)
 
         all_patient_info_button = Button(
-            button_frame, 
-            text="All Patients", 
-            command=all_patient_info
+            button_frame, text="Patient Age Distribution", command=all_patient_info
         )
         all_patient_info_button.pack(side=RIGHT, padx=5)
 
@@ -510,10 +497,7 @@ class ActionsUI:
                 auth.reset_password(
                     username, hash_password, new_password, confirm_new_password
                 )
-                messagebox.showinfo(
-                    "Reset Password Info",
-                    f"Username: {username}\nPassword: {old_password}",
-                )
+                messagebox.showinfo("Password Reset Successful!")
                 change_password_window.destroy()
                 action_window.deiconify()
 
@@ -544,11 +528,9 @@ class ActionsUI:
             subprocess.run(["python", "main_ui.py"])
             sys.exit()
 
-        Label(
-            action_window, 
-            text=f"Welcome {name} {surname}", 
-            font=("Arial", 20)
-        ).pack(pady=10)
+        Label(action_window, text=f"Welcome {name} {surname}", font=("Arial", 20)).pack(
+            pady=10
+        )
 
         button_frame = Frame(action_window)
         button_frame.pack(pady=10)
@@ -594,7 +576,7 @@ class ActionsUI:
                 sys.exit()
 
         actions_window.protocol("WM_DELETE_WINDOW", on_closing)
-        
+
         def view_all_users():
             """This method is responsible for viewing all users"""
             actions_window.withdraw
@@ -658,8 +640,8 @@ class ActionsUI:
                 ):
                     user_service.delete_user(patient_id.get())
                     messagebox.showinfo(title=None, message="User removed successfully")
-            
-                get_user_id_window.destroy()    
+
+                get_user_id_window.destroy()
 
             def cancel_get_patient_id():
                 """This method is responsible for cancelling and returning to the actions window"""
@@ -686,7 +668,9 @@ class ActionsUI:
             change_password_window.title("Change Password")
             change_password_window.geometry("500x300")
 
-            change_password_window.protocol("WM_DELETE_WINDOW", actions_window.deiconify)
+            change_password_window.protocol(
+                "WM_DELETE_WINDOW", actions_window.deiconify
+            )
 
             Label(change_password_window, text="Username:").pack(pady=5)
             username_entry = Entry(change_password_window)
@@ -711,20 +695,18 @@ class ActionsUI:
                 new_password = new_password_entry.get()
                 confirm_new_password = confirm_new_password_entry.get()
                 hash_password = User.hash_password(old_password)
-                auth.reset_password(username, hash_password)
-                messagebox.showinfo(
-                    "Reset Password Info",
-                    f"Username: {username}\nPassword: {old_password}",
-                )
-                auth.reset_password(
-                    username, hash_password, new_password, confirm_new_password
-                )
-                messagebox.showinfo(
-                    "Reset Password Info",
-                    f"Username: {username}\nPassword: {old_password}",
-                )
-                change_password_window.destroy()
-                actions_window.deiconify()
+                try:
+                    auth.reset_password(
+                        username, hash_password, new_password, confirm_new_password
+                    )
+                    messagebox.showinfo("Password Reset Successful!")
+                    change_password_window.destroy()
+                    actions_window.deiconify()
+
+                except ValueError:
+                    messagebox.showinfo("No!")
+                    change_password()
+                    change_password_window.destroy()
 
             def cancel_change_password():
                 """This method is responsible for cancelling the password change"""

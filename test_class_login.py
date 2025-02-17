@@ -1,8 +1,7 @@
 # import getpass
-
+from tkinter import messagebox
 import pyodbc
 from user_test import User
-from tkinter import messagebox
 
 # import datetime
 # import threading
@@ -157,44 +156,20 @@ class AuthSystem:
         try:
             user = self.check_user(subject_id, password)
             if user is None:
-                raise ValueError("\nInvalid username or password.\n")
+                messagebox.showerror("Error", "Wrong User ID")
+                raise ValueError
 
-            # while True:
+            if new_password != confirm_new_password:
+                messagebox.showerror("Error", "Passwords do not match")
+                raise ValueError
+
+            h_new_password = User.hash_password(new_password)
+            if user[0] == h_new_password:
+                messagebox.showerror("Error", "Wrong old password")
+                raise ValueError
+
             # Konstantin
             try:
-                if len(new_password) < 8:
-                    messagebox.showinfo(
-                        "Invalid password",
-                        "Password must be at least 8 characters long.",
-                    )
-                if new_password.islower():
-                    messagebox.showinfo(
-                        "Password must contain at least one uppercase letter."
-                    )
-                if new_password.isupper():
-                    messagebox.showinfo(
-                        "Password must contain at least one lowercase letter."
-                    )
-                if new_password.isdigit():
-                    messagebox.showinfo("Password must contain at least one letter.")
-
-                if new_password.isalpha():
-                    messagebox.showinfo("Password must contain at least one number.")
-
-                if new_password.isalnum():
-                    messagebox.showinfo(
-                        "Password must contain at least one special character."
-                    )
-
-                if new_password != confirm_new_password:
-                    raise ValueError("\nPasswords do not match!\n")
-
-                h_new_password = User.hash_password(new_password)
-                if user[0] == h_new_password:
-                    raise ValueError(
-                        "\nNew password must be different from the old password.\n"
-                    )
-
                 connection = pyodbc.connect(connection_string)
                 cursor = connection.cursor()
                 cursor.execute(
