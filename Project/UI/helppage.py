@@ -9,13 +9,21 @@ class HelpPage:
         help_window.title("Help Page")
         help_window.geometry("800x600")
 
+        """Get the admin email from the database"""
         us = User_service()
         admin_email = us.get_admin_email()
 
-        Label(help_window, text="Help Page", font=("Arial", 20)).pack(pady=10)
-        Label(help_window, text="Welcome to the Help Page", font=("Arial", 20)).pack(
-            pady=10
-        )
+        """The help page text"""
+        Label(
+            help_window, 
+            text="Help Page", 
+            font=("Arial", 20)
+        ).pack(pady=10)
+        Label(
+            help_window, 
+            text="Welcome to the Help Page", 
+            font=("Arial", 20)
+        ).pack(pady=10)
         Label(
             help_window,
             text="This is the help page for the Hospital Management System",
@@ -52,10 +60,16 @@ class HelpPage:
         help_window.title("Doctor Help Page")
         help_window.geometry("800x600")
 
+        """Get the admin email from the database"""
         us = User_service()
         admin_email = us.get_admin_email()
 
-        Label(help_window, text="Help Page", font=("Arial", 20)).pack(pady=10)
+        """The help page text"""
+        Label(
+            help_window, 
+            text="Help Page", 
+            font=("Arial", 20)
+        ).pack(pady=10)
         Label(
             help_window, text="Welcome to the Help Page for Doctors", font=("Arial", 20)
         ).pack(pady=10)
@@ -115,10 +129,16 @@ class HelpPage:
         help_window.title("Doctor Help Page")
         help_window.geometry("800x600")
 
+        """Get the admin email from the database"""
         us = User_service()
         admin_email = us.get_admin_email()
 
-        Label(help_window, text="Help Page", font=("Arial", 20)).pack(pady=10)
+        """The help page text"""
+        Label(
+            help_window, 
+            text="Help Page", 
+            font=("Arial", 20)
+        ).pack(pady=10)
         Label(
             help_window,
             text="Welcome to the Help Page for Patients",
@@ -150,7 +170,10 @@ class HelpPage:
             font=("Arial", 15),
         ).pack(pady=10)
         Button(
-            help_window, text="Close", font=("Arial", 15), command=help_window.destroy
+            help_window, 
+            text="Close", 
+            font=("Arial", 15), 
+            command=help_window.destroy
         ).pack(pady=10)
         help_window.mainloop()
 
@@ -160,31 +183,51 @@ class HelpPage:
         help_window.title("Doctor Help Page")
         help_window.geometry("800x600")
 
+        """Get the admin email from the database"""
         us = User_service()
         admin_email = us.get_admin_email()
 
-        Label(help_window, text="Help Page", font=("Arial", 20)).pack(pady=10)
+        """The help page text"""
         Label(
-            help_window, text="Welcome to the Help Page for Admins", font=("Arial", 20)
+            help_window, 
+            text="Help Page", 
+            font=("Arial", 20)
         ).pack(pady=10)
-        Label(help_window, text="What are you doing here?", font=("Arial", 15)).pack(
-            pady=10
-        )
+        Label(
+            help_window, 
+            text="Welcome to the Help Page for Admins", 
+            font=("Arial", 20)
+        ).pack(pady=10)
+        Label(
+            help_window, 
+            text="What are you doing here?", 
+            font=("Arial", 15)
+        ).pack(pady=10)
         Label(
             help_window,
             text="You are the admin, you know everything!",
             font=("Arial", 15),
         ).pack(pady=10)
-        Label(help_window, text="Do you really need help?", font=("Arial", 15)).pack(
-            pady=10
-        )
-        Label(help_window, text="Are you bored?", font=("Arial", 15)).pack(pady=10)
+        Label(
+            help_window, 
+            text="Do you really need help?", 
+            font=("Arial", 15)
+        ).pack(pady=10)
+        Label(
+            help_window, 
+            text="Are you bored?", 
+            font=("Arial", 15)
+        ).pack(pady=10)
         Label(
             help_window,
             text="I guess you can click on the 'Close' button now.",
             font=("Arial", 15),
         ).pack(pady=10)
-        Label(help_window, text="Are you still here?", font=("Arial", 15)).pack(pady=10)
+        Label(
+            help_window, 
+            text="Are you still here?", 
+            font=("Arial", 15)
+        ).pack(pady=10)
         Label(
             help_window,
             text="Ok, I will stop now. Here is your help page.",
@@ -202,10 +245,23 @@ class HelpPage:
         ).pack(pady=10)
         Label(
             help_window,
-            text=f"If you need help, please contact the system administrator at: {admin_email}",
+            text="What you don't even know the email of the system administrator?",
+            font=("Arial", 15),
+        ).pack(pady=10)
+        Label(
+            help_window,
+            text="I don't even know how you managed to become an admin.",
+            font=("Arial", 15),
+        ).pack(pady=10)
+        Label(
+            help_window,
+            text=f"If you need help, please contact a more competent system administrator at: {admin_email}",
             font=("Arial", 15),
         ).pack(pady=10)
         Button(
-            help_window, text="Close", font=("Arial", 15), command=help_window.destroy
+            help_window, 
+            text="Close", 
+            font=("Arial", 15), 
+            command=help_window.destroy
         ).pack(pady=10)
         help_window.mainloop()
