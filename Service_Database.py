@@ -407,7 +407,7 @@ class User_service:
             cursor.close()
             connection.close()
 
-            messagebox.showinfo("Diagnosis added successfully")
+            messagebox.showinfo(title="Success", text="Diagnosis added successfully")
 
         except Exception as e:
             print("Error:  ", e)
