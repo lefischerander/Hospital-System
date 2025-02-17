@@ -308,7 +308,7 @@ class ActionsUI:
 
         view_diagnosis = Button(
             button_frame,
-            text="View Patient analysis",
+            text="View Patient Data",
             command=view_patient_diagnosis,
         )
         view_diagnosis.pack(side=RIGHT, padx=5)

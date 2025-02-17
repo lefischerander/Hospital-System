@@ -75,12 +75,7 @@ class HelpPage:
         ).pack(pady=10)
         Label(
             help_window,
-            text="If you want to view the data of a patient, please click on the 'View Patients Data' button.",
-            font=("Arial", 15),
-        ).pack(pady=10)
-        Label(
-            help_window,
-            text="If you want to analyze patients data, please click on the 'View Patient Analysis' button.",
+            text="If you want to view patients data, please click on the 'View Patient Data' button.",
             font=("Arial", 15),
         ).pack(pady=10)
         Label(
