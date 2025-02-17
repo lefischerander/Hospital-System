@@ -77,7 +77,7 @@ class Analyse_ui:
                 diagnoses_icd_window.title("Diagnoses ICD")
                 diagnoses_icd_window.geometry("800x600")
 
-                diagnoses_icd_list = ["shadm_id", "seq_num", "icd_code", "long_title", "icd_version"]
+                diagnoses_icd_list = ["shadm_id", "seq_num", "icd_code", "icd_version", "long_title"]
                 for i in range(len(diagnoses_icd_list)):
                     for j in range(len(diagnoses_icd)+1):
                         diagnoses_icd_grid = Frame(
@@ -329,7 +329,7 @@ class Analyse_ui:
                 diagnoses_icd_window.title("Diagnoses ICD")
                 diagnoses_icd_window.geometry("800x600")
 
-                diagnoses_icd_list = ["shadm_id", "seq_num", "icd_code", "long_title", "icd_version"]
+                diagnoses_icd_list = ["shadm_id", "seq_num", "icd_code", "icd_version", "long_title"]
                 for i in range(len(diagnoses_icd_list)):
                     for j in range(len(diagnoses_icd)+1):
                         diagnoses_icd_grid = Frame(
