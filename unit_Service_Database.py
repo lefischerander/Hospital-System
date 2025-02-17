@@ -1,79 +1,52 @@
 import unittest
-from unittest.mock import patch, MagicMock #for mocking the database
 from Service_Database import User_service
+from unittest.mock import MagicMock
+import pandas as pd
 
 
-
-#Mock means simulate
-
-class TestService:
-    
-    def Set_up(self):
-        """Set up the test environment before each test runs"""
-        self.service = User_service()
-
-    #Mock pyodbc connection
-    
-    @patch("pyodbc.connect") #replace pyodbc.connect with a mock object
-    
-    
-    def test_get_role_by_id(self, fake_connect):
-
-         # Mock database behavior
-        fake_conn = MagicMock() #creating an instance of the subclass that replaces pyodbc.connect()
-                                
-        fake_cursor = MagicMock() #replacecs 'cursor = connection.cursor()'
-        fake_cursor.fetchone.return_value = ["Doctor"]  # Mocking return value
-        fake_conn.cursor.return_value = fake_cursor # returning a mocked object
-        fake_connect.return_value = fake_conn # instead returning a database connectio it will return a mock connection
-
-         # Test function
-        role = self.service.get_role_by_id(123)
-
-        # Assertions
-        self.assertEqual(role, "Doctor")
-        fake_cursor.execute.assert_called_with(
-            f"select role from {self.service.LOGIN_DATA} where subject_id = ?", 123
+class TestMethods(unittest.TestCase):
+    def setUp(self):
+        self.mock_row = MagicMock()
+        self.mock_row_firstname = "Terry"
+        self.mock_row_surname = "Forest"
+        self.mock_row_department = "Surgery"
+        self.mock_row_age = 45
+        self.df = pd.DataFrame(
+            {
+                "subject_id": [10002495],
+                "password": [
+                    "d3751d33f9cd5049c4af2b462735457e4d3baf130bcbb87f389e349fbaeb20b9"
+                ],
+                "role": ["Patient"],
+            }
         )
-    
-    def test_delete_user_not_admin(self):
-        """Test delete_user() when caller is not admin"""
 
-        # Mocking get_role_by_id to return "Doctor" instead of "admin"
-        self.service.get_role_by_id = MagicMock(return_value="Doctor")
+    def test_getRole(self):
+        us = User_service()
+        self.assertEqual(us.get_role_by_id(30000000), "Doctor")
+        self.assertEqual(us.get_role_by_id(40000000), "Admin")
+        self.assertEqual(us.get_role_by_id(10002495), "Patient")
 
-        with patch("tkinter.messagebox.showinfo") as mock_msgbox:
-            self.service.delete_user(123, 456)  # 456 is caller_id
+    def test_get_doctor_by_name(self):
+        us = User_service()
+        doctor = us.get_doctor_by_name("Forest")
+        self.assertEqual(doctor.firstname, self.mock_row_firstname)
+        self.assertEqual(doctor.surname, self.mock_row_surname)
+        self.assertEqual(doctor.department, self.mock_row_department)
+        self.assertEqual(doctor.age, self.mock_row_age)
 
-            mock_msgbox.assert_called_with("user deleted successfully")
+    def test_getTable(self):
+        us = User_service()
+        data = us.read_table_sa("login_data")
+        data2 = us.read_table_sa("omr").head(1)
+        self.assertEqual(data.head(1).equals(self.df), True)
+        self.assertEqual(data2.equals(self.df), False)
+        self.assertEqual(len(data), 4)
 
-    @patch("pyodbc.connect")
-    
-    def test_create_user(self, fake_connect):
-        """Test create_user() function"""
-
-        # Mock database connection
-        fake_conn = MagicMock() #creating an instance of the subclass that replaces pyodbc.connect()
-        fake_cursor = MagicMock()  #replacecs 'cursor = connection.cursor()'
-        fake_conn.cursor.return_value = fake_cursor # returning a mocked object
-        fake_cursor.return_value = fake_conn # instead returning a database connectio it will return a mock connection
-
-
-        # Test function
-        self.service.create_user(2000, "pass123", "Doctor", "Leander", "Kolbek")
-
-        # Assertions
-        fake_cursor.execute.assert_called_with(
-            f"INSERT INTO {self.service.LOGIN_DATA} (subject_id, password, role, firstname, surname) VALUES (?, ?, ?, ?, ?)",
-            2000,
-            "pass123",
-            "Doctor",
-            "Leander",
-            "Kolbek",
-        )
-        fake_conn.commit.assert_called()
-
-
+    def test_getMore(self):
+        us = User_service()
+        email = us.get_admin_email()
+        self.assertEqual(email, "konsti.krümmel@stud.txt-uni.de")
 
 
 if __name__ == "__main__":

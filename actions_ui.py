@@ -19,6 +19,7 @@ import subprocess
 from user_test import User
 import Service_Database
 from Analyse_ui import Analyse_ui
+from test_analyse import Analyse
 
 user_service = (
     Service_Database.User_service()
@@ -38,133 +39,132 @@ class ActionsUI:
         actions_window.title("Homepage")
         actions_window.geometry("800x600")
 
-        print("1. View patient data")
-        print("2. View Diagnosis for patient")
-        print("3. Create Diagnostic Report")
-        print("4. View your profile")
-        print("5. Change Password")
-        print("6. Logout")
-        print()
+        def on_closing():
+            """This method is responsible for handling the window close event"""
+            if messagebox.askokcancel("Quit", "Do you want to quit?"):
+                actions_window.destroy()
+                sys.exit()
+
+        actions_window.protocol("WM_DELETE_WINDOW", on_closing)
+
+        # get name and surname of user
+        user = user_service.get_your_profile(global_username)
+        name = user[1]
+        surname = user[2]
 
         def view_patient_data():
             """This method is responsible for viewing the patient data"""
             actions_window.withdraw
 
-            def get_patient_id():
-                """This method is responsible for getting the patient id the doctor wants to view"""
-                get_patient_id_window = Toplevel(actions_window)
-                get_patient_id_window.title("Patient ID")
+            get_patient_id_window = Toplevel(actions_window)
+            get_patient_id_window.title("Patient ID")
 
-                Label(get_patient_id_window, text="Patient ID:").pack(pady=5)
-                patient_id = Entry(get_patient_id_window)
-                patient_id.pack(pady=5)
+            Label(get_patient_id_window, text="Patient ID:").pack(pady=5)
+            patient_id = Entry(get_patient_id_window)
+            patient_id.pack(pady=5)
 
-                def submit_patient_id():
-                    """This method is responsible for submitting the patient id"""
-                    id = patient_id.get()
-                    get_patient_id_window.destroy()
-                    return id
+            def submit_patient_id():
+                """This method is responsible for submitting the patient id"""
 
-                def cancel_get_patient_id():
-                    """This method is responsible for cancelling the patient id"""
-                    get_patient_id_window.destroy()
+                def back_action():
+                    """This method is responsible for going back to the actions window"""
                     actions_window.deiconify
+                    view_patient_data_window.destroy
 
-                button_frame = Frame(get_patient_id_window)
-                button_frame.pack(pady=10)
+                view_patient_data_window = Toplevel(actions_window)
+                view_patient_data_window.title("Patient Data")
+                view_patient_data_window.geometry("800x600")
 
-                submit_button = Button(
-                    get_patient_id_window, text="Submit", command=submit_patient_id
+                view_patient_data_window.protocol(
+                    "WM_DELETE_WINDOW", actions_window.deiconify
                 )
-                submit_button.pack(pady=5, side=RIGHT)
 
-                cancel_button = Button(
-                    get_patient_id_window, text="Cancel", command=cancel_get_patient_id
+                button_grid = Frame(
+                    master=view_patient_data_window,
+                    relief=RAISED,
+                    borderwidth=1,
+                    width=15,
                 )
-                cancel_button.pack(pady=5, side=RIGHT)
+                button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
 
-            def back_action():
-                """This method is responsible for going back to the actions window"""
+                back_button = Button(button_grid, text="Back", command=back_action)
+                back_button.grid(row=0, column=0, padx=10, pady=10, sticky="ne")
+
+                patient_data = user_service.get_patient_profile(patient_id)
+                patient_info = [
+                    "Patient_ID",
+                    "Gender",
+                    "Age",
+                    "Name",
+                    "Surname",
+                    "Date of Death",
+                ]
+                for i in range(len(patient_data)):
+                    for j in range(2):
+                        patient_grid = Frame(
+                            master=view_patient_data_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15,
+                        )
+                        patient_grid.grid(row=i + 1, column=j, padx=5, pady=5)
+                        if j == 0:
+                            label = Label(master=patient_grid, text=patient_info[i])
+                            label.pack()
+                        else:
+                            label = Label(master=patient_grid, text=patient_data[i])
+                            label.pack()
+
+            def cancel_get_patient_id():
+                """This method is responsible for cancelling the patient id"""
+                get_patient_id_window.destroy()
                 actions_window.deiconify
-                view_patient_data_window.destroy
 
-            patient_id = get_patient_id()
-            view_patient_data_window = Toplevel(actions_window)
-            view_patient_data_window.title("Patient Data")
-            view_patient_data_window.geometry("800x600")
+            button_frame = Frame(get_patient_id_window)
+            button_frame.pack(pady=10)
 
-            button_grid = Frame(
-                master=view_patient_data_window,
-                relief=RAISED,
-                borderwidth=1,
-                width=15,
+            submit_button = Button(
+                get_patient_id_window, text="Submit", command=submit_patient_id
             )
-            button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
+            submit_button.pack(pady=5, side=RIGHT)
 
-            back_button = Button(button_grid, text="Back", command=back_action)
-            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="ne")
-
-            patient_data = user_service.get_patient_profile(patient_id)
-            patient_info = [
-                "Patient_ID",
-                "Gender",
-                "Age",
-                "Name",
-                "Surname",
-                "Date of Death",
-            ]
-            for i in range(len(patient_data)):
-                for j in range(2):
-                    patient_grid = Frame(
-                        master=view_patient_data_window,
-                        relief=RAISED,
-                        borderwidth=1,
-                        width=15,
-                    )
-                    patient_grid.grid(row=i + 1, column=j, padx=5, pady=5)
-                    if j == 0:
-                        label = Label(master=patient_grid, text=patient_info[i])
-                        label.pack()
-                    else:
-                        label = Label(master=patient_grid, text=patient_data[i])
-                        label.pack()
+            cancel_button = Button(
+                get_patient_id_window, text="Cancel", command=cancel_get_patient_id
+            )
+            cancel_button.pack(pady=5, side=RIGHT)
 
         def view_patient_diagnosis():
             """This method is responsible for viewing the diagnosis of patients"""
+            get_patient_id_window = Toplevel(actions_window)
+            get_patient_id_window.title("Patient ID")
+            get_patient_id_window.geometry("200x300")
 
-            def get_patient_id():
-                """This method is responsible for getting the patient id the doctor wants to view"""
-                get_patient_id_window = Toplevel(actions_window)
-                get_patient_id_window.title("Patient ID")
+            Label(get_patient_id_window, text="Patient ID:").pack(pady=5)
+            patient_id = Entry(get_patient_id_window)
+            patient_id.pack(pady=5)
 
-                Label(get_patient_id_window, text="Patient ID:").pack(pady=5)
-                patient_id = Entry(get_patient_id_window)
-                patient_id.pack(pady=5)
+            def submit_patient_id():
+                """This method is responsible for submitting the patient id"""
+                id = patient_id.get()
+                get_patient_id_window.destroy()
+                Analyse_ui.analyse_action_doctor(id)
 
-                def submit_patient_id():
-                    """This method is responsible for submitting the patient id"""
-                    id = patient_id.get()
-                    get_patient_id_window.destroy()
-                    Analyse_ui.analyse_action_doctor(id)
+            def cancel_get_patient_id():
+                """This method is responsible for cancelling the patient id"""
+                get_patient_id_window.destroy()
 
-                def cancel_get_patient_id():
-                    """This method is responsible for cancelling the patient id"""
-                    get_patient_id_window.destroy()
+            button_frame = Frame(get_patient_id_window)
+            button_frame.pack(pady=10)
 
-                button_frame = Frame(get_patient_id_window)
-                button_frame.pack(pady=10)
+            submit_button = Button(
+                get_patient_id_window, text="Submit", command=submit_patient_id
+            )
+            submit_button.pack(pady=5, side=RIGHT)
 
-                submit_button = Button(
-                    get_patient_id_window, text="Submit", command=submit_patient_id
-                )
-                submit_button.pack(pady=5, side=RIGHT)
-
-                cancel_button = Button(
-                    get_patient_id_window, text="Cancel", command=cancel_get_patient_id
-                )
-                cancel_button.pack(pady=5, side=RIGHT)
-
-            get_patient_id()
+            cancel_button = Button(
+                get_patient_id_window, text="Cancel", command=cancel_get_patient_id
+            )
+            cancel_button.pack(pady=5, side=RIGHT)
 
         def create_diagnostic_report():
             """This method is responsible for creating a diagnostic report"""
@@ -204,6 +204,16 @@ class ActionsUI:
             )
             cancel_button.pack(pady=5, side=RIGHT)
 
+        def view_all_patient_addmissions():
+            """This method is responsible for viewing all patient admissions"""
+            analyse_user = Analyse()
+            analyse_user.admissions_all_patients()
+
+        def all_patient_info():
+            """This method is responsible for viewing all patient information"""
+            analyse_user = Analyse()
+            analyse_user.all_patients()
+
         def view_profile():
             """This method is responsible for viewing the profile of the user"""
             actions_window.withdraw()
@@ -220,6 +230,8 @@ class ActionsUI:
                 """This method is responsible for going back to the actions window"""
                 actions_window.deiconify()
                 view_profile_window.destroy()
+
+            view_profile_window.protocol("WM_DELETE_WINDOW", actions_window.deiconify)
 
             button_grid = Frame(
                 master=view_profile_window,
@@ -254,6 +266,11 @@ class ActionsUI:
             auth = AuthSystem()
             change_password_window = Toplevel(actions_window)
             change_password_window.title("Change Password")
+            change_password_window.geometry("500x300")
+
+            change_password_window.protocol(
+                "WM_DELETE_WINDOW", actions_window.deiconify
+            )
 
             Label(change_password_window, text="Username:").pack(pady=5)
             username_entry = Entry(change_password_window)
@@ -278,18 +295,10 @@ class ActionsUI:
                 new_password = new_password_entry.get()
                 confirm_new_password = confirm_new_password_entry.get()
                 hash_password = User.hash_password(old_password)
-                auth.reset_password(username, hash_password)
-                messagebox.showinfo(
-                    "Reset Password Info",
-                    f"Username: {username}\nPassword: {old_password}",
-                )
                 auth.reset_password(
                     username, hash_password, new_password, confirm_new_password
                 )
-                messagebox.showinfo(
-                    "Reset Password Info",
-                    f"Username: {username}\nPassword: {old_password}",
-                )
+                messagebox.showinfo("Password Reset Successful!")
                 change_password_window.destroy()
                 actions_window.deiconify()
 
@@ -318,16 +327,15 @@ class ActionsUI:
             subprocess.run(["python", "main_ui.py"])
             sys.exit()
 
+        Label(
+            actions_window, text=f"Welcome {name} {surname}", font=("Arial", 20)
+        ).pack(pady=10)
+
         button_frame = Frame(actions_window)
         button_frame.pack(pady=10)
 
         logout_button = Button(button_frame, text="Logout", command=logout)
         logout_button.pack(side=RIGHT, padx=5)
-
-        patient_data = Button(
-            button_frame, text="View patient data", command=view_patient_data
-        )
-        patient_data.pack(side=RIGHT, padx=5)
 
         view_diagnosis = Button(
             button_frame,
@@ -345,6 +353,18 @@ class ActionsUI:
             command=create_diagnostic_report,
         )
         create_diagnostic_report_button.pack(side=RIGHT, padx=5)
+
+        view_all_patient_addmissions_button = Button(
+            button_frame,
+            text="Average Length of Hospital Stays",
+            command=view_all_patient_addmissions,
+        )
+        view_all_patient_addmissions_button.pack(side=RIGHT, padx=5)
+
+        all_patient_info_button = Button(
+            button_frame, text="Patient Age Distribution", command=all_patient_info
+        )
+        all_patient_info_button.pack(side=RIGHT, padx=5)
 
         change_password_button = Button(
             button_frame, text="Change Password", command=change_password
@@ -367,11 +387,18 @@ class ActionsUI:
         action_window.title("Homepage")
         action_window.geometry("800x600")
 
-        print("1. View your profile")
-        print("2. View zour diagnosis")
-        print("3. Change Password")
-        print("4. Logout")
-        print()
+        def on_closing():
+            """This method is responsible for handling the window close event"""
+            if messagebox.askokcancel("Quit", "Do you want to quit?"):
+                action_window.destroy()
+                sys.exit()
+
+        action_window.protocol("WM_DELETE_WINDOW", on_closing)
+
+        # get name and surname of user
+        user = user_service.get_your_profile(global_username)
+        name = user[3]
+        surname = user[4]
 
         def view_profile():
             """This method is responsible for viewing the profile of the user"""
@@ -385,8 +412,10 @@ class ActionsUI:
 
             def back_action():
                 """This method is responsible for going back to the actions window"""
-                action_window.deiconify
                 view_profile_window.destroy()
+                action_window.deiconify
+
+            view_profile_window.protocol("WM_DELETE_WINDOW", action_window.deiconify)
 
             button_grid = Frame(
                 master=view_profile_window,
@@ -433,6 +462,9 @@ class ActionsUI:
             auth = AuthSystem()
             change_password_window = Toplevel(action_window)
             change_password_window.title("Change Password")
+            change_password_window.geometry("500x300")
+
+            change_password_window.protocol("WM_DELETE_WINDOW", action_window.deiconify)
 
             Label(change_password_window, text="Username:").pack(pady=5)
             username_entry = Entry(change_password_window)
@@ -457,7 +489,7 @@ class ActionsUI:
                 new_password = new_password_entry.get()
                 confirm_new_password = confirm_new_password_entry.get()
                 hash_password = User.hash_password(old_password)
-                auth.reset_password(username, hash_password)
+                # auth.reset_password(username, hash_password)
                 messagebox.showinfo(
                     "Reset Password Info",
                     f"Username: {username}\nPassword: {old_password}",
@@ -465,10 +497,7 @@ class ActionsUI:
                 auth.reset_password(
                     username, hash_password, new_password, confirm_new_password
                 )
-                messagebox.showinfo(
-                    "Reset Password Info",
-                    f"Username: {username}\nPassword: {old_password}",
-                )
+                messagebox.showinfo("Password Reset Successful!")
                 change_password_window.destroy()
                 action_window.deiconify()
 
@@ -498,6 +527,10 @@ class ActionsUI:
             messagebox.showinfo(title=None, message="You have been logged out")
             subprocess.run(["python", "main_ui.py"])
             sys.exit()
+
+        Label(action_window, text=f"Welcome {name} {surname}", font=("Arial", 20)).pack(
+            pady=10
+        )
 
         button_frame = Frame(action_window)
         button_frame.pack(pady=10)
@@ -536,11 +569,13 @@ class ActionsUI:
         actions_window.title("Homepage")
         actions_window.geometry("800x600")
 
-        print("1. View all users")
-        print("2. Delete a user")
-        print("3. Change Password")
-        print("4. Logout")
-        print()
+        def on_closing():
+            """This method is responsible for handling the window close event"""
+            if messagebox.askokcancel("Quit", "Do you want to quit?"):
+                actions_window.destroy()
+                sys.exit()
+
+        actions_window.protocol("WM_DELETE_WINDOW", on_closing)
 
         def view_all_users():
             """This method is responsible for viewing all users"""
@@ -549,7 +584,9 @@ class ActionsUI:
             user_table.title("All Users")
             user_table.geometry("800x600")
 
-            row_list = ["User ID", "Name", "Surname", "Role"]
+            user_table.protocol("WM_DELETE_WINDOW", actions_window.deiconify)
+
+            row_list = ["User ID", "Role"]
             all_users = user_service.view_all_users()
 
             def back_action():
@@ -585,47 +622,43 @@ class ActionsUI:
 
         def delete_user():
             """This method is responsible for deleting a user"""
-            actions_window.withdraw
+            get_user_id_window = Toplevel(actions_window)
+            get_user_id_window.title("Patient ID")
+            get_user_id_window.geometry("200x300")
 
-            def get_user_id():
-                """This method is responsible for getting the user id the admin wants to delete"""
-                get_user_id_window = Toplevel(actions_window)
-                get_user_id_window.title("Patient ID")
+            get_user_id_window.protocol("WM_DELETE_WINDOW", actions_window.deiconify)
 
-                Label(get_user_id_window, text="Patient ID:").pack(pady=5)
-                patient_id = Entry(get_user_id_window)
-                patient_id.pack(pady=5)
+            Label(get_user_id_window, text="Patient ID:").pack(pady=5)
+            patient_id = Entry(get_user_id_window)
+            patient_id.pack(pady=5)
 
-                def submit_patient_id():
-                    """This method is responsible for submitting the user id"""
-                    messagebox.askquestion(
-                        title="Delete user",
-                        message="Are you sure you want to continue?",
-                    )
-                    get_user_id_window.destroy()
-                    return patient_id
+            def submit_patient_id():
+                """This method is responsible for submitting the user id"""
+                if messagebox.askquestion(
+                    title="Delete user",
+                    message="Are you sure you want to continue?",
+                ):
+                    user_service.delete_user(patient_id.get())
+                    messagebox.showinfo(title=None, message="User removed successfully")
 
-                def cancel_get_patient_id():
-                    """This method is responsible for cancelling and returning to the actions window"""
-                    get_user_id_window.destroy()
-                    actions_window.deiconify
+                get_user_id_window.destroy()
 
-                button_frame = Frame(get_user_id_window)
-                button_frame.pack(pady=10)
+            def cancel_get_patient_id():
+                """This method is responsible for cancelling and returning to the actions window"""
+                get_user_id_window.destroy()
 
-                submit_button = Button(
-                    get_user_id_window, text="Submit", command=submit_patient_id
-                )
-                submit_button.pack(pady=5, side=RIGHT)
+            button_frame = Frame(get_user_id_window)
+            button_frame.pack(pady=10)
 
-                cancel_button = Button(
-                    get_user_id_window, text="Cancel", command=cancel_get_patient_id
-                )
-                cancel_button.pack(pady=5, side=RIGHT)
+            submit_button = Button(
+                get_user_id_window, text="Submit", command=submit_patient_id
+            )
+            submit_button.pack(pady=5, side=RIGHT)
 
-            user_id = get_user_id()
-            user_service.delete_user(user_id)
-            messagebox.showinfo(title=None, message="User removed successfully")
+            cancel_button = Button(
+                get_user_id_window, text="Cancel", command=cancel_get_patient_id
+            )
+            cancel_button.pack(pady=5, side=RIGHT)
 
         def change_password():
             """This method is responsible for changing the password of the user"""
@@ -633,6 +666,11 @@ class ActionsUI:
             auth = AuthSystem()
             change_password_window = Toplevel(actions_window)
             change_password_window.title("Change Password")
+            change_password_window.geometry("500x300")
+
+            change_password_window.protocol(
+                "WM_DELETE_WINDOW", actions_window.deiconify
+            )
 
             Label(change_password_window, text="Username:").pack(pady=5)
             username_entry = Entry(change_password_window)
@@ -657,20 +695,15 @@ class ActionsUI:
                 new_password = new_password_entry.get()
                 confirm_new_password = confirm_new_password_entry.get()
                 hash_password = User.hash_password(old_password)
-                auth.reset_password(username, hash_password)
-                messagebox.showinfo(
-                    "Reset Password Info",
-                    f"Username: {username}\nPassword: {old_password}",
-                )
-                auth.reset_password(
+                if auth.reset_password(
                     username, hash_password, new_password, confirm_new_password
-                )
-                messagebox.showinfo(
-                    "Reset Password Info",
-                    f"Username: {username}\nPassword: {old_password}",
-                )
-                change_password_window.destroy()
-                actions_window.deiconify()
+                ):
+                    change_password_window.destroy()
+                    actions_window.deiconify()
+                else:
+                    messagebox.showerror("Error", "Password reset failed")
+                    change_password()
+                    change_password_window.destroy()
 
             def cancel_change_password():
                 """This method is responsible for cancelling the password change"""

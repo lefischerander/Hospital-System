@@ -4,6 +4,7 @@ from test_class_login import AuthSystem
 from user_test import User
 from actions_ui import ActionsUI
 from helppage import HelpPage
+import sys
 
 global_username = None
 global_password = None
@@ -22,6 +23,14 @@ def login_action():
     login_window.title("Login")
     login_window.geometry("300x400")
 
+    def on_closing():
+        """This method is responsible for handling the window close event"""
+        if messagebox.askokcancel("Quit", "Do you want to quit?"):
+            login_window.destroy()
+            sys.exit()
+
+    login_window.protocol("WM_DELETE_WINDOW", on_closing)
+
     Label(login_window, text="Username:").pack(pady=5)
     username_entry = Entry(login_window)
     username_entry.pack(pady=5)
@@ -36,7 +45,6 @@ def login_action():
         username = username_entry.get()
         password = password_entry.get()
         global_username = username
-        messagebox.showinfo("Globalusername", f"Username: {global_username}")
         hash_password = User.hash_password(password)
         auth.login(username, hash_password)
         if not auth.logged_in:
@@ -77,9 +85,18 @@ def login_action():
 def reset_password_action():
     """Create a reset password window to reset the user's password."""
     root.withdraw()
+
     auth = AuthSystem()
     reset_password_window = Toplevel(root)
     reset_password_window.title("Reset Password")
+
+    def on_closing():
+        """This method is responsible for handling the window close event"""
+        if messagebox.askokcancel("Quit", "Do you want to quit?"):
+            reset_password_window.destroy()
+            sys.exit()
+
+    reset_password_window.protocol("WM_DELETE_WINDOW", on_closing)
 
     Label(reset_password_window, text="Username:").pack(pady=5)
     username_entry = Entry(reset_password_window)
@@ -131,8 +148,18 @@ def exit_action():
 
 # Main program
 root = Tk()
-root.title("My Tkinter App")
+root.title("Hospital Management")
 root.geometry("800x600")
+
+
+def on_closing():
+    """This method is responsible for handling the window close event"""
+    if messagebox.askokcancel("Quit", "Do you want to quit?"):
+        root.destroy()
+        sys.exit()
+
+
+root.protocol("WM_DELETE_WINDOW", on_closing)
 
 login_button = Button(root, text="Login", command=login_action)
 login_button.pack(pady=10)

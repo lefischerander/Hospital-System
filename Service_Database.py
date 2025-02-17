@@ -83,7 +83,7 @@ class User_service:
         except Exception as e:
             print("No Admin found. See:", e)
 
-    def delete_user(self, subject_id, caller_id):  ##low priority
+    def delete_user(self, subject_id):  ##low priority
         """Deletes a user from the database based on the user's subject ID
 
         Args:
@@ -94,9 +94,6 @@ class User_service:
             Exception: If the user is not found in the database or another error occurs
         """
         try:
-            if self.get_role_by_id(caller_id) != "admin":
-                messagebox.showinfo("Only admin can perform this action")
-
             checked_id = self.check_id(subject_id)
 
             if checked_id is None:
@@ -374,7 +371,7 @@ class User_service:
             )
 
             if diagnosis_added.empty:
-                raise Exception("Invalid icd_code. Please retry ")
+                raise Exception("Invalid icd_code. Please retry")
 
             hadm_id = cursor.execute(
                 f"select hadm_id from {ADMISSIONS} where subject_id = ? order by hadm_id desc",
@@ -391,6 +388,7 @@ class User_service:
                 )
             except pyodbc.Error:
                 seq_num = 1
+
             icd_code = str(diagnosis_added.iloc[0]["icd_code"])
             icd_version = str(diagnosis_added.iloc[0]["icd_version"])
 
@@ -407,7 +405,7 @@ class User_service:
             cursor.close()
             connection.close()
 
-            messagebox.showinfo("Diagnosis added successfully")
+            messagebox.showinfo(title="Success", message="Diagnosis added successfully")
 
         except Exception as e:
             print("Error:  ", e)
@@ -591,9 +589,7 @@ class User_service:
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            cursor.execute(
-                f"select subject_id, firstname, surname, role from {LOGIN_DATA}"
-            )
+            cursor.execute(f"select subject_id, role from {LOGIN_DATA}")
             users = cursor.fetchall()
             cursor.close()
             connection.close()
@@ -602,7 +598,7 @@ class User_service:
             print("Error fetching all users: ", database_error)
             return None
 
-    # def get_password(self, subject_id):  # low priority
+    # def get_password(self, subject_id):  # low priority10002495
     #     try:
     #         connection = pyodbc.connect(self.connection_string)
     #         cursor = connection.cursor()

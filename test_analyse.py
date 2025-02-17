@@ -80,13 +80,17 @@ class Analyse:
         axes[1, 1].tick_params(axis="x", rotation=30)
 
         plt.tight_layout()
+        plt.suptitle(f"Online Medical Record (OMR) of {id}")
         plt.show()
-        if messagebox.askquestion(
-            title="Proceed Download?",
-            message="Do you want to download the results?",
-            icon="question",
-            type="yesno",
-        ) == 'yes':
+        if (
+            messagebox.askquestion(
+                title="Proceed Download?",
+                message="Do you want to download the results?",
+                icon="question",
+                type="yesno",
+            )
+            == "yes"
+        ):
             # Save the data of the patient as a text file and return it as a string for better visualization
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"omr_{id}.txt")
@@ -96,15 +100,11 @@ class Analyse:
 
         return df
 
-    def read_admissions(self, id):
-        """This method is used to read the admissions table and plot the duration of stay in the hospital of all patients by gender,
-        save the data of patient with entered subject_id as a text file and return it as a string.
-
-        Args:
-            id (int): The subject_id of the patient.
+    def admissions_all_patients(self):
+        """This method is used to read the admissions table and plot the duration of stay in the hospital of all patients by gender.
 
         Returns:
-            str: The data of the patient with the entered subject_id.
+            str: The data of all patients.
         """
         # Read the data from the admissions table and gender of the patient from the patients table
         engine = self.connect_to_db()
@@ -117,7 +117,7 @@ class Analyse:
                 conn,
             )
 
-        # Read the data from the admissions table and calculate the duration of stay in the hospital
+        # Read the data and calculate the duration of stay in the hospital
         adtime = df["admittime"]
         ditime = df["dischtime"]
         gender = df["gender"]
@@ -143,23 +143,48 @@ class Analyse:
         plt.grid(True, linestyle="--", linewidth=1.5, alpha=0.7)
         plt.show()
 
-        # Save the data of the patient as a text file and return it as a string for better visualization
-        patient = df[df["subject_id"] == id][
-            "hadm_id, admission_type, admittime, dischtime, deathtime, insurance, edregtime, edouttime, hospital_expire_flag"
-        ]
-        if messagebox.askquestion(
-            title="Proceed Download?",
-            message="Do you want to download the results?",
-            icon="question",
-            type="yesno",
-        ) == 'yes':
-            downloads_path = str(Path.home() / "Downloads")
-            file_path = os.path.join(downloads_path, f"admission_{id}.txt")
-            with open(file_path, "w") as file:
-                file.write(patient.to_string(index=False))
-                print(f"\nYour admission is saved under {file_path}!")
+        return df
 
-        return patient
+    def read_admissions(self, id):
+        """This method is used to read the admissions table, save the data of the patient with the entered subject_id as a text file and return it as a string.
+
+        Args:
+            id (int): The subject_id of the patient.
+
+        Returns:
+            str: The data of the patient with the entered subject_id.
+        """
+        # Read the data from the admissions table and gender of the patient from the patients table
+        engine = self.connect_to_db()
+        query = f"""select a.subject_id, a.hadm_id, a.admission_type , a.admittime, a.dischtime, a.deathtime, a.insurance, a.edregtime, a.edouttime, p.gender, a.hospital_expire_flag from admissions as a
+                inner join patients as p ON a.subject_id = p.subject_id where a.subject_id = {id} order by a.hadm_id"""
+
+        with engine.begin() as conn:
+            df = pd.read_sql_query(
+                sa.text(query),
+                conn,
+            )
+
+        # Save the data of the patient as a text file and return it as a string for better visualization
+        # patient = df[df["subject_id"] == id][
+        #     "hadm_id, admission_type, admittime, dischtime, deathtime, insurance, edregtime, edouttime, hospital_expire_flag"
+        # ]
+        # if (
+        #     messagebox.askquestion(
+        #         title="Proceed Download?",
+        #         message="Do you want to download the results?",
+        #         icon="question",
+        #         type="yesno",
+        #     )
+        #     == "yes"
+        # ):
+        #     downloads_path = str(Path.home() / "Downloads")
+        #     file_path = os.path.join(downloads_path, f"admission_{id}.txt")
+        #     with open(file_path, "w") as file:
+        #         file.write(patient.to_string(index=False))
+        #         print(f"\nYour admission is saved under {file_path}!")
+
+        return df
 
     def read_diagnoses_icd(self, id):
         """This method is used to read the diagnoses_icd table, save the diagnoses of patient with entered subject_id as a text file and return it as a string.
@@ -180,12 +205,15 @@ class Analyse:
                 sa.text(query),
                 conn,
             )
-        if messagebox.askquestion(
-            title="Proceed Download?",
-            message="Do you want to download the results?",
-            icon="question",
-            type="yesno",
-        ) == 'yes':
+        if (
+            messagebox.askquestion(
+                title="Proceed Download?",
+                message="Do you want to download the results?",
+                icon="question",
+                type="yesno",
+            )
+            == "yes"
+        ):
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"diagnoses_{id}.txt")
             with open(file_path, "w") as file:
@@ -214,12 +242,15 @@ class Analyse:
                 sa.text(query),
                 conn,
             )
-        if messagebox.askquestion(
-            title="Proceed Download?",
-            message="Do you want to download the results?",
-            icon="question",
-            type="yesno",
-        ) == 'yes':
+        if (
+            messagebox.askquestion(
+                title="Proceed Download?",
+                message="Do you want to download the results?",
+                icon="question",
+                type="yesno",
+            )
+            == "yes"
+        ):
             # Save the data of the patient as a text file and return it as a string for better visualization
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"drg_codes_{id}.txt")
@@ -250,12 +281,15 @@ class Analyse:
                 sa.text(query),
                 conn,
             )
-        if messagebox.askquestion(
-            title="Proceed Download?",
-            message="Do you want to download the results?",
-            icon="question",
-            type="yesno",
-        ) == 'yes':
+        if (
+            messagebox.askquestion(
+                title="Proceed Download?",
+                message="Do you want to download the results?",
+                icon="question",
+                type="yesno",
+            )
+            == "yes"
+        ):
             # Save the data of the patient as a text file and return it as a string for better visualization
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"emar_{id}.txt")
@@ -267,15 +301,11 @@ class Analyse:
 
         return df
 
-    def read_patients(self, id):
-        """This method is used to read the patients table and plot the distribution of patients by age
-        and return the data of the patient with the entered subject_id.
-
-        Args:
-            id (int): The subject_id of the patient.
+    def all_patients(self):
+        """This method is used to read the patients table and plot the distribution of patients by age.
 
         Returns:
-            str: The data of the patient with the entered subject_id.
+            str: The data of all patients.
         """
         # Read the data from the patients table
         engine = self.connect_to_db()
@@ -316,9 +346,28 @@ class Analyse:
 
         plt.show()
 
-        # Return the data of the patient as a string for better visualization
-        patient = df[df["subject_id"] == id][["gender", "anchor_age", "dod"]]
-        return patient
+        return df
+
+    def read_patients(self, id):
+        """This method is used to read the patients table, return the data of the patient with the entered subject_id and save the data as a text file.
+
+        Args:
+            id (int): The subject_id of the patient.
+
+        Returns:
+            str: The data of the patient with the entered subject_id.
+        """
+        # Read the data from the patients table
+        engine = self.connect_to_db()
+        query = f"""select p.subject_id, p.gender, p.anchor_age, p.dod from patients as p where subject_id = {id}"""
+
+        with engine.begin() as conn:
+            df = pd.read_sql_query(
+                sa.text(query),
+                conn,
+            )
+
+        return df
 
     def read_pharmacy(self, id):
         """This method is used to read the pharmacy table, return the pharmacy data of the patient with the entered subject_id
@@ -340,12 +389,15 @@ class Analyse:
                 sa.text(query),
                 conn,
             )
-        if messagebox.askquestion(
-            title="Proceed Download?",
-            message="Do you want to download the results?",
-            icon="question",
-            type="yesno",
-        ) == 'yes':
+        if (
+            messagebox.askquestion(
+                title="Proceed Download?",
+                message="Do you want to download the results?",
+                icon="question",
+                type="yesno",
+            )
+            == "yes"
+        ):
             # Save the data of the patient as a text file and return it as a string for better visualization
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"pharmacy_{id}.txt")
@@ -374,12 +426,15 @@ class Analyse:
                 sa.text(query),
                 conn,
             )
-        if messagebox.askquestion(
-            title="Proceed Download?",
-            message="Do you want to download the results?",
-            icon="question",
-            type="yesno",
-        ) == 'yes':
+        if (
+            messagebox.askquestion(
+                title="Proceed Download?",
+                message="Do you want to download the results?",
+                icon="question",
+                type="yesno",
+            )
+            == "yes"
+        ):
             downloads_path = str(Path.home() / "Downloads")
             file_path = os.path.join(downloads_path, f"procedures_{id}.txt")
             with open(file_path, "w") as file:
