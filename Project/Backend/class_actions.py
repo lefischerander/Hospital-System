@@ -1,5 +1,5 @@
 # This is a backup file
-from Backend.Database.login import AuthSystem
+from Database.login import AuthSystem
 import getpass
 
 
