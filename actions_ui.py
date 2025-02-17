@@ -35,7 +35,7 @@ class ActionsUI:
             global_username (str): The username of the user
         """
         actions_window = Tk()
-        actions_window.title("Doktor Actions")
+        actions_window.title("Homepage")
         actions_window.geometry("800x600")
 
         print("1. View patient data")
@@ -325,7 +325,7 @@ class ActionsUI:
         logout_button.pack(side=RIGHT, padx=5)
 
         patient_data = Button(
-            button_frame, text="View patiant data", command=view_patient_data
+            button_frame, text="View patient data", command=view_patient_data
         )
         patient_data.pack(side=RIGHT, padx=5)
 
@@ -364,7 +364,7 @@ class ActionsUI:
             global_username (str): The username of the user
         """
         action_window = Tk()
-        action_window.title("Patient Actions")
+        action_window.title("Homepage")
         action_window.geometry("800x600")
 
         print("1. View your profile")
@@ -533,7 +533,7 @@ class ActionsUI:
             global_username (str): The username of the user
         """
         actions_window = Tk()
-        actions_window.title("Actions")
+        actions_window.title("Homepage")
         actions_window.geometry("800x600")
 
         print("1. View all users")
