@@ -68,6 +68,9 @@ Go to the object explorer and right-click on your server to open the Property wi
 
 Adjust [db.access](Backend/Database/db_access.py) with your local instance's database information. The program will now use your local database. The program can now be started by running main.py.
 
+## Data Flow Diagram
+
+![screenshot][dfd]
 ## Timeline
 
 ![screenshot][timeline]
@@ -95,3 +98,4 @@ Adjust [db.access](Backend/Database/db_access.py) with your local instance's dat
 - MIMIC Online Documentation <https://mimic.mit.edu/>
 
 [timeline]: Miscellaneous/Timeline.png
+[dfd]: Miscellaneous/lank_dfd.png
