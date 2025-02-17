@@ -156,8 +156,8 @@ class Analyse:
         """
         # Read the data from the admissions table and gender of the patient from the patients table
         engine = self.connect_to_db()
-        query = """select a.subject_id, a.hadm_id, a.admission_type , a.admittime, a.dischtime, a.deathtime, a.insurance, a.edregtime, a.edouttime, p.gender, a.hospital_expire_flag from admissions as a
-                inner join patients as p ON a.subject_id = p.subject_id order by a.hadm_id"""
+        query = f"""select a.subject_id, a.hadm_id, a.admission_type , a.admittime, a.dischtime, a.deathtime, a.insurance, a.edregtime, a.edouttime, p.gender, a.hospital_expire_flag from admissions as a
+                inner join patients as p ON a.subject_id = p.subject_id where a.subject_id = {id} order by a.hadm_id"""
 
         with engine.begin() as conn:
             df = pd.read_sql_query(
@@ -166,25 +166,25 @@ class Analyse:
             )
 
         # Save the data of the patient as a text file and return it as a string for better visualization
-        patient = df[df["subject_id"] == id][
-            "hadm_id, admission_type, admittime, dischtime, deathtime, insurance, edregtime, edouttime, hospital_expire_flag"
-        ]
-        if (
-            messagebox.askquestion(
-                title="Proceed Download?",
-                message="Do you want to download the results?",
-                icon="question",
-                type="yesno",
-            )
-            == "yes"
-        ):
-            downloads_path = str(Path.home() / "Downloads")
-            file_path = os.path.join(downloads_path, f"admission_{id}.txt")
-            with open(file_path, "w") as file:
-                file.write(patient.to_string(index=False))
-                print(f"\nYour admission is saved under {file_path}!")
+        # patient = df[df["subject_id"] == id][
+        #     "hadm_id, admission_type, admittime, dischtime, deathtime, insurance, edregtime, edouttime, hospital_expire_flag"
+        # ]
+        # if (
+        #     messagebox.askquestion(
+        #         title="Proceed Download?",
+        #         message="Do you want to download the results?",
+        #         icon="question",
+        #         type="yesno",
+        #     )
+        #     == "yes"
+        # ):
+        #     downloads_path = str(Path.home() / "Downloads")
+        #     file_path = os.path.join(downloads_path, f"admission_{id}.txt")
+        #     with open(file_path, "w") as file:
+        #         file.write(patient.to_string(index=False))
+        #         print(f"\nYour admission is saved under {file_path}!")
 
-        return patient
+        return df
 
     def read_diagnoses_icd(self, id):
         """This method is used to read the diagnoses_icd table, save the diagnoses of patient with entered subject_id as a text file and return it as a string.
@@ -359,7 +359,7 @@ class Analyse:
         """
         # Read the data from the patients table
         engine = self.connect_to_db()
-        query = """select p.subject_id, p.gender, p.anchor_age, p.dod from patients as p order by anchor_age"""
+        query = f"""select p.subject_id, p.gender, p.anchor_age, p.dod from patients as p where subject_id = {id}"""
 
         with engine.begin() as conn:
             df = pd.read_sql_query(
@@ -367,9 +367,7 @@ class Analyse:
                 conn,
             )
 
-        # Return the data of the patient as a string for better visualization
-        patient = df[df["subject_id"] == id][["gender", "anchor_age", "dod"]]
-        return patient
+        return df
 
     def read_pharmacy(self, id):
         """This method is used to read the pharmacy table, return the pharmacy data of the patient with the entered subject_id

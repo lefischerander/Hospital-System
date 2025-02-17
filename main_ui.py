@@ -85,7 +85,7 @@ def login_action():
 def reset_password_action():
     """Create a reset password window to reset the user's password."""
     root.withdraw()
-    
+
     auth = AuthSystem()
     reset_password_window = Toplevel(root)
     reset_password_window.title("Reset Password")
@@ -151,11 +151,13 @@ root = Tk()
 root.title("Hospital Management")
 root.geometry("800x600")
 
+
 def on_closing():
     """This method is responsible for handling the window close event"""
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
         root.destroy()
         sys.exit()
+
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
 

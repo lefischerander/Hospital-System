@@ -1,5 +1,5 @@
 from test_analyse import Analyse
-from tkinter import Tk, Frame, Label, RAISED
+from tkinter import Tk
 import tkinter.ttk as ttk
 
 
@@ -17,48 +17,33 @@ class Analyse_ui:
             """This method is responsible for calling the right function from the combobox input"""
             selection = combo.get()
             call_analyse = Analyse()
-            if selection == "omr":
+            if selection == "Medical Records":
                 omr = call_analyse.read_omr(subject_id)
                 omr_window = Tk()
                 omr_window.title("OMR")
                 omr_window.geometry("800x600")
 
-                omr_list = ["chartdate", "resultname", "result_value"]
-                for i in range(len(omr_list)):
-                    for j in range(len(omr) + 1):
-                        omr_grid = Frame(
-                            master=omr_window, relief=RAISED, borderwidth=1, width=15
-                        )
+                tree = ttk.Treeview(omr_window)
 
-                        omr_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(omr_grid, text=omr_list[i]).pack()
-                        else:
-                            Label(omr_grid, text=omr[j - 1][i]).pack()
+                tree["columns"] = list(omr.columns)
+                tree["show"] = "headings"
 
-            elif selection == "admissions":
+                for column in omr.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in omr.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Hospital Visits":
                 admissions = call_analyse.read_admissions(subject_id)
                 admissions_window = Tk()
                 admissions_window.title("Admissions")
                 admissions_window.geometry("800x600")
 
                 tree = ttk.Treeview(admissions_window)
-                
 
-                # admissions_list = [
-                #     "subject_id",
-                #     "hadm_id",
-                #     "admission_type",
-                #     "admittime",
-                #     "dischtime",
-                #     "deathtime",
-                #     "insurance",
-                #     "edregtime",
-                #     "edouttime",
-                #     "gender",
-                #     "hospital_expire_flag",
-                # ]
-                
                 tree["columns"] = list(admissions.columns)
                 tree["show"] = "headings"
 
@@ -70,189 +55,119 @@ class Analyse_ui:
 
                 tree.pack(expand=True, fill="both")
 
-                # for i in range(len(admissions_list)):
-                #     for j in range(len(admissions) + 1):
-                #         admissions_grid = Frame(
-                #             master=admissions_window,
-                #             relief=RAISED,
-                #             borderwidth=1,
-                #             width=15,
-                #         )
-
-                #         admissions_grid.grid(row=i, column=j, padx=5, pady=5)
-                #         if j == 0:
-                #             Label(admissions_grid, text=admissions_list[i]).pack()
-                #         else:
-                #             Label(admissions_grid, text=admissions[j - 1][i]).pack()
-
-            elif selection == "diagnoses_icd":
+            elif selection == "Diagnoses":
                 diagnoses_icd = call_analyse.read_diagnoses_icd(subject_id)
                 diagnoses_icd_window = Tk()
                 diagnoses_icd_window.title("Diagnoses ICD")
                 diagnoses_icd_window.geometry("800x600")
 
-                diagnoses_icd_list = [
-                    "shadm_id",
-                    "seq_num",
-                    "icd_code",
-                    "icd_version",
-                    "long_title",
-                ]
-                for i in range(len(diagnoses_icd_list)):
-                    for j in range(len(diagnoses_icd) + 1):
-                        diagnoses_icd_grid = Frame(
-                            master=diagnoses_icd_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
+                tree = ttk.Treeview(diagnoses_icd_window)
 
-                        diagnoses_icd_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(diagnoses_icd_grid, text=diagnoses_icd_list[i]).pack()
-                        else:
-                            Label(
-                                diagnoses_icd_grid, text=diagnoses_icd[j - 1][i]
-                            ).pack()
+                tree["columns"] = list(diagnoses_icd.columns)
+                tree["show"] = "headings"
 
-            elif selection == "drgcodes":
+                for column in diagnoses_icd.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in diagnoses_icd.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Diagnosis Related Group (DRG)":
                 drgcodes = call_analyse.read_drgcodes(subject_id)
                 drgcodes_window = Tk()
                 drgcodes_window.title("DRG Codes")
                 drgcodes_window.geometry("800x600")
 
-                drgcodes_list = [
-                    "hadm_id",
-                    "drg_code",
-                    "description",
-                    "drg_severity",
-                    "drg_mortality",
-                ]
-                for i in range(len(drgcodes_list)):
-                    for j in range(len(drgcodes) + 1):
-                        drgcodes_grid = Frame(
-                            master=drgcodes_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
+                tree = ttk.Treeview(drgcodes_window)
 
-                        drgcodes_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(drgcodes_grid, text=drgcodes_list[i]).pack()
-                        else:
-                            Label(drgcodes_grid, text=drgcodes[j - 1][i]).pack()
+                tree["columns"] = list(drgcodes.columns)
+                tree["show"] = "headings"
 
-            elif selection == "emar":
+                for column in drgcodes.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in drgcodes.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Electronic Medicine Administration Record (eMAR)":
                 emar = call_analyse.read_emar(subject_id)
                 emar_window = Tk()
                 emar_window.title("EMAR")
                 emar_window.geometry("800x600")
 
-                emar_list = [
-                    "hadm_id",
-                    "pharmacy_id",
-                    "medication",
-                    "charttime",
-                    "scheduletime",
-                    "event_txt",
-                ]
-                for i in range(len(emar_list)):
-                    for j in range(len(emar) + 1):
-                        emar_grid = Frame(
-                            master=emar_window, relief=RAISED, borderwidth=1, width=15
-                        )
+                tree = ttk.Treeview(emar_window)
 
-                        emar_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(emar_grid, text=emar_list[i]).pack()
-                        else:
-                            Label(emar_grid, text=emar[j - 1][i]).pack()
+                tree["columns"] = list(emar.columns)
+                tree["show"] = "headings"
 
-            elif selection == "patients":
+                for column in emar.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in emar.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Patient Data":
                 patients = call_analyse.read_patients(subject_id)
                 patients_window = Tk()
                 patients_window.title("Patients")
                 patients_window.geometry("800x600")
 
-                patients_list = ["subject_id", "gender", "anchor_age", "dod"]
-                for i in range(len(patients_list)):
-                    for j in range(len(patients) + 1):
-                        patients_grid = Frame(
-                            master=patients_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
+                tree = ttk.Treeview(patients_window)
 
-                        patients_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(patients_grid, text=patients_list[i]).pack()
-                        else:
-                            Label(patients_grid, text=patients[j - 1][i]).pack()
+                tree["columns"] = list(patients.columns)
+                tree["show"] = "headings"
 
-            elif selection == "pharmacy":
+                for column in patients.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in patients.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Medication":
                 pharmacy = call_analyse.read_pharmacy(subject_id)
                 pharmacy_window = Tk()
                 pharmacy_window.title("Pharmacy")
                 pharmacy_window.geometry("800x600")
 
-                pharmacy_list = [
-                    "hadm_id",
-                    "pharmacy_id",
-                    "medication",
-                    "proc_type",
-                    "frequency",
-                    "starttime",
-                    "stoptime",
-                ]
-                for i in range(len(pharmacy_list)):
-                    for j in range(len(pharmacy) + 1):
-                        pharmacy_grid = Frame(
-                            master=pharmacy_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
+                tree = ttk.Treeview(pharmacy_window)
 
-                        pharmacy_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(pharmacy_grid, text=pharmacy_list[i]).pack()
-                        else:
-                            Label(pharmacy_grid, text=pharmacy[j - 1][i]).pack()
+                tree["columns"] = list(pharmacy.columns)
+                tree["show"] = "headings"
 
-            elif selection == "procedures_icd":
-                procrdures_icd = call_analyse.read_procedures_icd(subject_id)
+                for column in pharmacy.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in pharmacy.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Procedures":
+                procedures_icd = call_analyse.read_procedures_icd(subject_id)
                 procedures_icd_window = Tk()
                 procedures_icd_window.title("Procedures ICD")
                 procedures_icd_window.geometry("800x600")
 
-                procedures_icd_list = [
-                    "hadm_id",
-                    "chartdate",
-                    "seq_num",
-                    "icd_code",
-                    "long_title",
-                    "icd_version",
-                ]
-                for i in range(len(procedures_icd_list)):
-                    for j in range(len(procrdures_icd) + 1):
-                        procedures_icd_grid = Frame(
-                            master=procedures_icd_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
+                tree = ttk.Treeview(procedures_icd_window)
 
-                        procedures_icd_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(
-                                procedures_icd_grid, text=procedures_icd_list[i]
-                            ).pack()
-                        else:
-                            Label(
-                                procedures_icd_grid, text=procrdures_icd[j - 1][i]
-                            ).pack()
+                tree["columns"] = list(procedures_icd.columns)
+                tree["show"] = "headings"
+
+                for column in procedures_icd.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in procedures_icd.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
 
         print(subject_id)
 
@@ -262,14 +177,14 @@ class Analyse_ui:
         combo = ttk.Combobox(
             master=analyse_window,
             values=[
-                "omr",
-                "admissions",
-                "diagnoses_icd",
-                "drgcodes",
-                "emar",
-                "patients",
-                "pharmacy",
-                "procedures_icd",
+                "Medical Records",
+                "Hospital Visits",
+                "Diagnoses",
+                "Procedures",
+                "Diagnosis Related Group (DRG)",
+                "Electronic Medicine Administration Record (eMAR)",
+                "Patient Data",
+                "Medication",
             ],
         )
         combo.pack()
@@ -283,234 +198,163 @@ class Analyse_ui:
             subject_id (int): The id of the patient the doctor wants to view
         """
 
-        def selected_option(event):  # arg: event is necessary
+        def selected_option(event):  # arg: event might be unnecessary
             """This method is responsible for calling the right function from the combobox input"""
             selection = combo.get()
-            id = int(subject_id)
             call_analyse = Analyse()
-            print(id)
-            print(selection)
-            if selection == "omr":
+            if selection == "Medical Records":
                 omr = call_analyse.read_omr(subject_id)
                 omr_window = Tk()
                 omr_window.title("OMR")
                 omr_window.geometry("800x600")
 
-                omr_list = ["chartdate", "resultname", "result_value"]
-                for i in range(len(omr_list)):
-                    for j in range(len(omr) + 1):
-                        omr_grid = Frame(
-                            master=omr_window, relief=RAISED, borderwidth=1, width=15
-                        )
+                tree = ttk.Treeview(omr_window)
 
-                        omr_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(omr_grid, text=omr_list[i]).pack()
-                        else:
-                            Label(omr_grid, text=omr[j - 1][i]).pack()
+                tree["columns"] = list(omr.columns)
+                tree["show"] = "headings"
 
-            elif selection == "admissions":
+                for column in omr.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in omr.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Hospital Visits":
                 admissions = call_analyse.read_admissions(subject_id)
                 admissions_window = Tk()
                 admissions_window.title("Admissions")
                 admissions_window.geometry("800x600")
 
-                admissions_list = [
-                    "subject_id",
-                    "hadm_id",
-                    "admission_type",
-                    "admittime",
-                    "dischtime",
-                    "deathtime",
-                    "insurance",
-                    "edregtime",
-                    "edouttime",
-                    "gender",
-                    "hospital_expire_flag",
-                ]
-                for i in range(len(admissions_list)):
-                    for j in range(len(admissions) + 1):
-                        admissions_grid = Frame(
-                            master=admissions_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
+                tree = ttk.Treeview(admissions_window)
 
-                        admissions_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(admissions_grid, text=admissions_list[i]).pack()
-                        else:
-                            Label(admissions_grid, text=admissions[j - 1][i]).pack()
+                tree["columns"] = list(admissions.columns)
+                tree["show"] = "headings"
 
-            elif selection == "diagnoses_icd":
+                for column in admissions.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in admissions.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Diagnoses":
                 diagnoses_icd = call_analyse.read_diagnoses_icd(subject_id)
                 diagnoses_icd_window = Tk()
                 diagnoses_icd_window.title("Diagnoses ICD")
                 diagnoses_icd_window.geometry("800x600")
 
-                diagnoses_icd_list = [
-                    "shadm_id",
-                    "seq_num",
-                    "icd_code",
-                    "icd_version",
-                    "long_title",
-                ]
-                for i in range(len(diagnoses_icd_list)):
-                    for j in range(len(diagnoses_icd) + 1):
-                        diagnoses_icd_grid = Frame(
-                            master=diagnoses_icd_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
+                tree = ttk.Treeview(diagnoses_icd_window)
 
-                        diagnoses_icd_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(diagnoses_icd_grid, text=diagnoses_icd_list[i]).pack()
-                        else:
-                            Label(
-                                diagnoses_icd_grid, text=diagnoses_icd[j - 1][i]
-                            ).pack()
+                tree["columns"] = list(diagnoses_icd.columns)
+                tree["show"] = "headings"
 
-            elif selection == "drgcodes":
+                for column in diagnoses_icd.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in diagnoses_icd.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Diagnosis Related Group (DRG)":
                 drgcodes = call_analyse.read_drgcodes(subject_id)
                 drgcodes_window = Tk()
                 drgcodes_window.title("DRG Codes")
                 drgcodes_window.geometry("800x600")
 
-                drgcodes_list = [
-                    "hadm_id",
-                    "drg_code",
-                    "description",
-                    "drg_severity",
-                    "drg_mortality",
-                ]
-                for i in range(len(drgcodes_list)):
-                    for j in range(len(drgcodes) + 1):
-                        drgcodes_grid = Frame(
-                            master=drgcodes_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
+                tree = ttk.Treeview(drgcodes_window)
 
-                        drgcodes_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(drgcodes_grid, text=drgcodes_list[i]).pack()
-                        else:
-                            Label(drgcodes_grid, text=drgcodes[j - 1][i]).pack()
+                tree["columns"] = list(drgcodes.columns)
+                tree["show"] = "headings"
 
-            elif selection == "emar":
+                for column in drgcodes.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in drgcodes.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Electronic Medicine Administration Record (eMAR)":
                 emar = call_analyse.read_emar(subject_id)
                 emar_window = Tk()
                 emar_window.title("EMAR")
                 emar_window.geometry("800x600")
 
-                emar_list = [
-                    "hadm_id",
-                    "pharmacy_id",
-                    "medication",
-                    "charttime",
-                    "scheduletime",
-                    "event_txt",
-                ]
-                for i in range(len(emar_list)):
-                    for j in range(len(emar) + 1):
-                        emar_grid = Frame(
-                            master=emar_window, relief=RAISED, borderwidth=1, width=15
-                        )
+                tree = ttk.Treeview(emar_window)
 
-                        emar_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(emar_grid, text=emar_list[i]).pack()
-                        else:
-                            Label(emar_grid, text=emar[j - 1][i]).pack()
+                tree["columns"] = list(emar.columns)
+                tree["show"] = "headings"
 
-            elif selection == "patients":
+                for column in emar.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in emar.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Patient Data":
                 patients = call_analyse.read_patients(subject_id)
                 patients_window = Tk()
                 patients_window.title("Patients")
                 patients_window.geometry("800x600")
 
-                patients_list = ["subject_id", "gender", "anchor_age", "dod"]
-                for i in range(len(patients_list)):
-                    for j in range(len(patients) + 1):
-                        patients_grid = Frame(
-                            master=patients_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
+                tree = ttk.Treeview(patients_window)
 
-                        patients_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(patients_grid, text=patients_list[i]).pack()
-                        else:
-                            Label(patients_grid, text=patients[j - 1][i]).pack()
+                tree["columns"] = list(patients.columns)
+                tree["show"] = "headings"
 
-            elif selection == "pharmacy":
+                for column in patients.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in patients.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Medication":
                 pharmacy = call_analyse.read_pharmacy(subject_id)
                 pharmacy_window = Tk()
                 pharmacy_window.title("Pharmacy")
                 pharmacy_window.geometry("800x600")
 
-                pharmacy_list = [
-                    "hadm_id",
-                    "pharmacy_id",
-                    "medication",
-                    "proc_type",
-                    "frequency",
-                    "starttime",
-                    "stoptime",
-                ]
-                for i in range(len(pharmacy_list)):
-                    for j in range(len(pharmacy) + 1):
-                        pharmacy_grid = Frame(
-                            master=pharmacy_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
+                tree = ttk.Treeview(pharmacy_window)
 
-                        pharmacy_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(pharmacy_grid, text=pharmacy_list[i]).pack()
-                        else:
-                            Label(pharmacy_grid, text=pharmacy[j - 1][i]).pack()
+                tree["columns"] = list(pharmacy.columns)
+                tree["show"] = "headings"
 
-            elif selection == "procedures_icd":
-                procrdures_icd = call_analyse.read_procedures_icd(subject_id)
+                for column in pharmacy.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in pharmacy.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+            elif selection == "Procedures":
+                procedures_icd = call_analyse.read_procedures_icd(subject_id)
                 procedures_icd_window = Tk()
                 procedures_icd_window.title("Procedures ICD")
                 procedures_icd_window.geometry("800x600")
 
-                procedures_icd_list = [
-                    "hadm_id",
-                    "chartdate",
-                    "seq_num",
-                    "icd_code",
-                    "long_title",
-                    "icd_version",
-                ]
-                for i in range(len(procedures_icd_list)):
-                    for j in range(len(procrdures_icd) + 1):
-                        procedures_icd_grid = Frame(
-                            master=procedures_icd_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
+                tree = ttk.Treeview(procedures_icd_window)
 
-                        procedures_icd_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(
-                                procedures_icd_grid, text=procedures_icd_list[i]
-                            ).pack()
-                        else:
-                            Label(
-                                procedures_icd_grid, text=procrdures_icd[j - 1][i]
-                            ).pack()
+                tree["columns"] = list(procedures_icd.columns)
+                tree["show"] = "headings"
+
+                for column in procedures_icd.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in procedures_icd.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+        print(subject_id)
 
         analyse_window = Tk()
         analyse_window.title("Analyse")
@@ -518,14 +362,14 @@ class Analyse_ui:
         combo = ttk.Combobox(
             master=analyse_window,
             values=[
-                "omr",
-                "admissions",
-                "diagnoses_icd",
-                "drgcodes",
-                "emar",
-                "patients",
-                "pharmacy",
-                "procedures_icd",
+                "Medical Records",
+                "Hospital Visits",
+                "Diagnoses",
+                "Procedures",
+                "Diagnosis Related Group (DRG)",
+                "Electronic Medicine Administration Record (eMAR)",
+                "Patient Data",
+                "Medication",
             ],
         )
         combo.pack()
