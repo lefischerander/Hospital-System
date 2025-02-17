@@ -78,6 +78,11 @@ class User_service:
         try:
             if self.get_role_by_id(caller_id) != "admin":
                 raise Exception("Only admins can delete users")
+            
+            checked_id= self.check_id(subject_id)
+
+            if checked_id is None:
+                raise Exception("Please make sure to input the correct subject_id")
 
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
