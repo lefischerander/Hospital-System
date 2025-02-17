@@ -85,12 +85,29 @@ class ActionsUI:
                     borderwidth=1,
                     width=15,
                 )
-                button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
+                button_grid.grid(
+                    row=0, 
+                    column=0, 
+                    padx=0, 
+                    pady=0, 
+                    sticky="ne"
+                )
 
-                back_button = Button(button_grid, text="Back", command=back_action)
-                back_button.grid(row=0, column=0, padx=10, pady=10, sticky="ne")
+                back_button = Button(
+                    button_grid, 
+                    text="Back", 
+                    command=back_action
+                )
+                back_button.grid(
+                    row=0, 
+                    column=0, 
+                    padx=10, 
+                    pady=10, 
+                    sticky="ne"
+                )
 
-                patient_data = user_service.get_patient_profile(patient_id)
+                p_id = patient_id.get()
+                patient_data = user_service.get_patient_profile(p_id)
                 patient_info = [
                     "Patient_ID",
                     "Gender",
@@ -99,6 +116,7 @@ class ActionsUI:
                     "Surname",
                     "Date of Death"
                 ]
+
                 for i in range(len(patient_data)):
                     for j in range(2):
                         patient_grid = Frame(
@@ -107,7 +125,12 @@ class ActionsUI:
                             borderwidth=1,
                             width=15,
                         )
-                        patient_grid.grid(row=i + 1, column=j, padx=5, pady=5)
+                        patient_grid.grid(
+                            row=i + 1, 
+                            column=j, 
+                            padx=5, 
+                            pady=5
+                        )
                         if j == 0:
                             label = Label(master=patient_grid, text=patient_info[i])
                             label.pack()
@@ -263,14 +286,26 @@ class ActionsUI:
                 borderwidth=1,
                 width=15,
             )
-            button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
+            button_grid.grid(
+                row=0, 
+                column=0, 
+                padx=0, 
+                pady=0, 
+                sticky="ne"
+            )
 
             back_button = Button(
                 button_grid, 
                 text="Back", 
                 command=back_action
             )
-            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="ne")
+            back_button.grid(
+                row=0, 
+                column=0, 
+                padx=10, 
+                pady=10, 
+                sticky="ne"
+            )
 
             for i in range(len(user_profile)):
                 for j in range(2):
