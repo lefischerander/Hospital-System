@@ -132,10 +132,6 @@ class AuthSystem:
             else:
                 print(f"Your role in this hospital: {user_role}")
 
-    def logout(self):
-        """Logs the user out and returns to the main menu."""
-        self.logged_in = False
-
     def reset_password(self, subject_id, password, new_password, confirm_new_password):
         """Resets the user's password.
 

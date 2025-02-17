@@ -91,12 +91,16 @@ class User_service:
         Raises:
             Exception: If the user is not an admin
             Exception: If the user is not found in the database or another error occurs
+
+        Returns:
+            bool: False if the user doesn't exist, True if an existing user got deleted
         """
         try:
             checked_id = self.check_id(subject_id)
 
             if checked_id is None:
-                messagebox.showinfo("User not found")
+                messagebox.showerror("Error", "User doesn't exist.")
+                return False
 
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
@@ -109,6 +113,7 @@ class User_service:
             cursor.close()
             connection.close()
             print(f"User: {subject_id} deleted successfully")
+            return True
         except Exception as e:
             print("Error:", e)
 
@@ -349,6 +354,9 @@ class User_service:
         Raises:
             Exception: If the patient with the given ID can't be found
             Exception: If any other Error happens during the process
+
+        Returns:
+            bool: False if the patient ID or ICD Code doesn't exist, True if the diagnosis was created
         """
 
         try:
@@ -363,14 +371,16 @@ class User_service:
             check_id = self.check_id(patient_id)
 
             if check_id is None:
-                raise Exception(f"Patient with subject ID {patient_id} not found")
+                messagebox.showerror("Error", "This patient ID doesn't exist.")
+                return False
 
             diagnosis_added = self.read_sa_query(
                 f"SELECT * FROM {DIAGNOSES_DESC} WHERE icd_code = '{icd_code}'"
             )
 
             if diagnosis_added.empty:
-                raise Exception("Invalid icd_code. Please retry")
+                messagebox.showerror("Error", "This ICD Code doesn't exist.")
+                return False
 
             hadm_id = cursor.execute(
                 f"select hadm_id from {ADMISSIONS} where subject_id = ? order by hadm_id desc",
@@ -408,40 +418,37 @@ class User_service:
 
         except Exception as e:
             print("Error:  ", e)
+            return False
 
     def get_patient_profile(self, subject_id):  # dod time must be string
         """Gets a patient's profile based on the patient's subject_id.
 
-        Before making any connection with the database, the entered subject_id need to be checked first.
+        Before making any connection with the database, the entered subject_id needs to be checked first.
 
         Args:
             entered subject_id
 
         Returns:
-        pyodbc.row: the row containing the user's profile (pyodbc object)
+            pyodbc.row: the row containing the user's profile (pyodbc object)
+            bool: If the user doesn't exist
 
         Raises:
-            Exception: if the checked subject_id does not exist on the database
-                        if the database could not fetch the patient profile
+            Exception: if the checked subject_id does not exist on the database or if the database could not fetch the patient profile
 
         """
         try:
             check_id = self.check_id(subject_id)
             if check_id is None:
-                raise Exception("The user you input is not on the database")
+                messagebox.showerror("Error", "This patient ID doesn't exist.")
+                return False
 
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            query = """
-                SELECT p.subject_id, p.gender, p.anchor_age, p.firstname, p.surname, p.dod 
-                FROM patients AS p
-                WHERE p.subject_id = ?
-            """
+            query = "SELECT * FROM patients WHERE p.subject_id = ?"
             cursor.execute(query, subject_id)
-            result = cursor.fetchone()
+            result = cursor.fetchone()[0]
             cursor.close()
             connection.close()
-
             return result
         except Exception as e:
             print("Error fetching patient profile: ", e)

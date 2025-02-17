@@ -51,87 +51,6 @@ class ActionsUI:
         name = user[1]
         surname = user[2]
 
-        def view_patient_data():
-            """This method is responsible for viewing the patient data"""
-            actions_window.withdraw
-
-            get_patient_id_window = Toplevel(actions_window)
-            get_patient_id_window.title("Patient ID")
-
-            Label(get_patient_id_window, text="Patient ID:").pack(pady=5)
-            patient_id = Entry(get_patient_id_window)
-            patient_id.pack(pady=5)
-
-            def submit_patient_id():
-                """This method is responsible for submitting the patient id"""
-
-                def back_action():
-                    """This method is responsible for going back to the actions window"""
-                    actions_window.deiconify
-                    view_patient_data_window.destroy
-
-                view_patient_data_window = Toplevel(actions_window)
-                view_patient_data_window.title("Patient Data")
-                view_patient_data_window.geometry("800x600")
-
-                view_patient_data_window.protocol(
-                    "WM_DELETE_WINDOW", actions_window.deiconify
-                )
-
-                button_grid = Frame(
-                    master=view_patient_data_window,
-                    relief=RAISED,
-                    borderwidth=1,
-                    width=15,
-                )
-                button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
-
-                back_button = Button(button_grid, text="Back", command=back_action)
-                back_button.grid(row=0, column=0, padx=10, pady=10, sticky="ne")
-
-                patient_data = user_service.get_patient_profile(patient_id)
-                patient_info = [
-                    "Patient_ID",
-                    "Gender",
-                    "Age",
-                    "Name",
-                    "Surname",
-                    "Date of Death",
-                ]
-                for i in range(len(patient_data)):
-                    for j in range(2):
-                        patient_grid = Frame(
-                            master=view_patient_data_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
-                        patient_grid.grid(row=i + 1, column=j, padx=5, pady=5)
-                        if j == 0:
-                            label = Label(master=patient_grid, text=patient_info[i])
-                            label.pack()
-                        else:
-                            label = Label(master=patient_grid, text=patient_data[i])
-                            label.pack()
-
-            def cancel_get_patient_id():
-                """This method is responsible for cancelling the patient id"""
-                get_patient_id_window.destroy()
-                actions_window.deiconify
-
-            button_frame = Frame(get_patient_id_window)
-            button_frame.pack(pady=10)
-
-            submit_button = Button(
-                get_patient_id_window, text="Submit", command=submit_patient_id
-            )
-            submit_button.pack(pady=5, side=RIGHT)
-
-            cancel_button = Button(
-                get_patient_id_window, text="Cancel", command=cancel_get_patient_id
-            )
-            cancel_button.pack(pady=5, side=RIGHT)
-
         def view_patient_diagnosis():
             """This method is responsible for viewing the diagnosis of patients"""
             get_patient_id_window = Toplevel(actions_window)
@@ -145,8 +64,12 @@ class ActionsUI:
             def submit_patient_id():
                 """This method is responsible for submitting the patient id"""
                 id = patient_id.get()
-                get_patient_id_window.destroy()
-                AnalyseUI.analyse_action_doctor(id)
+                if user_service.get_patient_profile(id) is False:
+                    get_patient_id_window.destroy()
+                    view_patient_diagnosis()
+                else:
+                    get_patient_id_window.destroy()
+                    AnalyseUI.analyse_action_doctor(id)
 
             def cancel_get_patient_id():
                 """This method is responsible for cancelling the patient id"""
@@ -183,7 +106,11 @@ class ActionsUI:
                 id = patient_id.get()
                 icd_code = icd_code_entry.get()
                 get_patient_id_window.destroy()
-                user_service.create_diagnosis(id, global_username, icd_code)
+                dia = user_service.create_diagnosis(id, global_username, icd_code)
+                if dia:
+                    get_patient_id_window.destroy()
+                else:
+                    create_diagnostic_report()
 
             def cancel_get_patient_id():
                 """This method is responsible for cancelling the patient id"""
@@ -381,11 +308,6 @@ class ActionsUI:
             command=view_patient_diagnosis,
         )
         view_diagnosis.pack(side=RIGHT, padx=5)
-
-        view_patient_data_button = Button(
-            button_frame, text="View Patient Data", command=view_patient_data
-        )
-        view_patient_data_button.pack(side=RIGHT, padx=5)
 
         help_button = Button(
             actions_window, text="Help", command=HelpPage.help_page_from_actions_doctor
@@ -657,14 +579,21 @@ class ActionsUI:
 
             def submit_patient_id():
                 """This method is responsible for submitting the user id"""
-                if messagebox.askquestion(
-                    title="Delete user",
-                    message="Are you sure you want to continue?",
-                ):
-                    user_service.delete_user(patient_id.get())
-                    messagebox.showinfo(title=None, message="User removed successfully")
+                id = patient_id.get()
+                if user_service.get_patient_profile(id):
+                    if messagebox.askquestion(
+                        title="Delete user",
+                        message="Are you sure you want to continue?",
+                    ):
+                        user_service.delete_user(patient_id.get())
+                        messagebox.showinfo(
+                            title=None, message="User removed successfully"
+                        )
 
-                get_user_id_window.destroy()
+                    get_user_id_window.destroy()
+                else:
+                    get_user_id_window.destroy()
+                    delete_user()
 
             def cancel_get_patient_id():
                 """This method is responsible for cancelling and returning to the actions window"""
