@@ -1,12 +1,18 @@
-# This is a backup file
-from Database.login import AuthSystem
+# This is a backup file. We created this file right from the start, because we were having problems with the user interface.
+# But as the interface is currently working, this file is used as a Backup
+# This file is imported by the test
+
+from Backend.Database.login import AuthSystem
 import getpass
 
 
-# import hashlib
 import Database.database_service as database_service
 from Backend.user import User
 import Database.config as config
+
+# We import config.py for one specific reason
+# As soon as a user is connected, the only variable (initialized as None) in config will save the user's id
+# This variable will be then used several times as an arguments when calling a method from classes
 
 user_service = (
     database_service.User_service()
@@ -46,8 +52,8 @@ class Actions:
 
         # Nante
         if choice == "1":
-            # We are parsing the view_all-users function to the instance of the class User?Service
             # The function takes no argument
+            # A row from the database will be output
             user_service.view_all_users()
 
             print("All users: ", user_service.view_all_users())
@@ -56,6 +62,8 @@ class Actions:
             Actions.admin_actions()
 
         elif choice == "2":
+            # We are making sure that the code is robust enough to handle errors and not to crash
+            
             try:
                 # Username variable stores the input subject_id
                 # We are making sure that the input is an integer
@@ -65,16 +73,16 @@ class Actions:
                 password_input = getpass.getpass("Set the password of the user: ")
 
                 # The password variable stores then the hashed password
-                ## The hash_password function is being parsed to the User object
                 password = User.hash_password(password_input)
 
                 role = input("Set the role of the user: ")
                 firstname = input("Set the firstname of the user: ")
                 surname = input("Set the surname of the user: ")
 
-                # The function create_user is being parsed to the instance of the class User_service and takes 5 parameters
+                # We call the function.
                 user_service.create_user(username, password, role, firstname, surname)
-
+            
+            # An exception is raised if an error occurs
             except Exception as e:
                 print("Error: ", e)
 
@@ -86,17 +94,23 @@ class Actions:
                 user_to_be_deleted = int(
                     input("Enter the subject_id of the user you want to delete: ")
                 )
-
+                # Ask the admin to confirm his choice
                 answer = input("Are you sure you want to do delete an user? (yes/no): ")
 
+                
                 if answer == "yes":
+                    # If he is sure then, then we will call the function
                     user_service.delete_user(
                         user_to_be_deleted, config.subject_id_logged
                     )
+                    
+                    #Back to the menu
                     Actions.admin_actions()
 
                 elif answer == "no":
                     print("You changed your mind")
+                    
+                    #Back to the menu
                     Actions.admin_actions()
 
                 else:
@@ -107,46 +121,64 @@ class Actions:
                 print("Oups error: ", e)
                 Actions.admin_actions()
 
-        # Nante
+        
 
         elif choice == "4":
+            # The input will be directly convert to an integer
             patient = int(
                 input("Enter the subject_id of the patient you want to view:  \n")
             )
+            
+            # The function is called and takes one argument
             patient_info = user_service.get_patient_profile(patient)
+            
+            # A row from the database will be printed
             print(patient_info)
-
+            
+            # Back to the menu
             Actions.admin_actions()
-        # Nante
+        
         elif choice == "5":
             try:
+                # This time we are making sure the input is a string
                 doctor = str(
                     input("Enter the surname of the doctor you want to view: ")
                 )
-
+                
+                # This variable will store the row from the database and then be printed
                 doctor_info = user_service.get_doctor_by_name(doctor)
 
                 print(doctor_info)
             except Exception as e:
                 print("Oups user not found: ", e)
 
-        # Nante
+        
         elif choice == "6":
+            # The variable user will store the input from the admin 
             user = input("Enter your Subject_id: ").strip()
+            
+            # The getpass method from the module is called. This is for making sure that the user's input is invisible on the terminal
             pw = getpass.getpass("Your currend Password: ")
+            
+            # The password is hashed
             pw = User.hash_password(pw)
+            
+            # The function from the class AuthSystem is called, and takes two arguments
             auth.reset_password(user, pw)
-            Actions.admin_actions()  # Return to admin actions
-        # Nante
+            
+            # Return to admin actions
+            Actions.admin_actions()  
+       
+        
         elif choice == "7":
             # auth_system.logout()
             Actions.admin_actions()  # Return to admin actions
-        # Nante
+       
         else:
             print("Invalid please choose one of the above possibles actions")
-            print()
+            Actions.admin_actions()
 
-    # Nante
+
     def doktor_actions():
         """This function takes no parameter (or arguments)
 
@@ -176,25 +208,40 @@ class Actions:
         choice = input("Choose an action: ")
 
         if choice == "1":
+             # We are making sure that the input is an integer
+            
             patient = int(
                 input("Enter the subject_id of the patient you want to view:  ")
             )
+            # This variable will store the row from the database
             patient_profile = user_service.get_patient_profile(patient)
 
+            # The row from the database will be output
             print(patient_profile)
+            
 
             Actions.doktor_actions()
 
         elif choice == "2":
-            doctor_profile = user_service.get_your_profile(config.subject_id_logged)
-            print(doctor_profile)
+            # For debugging
             print("Your subject_id: ", config.subject_id_logged)
+            
+            # This variable will store the returned value of the function get_your_profile
+            doctor_profile = user_service.get_your_profile(config.subject_id_logged)
+            
+            print(doctor_profile)
+            
 
             Actions.doktor_actions()
 
         elif choice == "3":
+            # We are making sure that the code is robust enough to handle errors and not to crash
             try:
+                # We intialized the diagnosis_subject_id (this will be input by the doctor later) to None
                 diagnosis_subject_id = None
+                
+                # The loop ensures that only valid patient IDs are accepted before proceeding
+                # This helps avoid errors later when trying to add a diagnosis to a 'non-existent patient'.
                 while (
                     diagnosis_subject_id is None
                     or user_service.check_id(diagnosis_subject_id) is None
@@ -204,9 +251,17 @@ class Actions:
                             " Enter the subject_id of the patient you want to add a diagnosis to: "
                         )
                     )
-
-                    icd_code = int(input("Enter the diagnosis (icd_code): "))
-
+                    
+                    try:
+                        # The doctor is asked then to input an icd_code
+                        icd_code = int(input("Enter the diagnosis (icd_code): "))
+                    
+                    except ValueError as ve:
+                        print("Invalid input: ", ve)
+                    
+                    
+                    # diagnosis_added will store the returned value from the method create_diagnosis.
+                    # The method create_diagnosis takes 3 arguments
                     diagnosis_added = str(
                         (
                             user_service.create_diagnosis(
@@ -214,12 +269,15 @@ class Actions:
                             )
                         )
                     )
+                    
+                    # If the variable diagnosis_added contains the expected value then the Diagnosis was added successfully
 
                 if diagnosis_added is not None:
                     print("Diagnosis added successfully")
-
+                    
+                    # If the variable is None then an Exception will be raised meaning that an error occured
                 else:
-                    raise Exception("Please enter a valid input (valid ICD-Code)")
+                    raise Exception("An unexpected error occured")
 
                 Actions.doktor_actions()
             except Exception as e:
@@ -236,7 +294,8 @@ class Actions:
                 patient_procedures, config.subject_id_logged
             )
             print(procedures)
-            print("Press 'menu' to go back to the main menu")
+            
+            Actions.doktor_actions()
 
         elif choice == "5":
             patient_diagnosis = int(
@@ -260,6 +319,8 @@ class Actions:
         else:
             print("Invalid please choose one of the above possibles actions")
             print()
+            
+            Actions.admin_actions()
 
     def patient_actions():
         """This function takes no parameter (or arguments)
@@ -306,6 +367,8 @@ class Actions:
             )
             doctor_profile = user_service.get_doctor_by_name(doctor_name)
             print(doctor_profile)
+
+            Actions.patient_actions()
 
         elif choice == "4":
             user = input("Username: ").strip()
