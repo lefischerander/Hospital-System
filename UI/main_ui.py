@@ -1,5 +1,12 @@
-# from test_class_actions import Actions
-from tkinter import Tk, Button, messagebox, Label, Entry, Toplevel, Frame, RIGHT
+from tkinter import (
+    Tk, 
+    Button, 
+    messagebox, Label, 
+    Entry, 
+    Toplevel, 
+    Frame, 
+    RIGHT
+)
 from Backend.Database.login import AuthSystem
 from Backend.user import User
 from UI.actions_ui import ActionsUI
@@ -75,70 +82,98 @@ def login_action():
     button_frame = Frame(login_window)
     button_frame.pack(pady=10)
 
-    submit_button = Button(button_frame, text="Submit", command=submit_login)
+    submit_button = Button(
+        button_frame, 
+        text="Submit", 
+        command=submit_login
+    )
     submit_button.pack(side=RIGHT, padx=5)
 
-    cancel_button = Button(button_frame, text="Cancel", command=cancel_login)
+    cancel_button = Button(
+        button_frame, 
+        text="Cancel", 
+        command=cancel_login
+    )
     cancel_button.pack(side=RIGHT, padx=5)
 
 
-def reset_password_action():
-    """Create a reset password window to reset the user's password."""
+def reset_password():
+    """This method is responsible for changing the password of the user"""
     root.withdraw()
-
     auth = AuthSystem()
-    reset_password_window = Toplevel(root)
-    reset_password_window.title("Reset Password")
+    change_password_window = Toplevel(root)
+    change_password_window.title("Change Password")
+    change_password_window.geometry("500x300")
 
-    def on_closing():
-        """This method is responsible for handling the window close event"""
-        if messagebox.askokcancel("Quit", "Do you want to quit?"):
-            reset_password_window.destroy()
-            sys.exit()
+    change_password_window.protocol("WM_DELETE_WINDOW", root.deiconify)
 
-    reset_password_window.protocol("WM_DELETE_WINDOW", on_closing)
-
-    Label(reset_password_window, text="Username:").pack(pady=5)
-    username_entry = Entry(reset_password_window)
+    Label(
+        change_password_window,
+        text="Username:"
+    ).pack(pady=5)
+    username_entry = Entry(change_password_window)
     username_entry.pack(pady=5)
 
-    Label(reset_password_window, text="Old Password:").pack(pady=5)
-    password_entry = Entry(reset_password_window, show="*")
+    Label(
+        change_password_window, 
+        text="Old Password:"
+    ).pack(pady=5)
+    password_entry = Entry(change_password_window, show="*")
     password_entry.pack(pady=5)
 
-    Label(reset_password_window, text="New Password:").pack(pady=5)
-    new_password_entry = Entry(reset_password_window, show="*")
+    Label(
+        change_password_window, 
+        text="New Password:"
+    ).pack(pady=5)
+    new_password_entry = Entry(change_password_window, show="*")
     new_password_entry.pack(pady=5)
 
-    Label(reset_password_window, text="Confirm New Password:").pack(pady=5)
-    confirm_new_password_entry = Entry(reset_password_window, show="*")
+    Label(
+        change_password_window, 
+        text="Confirm New Password:"
+    ).pack(pady=5)
+    confirm_new_password_entry = Entry(change_password_window, show="*")
     confirm_new_password_entry.pack(pady=5)
 
-    def submit_reset_password():
-        """Submit the reset password form and reset the user's password."""
+    def submit_change_password():
+        """This method is responsible for submitting the new password"""
         username = username_entry.get()
         old_password = password_entry.get()
         new_password = new_password_entry.get()
         confirm_new_password = confirm_new_password_entry.get()
         hash_password = User.hash_password(old_password)
-        auth.reset_password(username, hash_password, new_password, confirm_new_password)
-        messagebox.showinfo(
-            "Reset Password Info", f"Username: {username}\nPassword: {old_password}"
-        )
-        reset_password_window.destroy()
+        if auth.reset_password(
+            username, 
+            hash_password, 
+            new_password, 
+            confirm_new_password
+        ):
+            change_password_window.destroy()
+            root.deiconify()
+        else:
+            reset_password()
+            change_password_window.destroy()
+
+    def cancel_change_password():
+        """This method is responsible for cancelling the password change"""
+        change_password_window.destroy()
         root.deiconify()
 
-    def cancel_reset_password():
-        reset_password_window.destroy()
-        root.deiconify()
-
-    button_frame = Frame(reset_password_window)
+    button_frame = Frame(change_password_window)
     button_frame.pack(pady=10)
 
-    submit_button = Button(button_frame, text="Submit", command=submit_reset_password)
+    submit_button = Button(
+        button_frame, 
+        text="Submit", 
+        command=submit_change_password
+    )
     submit_button.pack(side=RIGHT, padx=5)
 
-    cancel_button = Button(button_frame, text="Cancel", command=cancel_reset_password)
+    cancel_button = Button(
+        button_frame, 
+        text="Cancel", 
+        command=cancel_change_password
+    )
     cancel_button.pack(side=RIGHT, padx=5)
 
 
@@ -161,18 +196,32 @@ def on_closing():
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
 
-login_button = Button(root, text="Login", command=login_action)
+login_button = Button(
+    root, 
+    text="Login", 
+    command=login_action
+)
 login_button.pack(pady=10)
 
 reset_password_button = Button(
-    root, text="Reset Password", command=reset_password_action
+    root, 
+    text="Reset Password", 
+    command=reset_password
 )
 reset_password_button.pack(pady=10)
 
-exit_button = Button(root, text="Exit", command=exit_action)
+exit_button = Button(
+    root, 
+    text="Exit", 
+    command=exit_action
+)
 exit_button.pack(pady=10)
 
-help_button = Button(root, text="Help", command=HelpPage.help_page)
+help_button = Button(
+    root, 
+    text="Help", 
+    command=HelpPage.help_page_from_home
+)
 help_button.pack(pady=10)
 
 root.mainloop()
