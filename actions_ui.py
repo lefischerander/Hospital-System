@@ -1,5 +1,17 @@
-'''import all dependencies'''
-from tkinter import Tk, Button, messagebox, Label, Entry, Toplevel, Frame, RIGHT, RAISED, LEFT
+"""import all dependencies"""
+
+from tkinter import (
+    Tk,
+    Button,
+    messagebox,
+    Label,
+    Entry,
+    Toplevel,
+    Frame,
+    RIGHT,
+    RAISED,
+    LEFT,
+)
 from test_class_login import AuthSystem
 from helppage import HelpPage
 import sys
@@ -15,9 +27,10 @@ user_service = (
 
 class ActionsUI:
     """This class is responsible for the user interface if you are logged in"""
+
     def doktor_actions(global_username):
         """This method is responsible for the actions of the doctor
-        
+
         Args:
             global_username (str): The username of the user
         """
@@ -108,7 +121,7 @@ class ActionsUI:
                         borderwidth=1,
                         width=15,
                     )
-                    patient_grid.grid(row=i+1, column=j, padx=5, pady=5)
+                    patient_grid.grid(row=i + 1, column=j, padx=5, pady=5)
                     if j == 0:
                         label = Label(master=patient_grid, text=patient_info[i])
                         label.pack()
@@ -118,6 +131,7 @@ class ActionsUI:
 
         def view_patient_diagnosis():
             """This method is responsible for viewing the diagnosis of patients"""
+
             def get_patient_id():
                 """This method is responsible for getting the patient id the doctor wants to view"""
                 get_patient_id_window = Toplevel(actions_window)
@@ -167,7 +181,6 @@ class ActionsUI:
             icd_code_entry = Entry(get_patient_id_window)
             icd_code_entry.pack(pady=5)
 
-
             def submit_patient_id():
                 """This method is responsible for submitting the patient id"""
                 id = patient_id.get()
@@ -192,7 +205,7 @@ class ActionsUI:
                 get_patient_id_window, text="Cancel", command=cancel_get_patient_id
             )
             cancel_button.pack(pady=5, side=RIGHT)
-            
+
         def view_profile():
             """This method is responsible for viewing the profile of the user"""
             actions_window.withdraw()
@@ -229,7 +242,7 @@ class ActionsUI:
                         borderwidth=1,
                         width=15,
                     )
-                    user_grid.grid(row=i+1, column=j, padx=5, pady=5)
+                    user_grid.grid(row=i + 1, column=j, padx=5, pady=5)
                     if j == 0:
                         label = Label(master=user_grid, text=user_info[i])
                         label.pack()
@@ -319,7 +332,9 @@ class ActionsUI:
         patient_data.pack(side=RIGHT, padx=5)
 
         view_diagnosis = Button(
-            button_frame, text="View Diagnosis for patient", command=view_patient_diagnosis
+            button_frame,
+            text="View Patient analysis",
+            command=view_patient_diagnosis,
         )
         view_diagnosis.pack(side=RIGHT, padx=5)
 
@@ -327,7 +342,9 @@ class ActionsUI:
         profile.pack(side=RIGHT, padx=5)
 
         create_diagnostic_report_button = Button(
-            button_frame, text="Create Diagnostic Report", command=create_diagnostic_report
+            button_frame,
+            text="Create Diagnostic Report",
+            command=create_diagnostic_report,
         )
         create_diagnostic_report_button.pack(side=RIGHT, padx=5)
 
@@ -340,11 +357,11 @@ class ActionsUI:
         help_button.pack(pady=10)
 
         """auto logout after 60 minutes"""
-        actions_window.after(60*60000, logout)
+        actions_window.after(60 * 60000, logout)
 
     def patient_actions(global_username):
         """This method is responsible for the actions of the patient
-        
+
         Args:
             global_username (str): The username of the user
         """
@@ -392,13 +409,20 @@ class ActionsUI:
                         borderwidth=1,
                         width=15,
                     )
-                    user_grid.grid(row=i+1, column=j, padx=5, pady=5)
+                    user_grid.grid(row=i + 1, column=j, padx=5, pady=5)
                     if j == 0:
                         label = Label(master=user_grid, text=user_info[i])
                         label.pack()
                     else:
-                        label = Label(master=user_grid, text=user_profile[i])
-                        label.pack()
+                        if user_profile[i] == "F":
+                            label = Label(master=user_grid, text="Female")
+                            label.pack()
+                        elif user_profile[i] == "M":
+                            label = Label(master=user_grid, text="Male")
+                            label.pack()
+                        else:
+                            label = Label(master=user_grid, text=user_profile[i])
+                            label.pack()
 
         def view_diagnosis():
             """This method is responsible for viewing the diagnosis of the patient"""
@@ -468,7 +492,7 @@ class ActionsUI:
             )
             cancel_button.pack(side=RIGHT, padx=5)
 
-            action_window.after(60*60000, logout)
+            action_window.after(60 * 60000, logout)
 
         def logout():
             """This method is responsible for logging out the user"""
@@ -502,7 +526,7 @@ class ActionsUI:
         help_button.pack(pady=10)
 
         """auto logout after 60 minutes"""
-        action_window.after(60*60000, logout)
+        action_window.after(60 * 60000, logout)
 
     def admin_actions(global_username):
         """This method is responsible for the actions of the admin
@@ -700,4 +724,4 @@ class ActionsUI:
         help_button.pack(pady=10)
 
         """auto logout after 60 minutes"""
-        actions_window.after(60*60000, logout)
+        actions_window.after(60 * 60000, logout)

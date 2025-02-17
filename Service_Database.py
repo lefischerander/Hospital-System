@@ -7,7 +7,7 @@ from tkinter import messagebox
 
 
 # database tables
-LOGIN_DATA = "New_login_data"
+LOGIN_DATA = "login_data"
 DOCTORS = "doctors"
 PATIENTS = "patients"
 DIAGNOSES = "diagnoses_icd"
@@ -18,6 +18,7 @@ PROCEDURES_DESC = "d_icd_procedures"
 EMAR = "emar"
 ADMISSIONS = "admissions"
 PHARMACY = "pharmacy"
+ADMINS = "admins"
 
 
 class User_service:
@@ -74,11 +75,11 @@ class User_service:
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            cursor.execute(f"select email from {LOGIN_DATA} where role = 'Admin'")
-            role = cursor.fetchone()[0]
+            cursor.execute(f"select email from {ADMINS}")
+            email = cursor.fetchone()[0]
             cursor.close()
             connection.close()
-            return role
+            return email
         except Exception as e:
             print("No Admin found. See:", e)
 
@@ -94,13 +95,13 @@ class User_service:
         """
         try:
             if self.get_role_by_id(caller_id) != "admin":
-               messagebox.showinfo("Only admin can perform this action")
-            
-            checked_id= self.check_id(subject_id)
+                messagebox.showinfo("Only admin can perform this action")
+
+            checked_id = self.check_id(subject_id)
 
             if checked_id is None:
                 messagebox.showinfo("User not found")
-            
+
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             cursor.execute(
@@ -180,7 +181,7 @@ class User_service:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                f"select firstname, surname, department_name, age from {DOCTORS} where surname = ?",
+                f"select firstname, surname, department, age from {DOCTORS} where surname = ?",
                 surname,
             )
             doctor = cursor.fetchone()
@@ -221,8 +222,8 @@ class User_service:
                 connection = pyodbc.connect(self.connection_string)
                 cursor = connection.cursor()
                 query = f"""
-                SELECT subject_id, firstname, surname, department_name, age 
-                FROM  {DOCTORS} 
+                SELECT subject_id, firstname, surname, department, age 
+                FROM {DOCTORS} 
                 WHERE subject_id = ?
                 """
                 cursor.execute(query, subject_id)
@@ -305,9 +306,9 @@ class User_service:
             cursor = connection.cursor()
 
             cursor.execute(
-                    f"select subject_id from {LOGIN_DATA} where subject_id= ?",
-                    subject_id,
-                )
+                f"select subject_id from {LOGIN_DATA} where subject_id= ?",
+                subject_id,
+            )
 
             checked_id = cursor.fetchone()
 
@@ -528,7 +529,7 @@ class User_service:
     #         connection = pyodbc.connect(self.connection_string)
     #         cursor = connection.cursor()
     #         query = """
-    #             SELECT TOP 1 * 
+    #             SELECT TOP 1 *
     #             FROM ?
     #             WHERE subject_id = ? AND result_name LIKE 'Weight%'
     #             ORDER BY chartdate DESC
@@ -547,7 +548,7 @@ class User_service:
     #         connection = pyodbc.connect(self.connection_string)
     #         cursor = connection.cursor()
     #         query = """
-    #             SELECT TOP 1 * 
+    #             SELECT TOP 1 *
     #             FROM ?
     #             WHERE subject_id = ? AND result_name LIKE 'Height%'
     #             ORDER BY chartdate DESC
@@ -566,7 +567,7 @@ class User_service:
     #         connection = pyodbc.connect(self.connection_string)
     #         cursor = connection.cursor()
     #         query = """
-    #             SELECT TOP 1 * 
+    #             SELECT TOP 1 *
     #             FROM ?
     #             WHERE subject_id = ? AND result_name LIKE 'BMI%'
     #             ORDER BY chartdate DESC

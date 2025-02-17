@@ -9,7 +9,7 @@ from tkinter import messagebox
 from db_access import connection_string
 
 # database tables
-LOGIN_DATA = "New_login_data"
+LOGIN_DATA = "login_data"
 DOCTORS = "doctors"
 PATIENTS = "patients"
 DIAGNOSES = "diagnoses_icd"
@@ -20,6 +20,7 @@ PROCEDURES_DESC = "d_icd_procedures"
 EMAR = "emar"
 ADMISSIONS = "admissions"
 PHARMACY = "pharmacy"
+ADMINS = "admins"
 
 
 class AuthSystem:
@@ -43,7 +44,7 @@ class AuthSystem:
             connection = pyodbc.connect(connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                f"select firstname, surname, password, subject_id, role FROM {LOGIN_DATA} WHERE subject_id = ? AND password = ?",
+                f"select password, subject_id, role FROM {LOGIN_DATA} WHERE subject_id = ? AND password = ?",
                 subject_id,
                 password,
             )
@@ -67,16 +68,46 @@ class AuthSystem:
             for i in temp_user:
                 user.append(i)
 
-            if user[4] == "Doctor":
+            if user[2] == "Doctor":
                 connection = pyodbc.connect(connection_string)
                 cursor = connection.cursor()
                 cursor.execute(
-                    f"""select d.department_name FROM {DOCTORS} AS d 
+                    f"""select d.firstname, d.surname, d.department FROM {DOCTORS} AS d 
                     INNER JOIN {LOGIN_DATA} AS l ON d.subject_id = l.subject_id 
                     WHERE d.subject_id = ? """,
                     subject_id,
                 )
-                result = cursor.fetchall()
+                result = cursor.fetchall()[0]
+                cursor.close()
+                connection.close()
+                for r in result:
+                    user.append(r)
+
+            elif user[2] == "Patient":
+                connection = pyodbc.connect(connection_string)
+                cursor = connection.cursor()
+                cursor.execute(
+                    f"""select p.firstname, p.surname FROM {PATIENTS} AS p
+                    INNER JOIN {LOGIN_DATA} AS l ON p.subject_id = l.subject_id 
+                    WHERE p.subject_id = ? """,
+                    subject_id,
+                )
+                result = cursor.fetchall()[0]
+                cursor.close()
+                connection.close()
+                for r in result:
+                    user.append(r)
+
+            elif user[2] == "Admin":
+                connection = pyodbc.connect(connection_string)
+                cursor = connection.cursor()
+                cursor.execute(
+                    f"""select a.firstname, a.surname FROM {ADMINS} AS a 
+                    INNER JOIN {LOGIN_DATA} AS l ON a.subject_id = l.subject_id 
+                    WHERE a.subject_id = ? """,
+                    subject_id,
+                )
+                result = cursor.fetchall()[0]
                 cursor.close()
                 connection.close()
                 for r in result:
@@ -96,9 +127,10 @@ class AuthSystem:
         """
         user = self.check_user(subject_id, password)
         if user:
-            print(f"\nLogin successful! Welcome, {user[0]} {user[1]}.")
+            print(user)
+            print(f"\nLogin successful! Welcome, {user[3]} {user[4]}.")
             self.logged_in = True
-            user_role = user[4]
+            user_role = user[2]
             if user_role == "Doctor":
                 print(f"Your role in this hospital: {user_role}")
                 print(f"Your department: {user[5]}")
@@ -108,8 +140,6 @@ class AuthSystem:
     def logout(self):
         """Logs the user out and returns to the main menu."""
         self.logged_in = False
-     
-
 
     def reset_password(self, subject_id, password, new_password, confirm_new_password):
         """Resets the user's password.
@@ -147,10 +177,10 @@ class AuthSystem:
                     )
                 if new_password.isdigit():
                     messagebox.showinfo("Password must contain at least one letter.")
-                
+
                 if new_password.isalpha():
                     messagebox.showinfo("Password must contain at least one number.")
-                
+
                 if new_password.isalnum():
                     messagebox.showinfo(
                         "Password must contain at least one special character."
