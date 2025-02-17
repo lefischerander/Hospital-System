@@ -1,5 +1,5 @@
 from test_analyse import Analyse
-from tkinter import *
+from tkinter import Tk, Frame, Label, RAISED
 import tkinter.ttk as ttk
 
 
@@ -18,21 +18,220 @@ class Analyse_ui:
             selection = combo.get()
             call_analyse = Analyse()
             if selection == "omr":
-                call_analyse.read_omr(subject_id)
+                omr = call_analyse.read_omr(subject_id)
+                omr_window = Tk()
+                omr_window.title("OMR")
+                omr_window.geometry("800x600")
+
+                omr_list = ["chartdate", "resultname", "result_value"]
+                for i in range(len(omr_list)):
+                    for j in range(len(omr)+1):
+                        omr_grid = Frame(
+                            master=omr_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        omr_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(omr_grid, text=omr_list[i]).pack()
+                        else:
+                            Label(omr_grid, text=omr[j-1][i]).pack()
+                        
             elif selection == "admissions":
-                call_analyse.read_admissions(subject_id)
+                admissions = call_analyse.read_admissions(subject_id)
+                admissions_window = Tk()
+                admissions_window.title("Admissions")
+                admissions_window.geometry("800x600")
+
+                admissions_list = ["subject_id", "hadm_id", "admission_type" , "admittime", "dischtime", "deathtime", "insurance", "edregtime", "edouttime", "gender", "hospital_expire_flag"]
+                for i in range(len(admissions_list)):
+                    for j in range(len(admissions)+1):
+                        admissions_grid = Frame(
+                            master=admissions_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        admissions_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(admissions_grid, text=admissions_list[i]).pack()
+                        else:
+                            Label(admissions_grid, text=admissions[j-1][i]).pack()
+
             elif selection == "diagnoses_icd":
-                call_analyse.read_diagnoses_icd(subject_id)
+                diagnoses_icd = call_analyse.read_diagnoses_icd(subject_id)
+                diagnoses_icd_window = Tk()
+                diagnoses_icd_window.title("Diagnoses ICD")
+                diagnoses_icd_window.geometry("800x600")
+
+                diagnoses_icd_list = ["shadm_id", "seq_num", "icd_code", "icd_version", "long_title"]
+                for i in range(len(diagnoses_icd_list)):
+                    for j in range(len(diagnoses_icd)+1):
+                        diagnoses_icd_grid = Frame(
+                            master=diagnoses_icd_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        diagnoses_icd_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(diagnoses_icd_grid, text=diagnoses_icd_list[i]).pack()
+                        else:
+                            Label(diagnoses_icd_grid, text=diagnoses_icd[j-1][i]).pack()
+                    
             elif selection == "drgcodes":
-                call_analyse.read_drgcodes(subject_id)
+                drgcodes = call_analyse.read_drgcodes(subject_id)
+                drgcodes_window = Tk()
+                drgcodes_window.title("DRG Codes")
+                drgcodes_window.geometry("800x600")
+
+                drgcodes_list = ["hadm_id", "drg_code", "description", "drg_severity", "drg_mortality"]
+                for i in range(len(drgcodes_list)):
+                    for j in range(len(drgcodes)+1):
+                        drgcodes_grid = Frame(
+                            master=drgcodes_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        drgcodes_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(drgcodes_grid, text=drgcodes_list[i]).pack()
+                        else:
+                            Label(drgcodes_grid, text=drgcodes[j-1][i]).pack()
+
             elif selection == "emar":
-                call_analyse.read_emar(subject_id)
+                emar = call_analyse.read_emar(subject_id)
+                emar_window = Tk()
+                emar_window.title("EMAR")
+                emar_window.geometry("800x600")
+
+                emar_list = ["hadm_id", "pharmacy_id", "medication", "charttime", "scheduletime", "event_txt"]
+                for i in range(len(emar_list)):
+                    for j in range(len(emar)+1):
+                        emar_grid = Frame(
+                            master=emar_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        emar_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(emar_grid, text=emar_list[i]).pack()
+                        else:
+                            Label(emar_grid, text=emar[j-1][i]).pack()
+
             elif selection == "patients":
-                call_analyse.read_patients(subject_id)
+                patients = call_analyse.read_patients(subject_id)
+                patients_window = Tk()
+                patients_window.title("Patients")
+                patients_window.geometry("800x600")
+
+                patients_list = ["subject_id", "gender", "anchor_age", "dod"]
+                for i in range(len(patients_list)):
+                    for j in range(len(patients)+1):
+                        patients_grid = Frame(
+                            master=patients_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        patients_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(patients_grid, text=patients_list[i]).pack()
+                        else:
+                            Label(patients_grid, text=patients[j-1][i]).pack()
+
             elif selection == "pharmacy":
-                call_analyse.read_pharmacy(subject_id)
+                pharmacy = call_analyse.read_pharmacy(subject_id)
+                pharmacy_window = Tk()
+                pharmacy_window.title("Pharmacy")
+                pharmacy_window.geometry("800x600")
+
+                pharmacy_list = ["hadm_id", "pharmacy_id", "medication", "proc_type", "frequency", "starttime", "stoptime"]
+                for i in range(len(pharmacy_list)):
+                    for j in range(len(pharmacy)+1):
+                        pharmacy_grid = Frame(
+                            master=pharmacy_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        pharmacy_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(pharmacy_grid, text=pharmacy_list[i]).pack()
+                        else:
+                            Label(pharmacy_grid, text=pharmacy[j-1][i]).pack()
+
             elif selection == "procedures_icd":
-                call_analyse.read_procedures_icd(subject_id)
+                procrdures_icd = call_analyse.read_procedures_icd(subject_id)
+                procedures_icd_window = Tk()
+                procedures_icd_window.title("Procedures ICD")
+                procedures_icd_window.geometry("800x600")
+
+                procedures_icd_list = ["hadm_id", "chartdate", "seq_num", "icd_code", "long_title", "icd_version"]
+                for i in range(len(procedures_icd_list)):
+                    for j in range(len(procrdures_icd)+1):
+                        procedures_icd_grid = Frame(
+                            master=procedures_icd_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        procedures_icd_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(procedures_icd_grid, text=procedures_icd_list[i]).pack()
+                        else:
+                            Label(procedures_icd_grid, text=procrdures_icd[j-1][i]).pack()
 
         print(subject_id)
 
@@ -71,25 +270,220 @@ class Analyse_ui:
             print(id)
             print(selection)
             if selection == "omr":
-                call_analyse.read_omr(id)
+                omr = call_analyse.read_omr(subject_id)
+                omr_window = Tk()
+                omr_window.title("OMR")
+                omr_window.geometry("800x600")
+
+                omr_list = ["chartdate", "resultname", "result_value"]
+                for i in range(len(omr_list)):
+                    for j in range(len(omr)+1):
+                        omr_grid = Frame(
+                            master=omr_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        omr_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(omr_grid, text=omr_list[i]).pack()
+                        else:
+                            Label(omr_grid, text=omr[j-1][i]).pack()
+                        
             elif selection == "admissions":
-                call_analyse.read_admissions(id)
+                admissions = call_analyse.read_admissions(subject_id)
+                admissions_window = Tk()
+                admissions_window.title("Admissions")
+                admissions_window.geometry("800x600")
+
+                admissions_list = ["subject_id", "hadm_id", "admission_type" , "admittime", "dischtime", "deathtime", "insurance", "edregtime", "edouttime", "gender", "hospital_expire_flag"]
+                for i in range(len(admissions_list)):
+                    for j in range(len(admissions)+1):
+                        admissions_grid = Frame(
+                            master=admissions_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        admissions_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(admissions_grid, text=admissions_list[i]).pack()
+                        else:
+                            Label(admissions_grid, text=admissions[j-1][i]).pack()
+                            
             elif selection == "diagnoses_icd":
-                call_analyse.read_diagnoses_icd(id)
+                diagnoses_icd = call_analyse.read_diagnoses_icd(subject_id)
+                diagnoses_icd_window = Tk()
+                diagnoses_icd_window.title("Diagnoses ICD")
+                diagnoses_icd_window.geometry("800x600")
+
+                diagnoses_icd_list = ["shadm_id", "seq_num", "icd_code", "icd_version", "long_title"]
+                for i in range(len(diagnoses_icd_list)):
+                    for j in range(len(diagnoses_icd)+1):
+                        diagnoses_icd_grid = Frame(
+                            master=diagnoses_icd_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        diagnoses_icd_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(diagnoses_icd_grid, text=diagnoses_icd_list[i]).pack()
+                        else:
+                            Label(diagnoses_icd_grid, text=diagnoses_icd[j-1][i]).pack()
+                    
             elif selection == "drgcodes":
-                call_analyse.read_drgcodes(id)
+                drgcodes = call_analyse.read_drgcodes(subject_id)
+                drgcodes_window = Tk()
+                drgcodes_window.title("DRG Codes")
+                drgcodes_window.geometry("800x600")
+
+                drgcodes_list = ["hadm_id", "drg_code", "description", "drg_severity", "drg_mortality"]
+                for i in range(len(drgcodes_list)):
+                    for j in range(len(drgcodes)+1):
+                        drgcodes_grid = Frame(
+                            master=drgcodes_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        drgcodes_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(drgcodes_grid, text=drgcodes_list[i]).pack()
+                        else:
+                            Label(drgcodes_grid, text=drgcodes[j-1][i]).pack()
+
             elif selection == "emar":
-                call_analyse.read_emar(id)
+                emar = call_analyse.read_emar(subject_id)
+                emar_window = Tk()
+                emar_window.title("EMAR")
+                emar_window.geometry("800x600")
+
+                emar_list = ["hadm_id", "pharmacy_id", "medication", "charttime", "scheduletime", "event_txt"]
+                for i in range(len(emar_list)):
+                    for j in range(len(emar)+1):
+                        emar_grid = Frame(
+                            master=emar_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        emar_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(emar_grid, text=emar_list[i]).pack()
+                        else:
+                            Label(emar_grid, text=emar[j-1][i]).pack()
+
             elif selection == "patients":
-                call_analyse.read_patients(id)
+                patients = call_analyse.read_patients(subject_id)
+                patients_window = Tk()
+                patients_window.title("Patients")
+                patients_window.geometry("800x600")
+
+                patients_list = ["subject_id", "gender", "anchor_age", "dod"]
+                for i in range(len(patients_list)):
+                    for j in range(len(patients)+1):
+                        patients_grid = Frame(
+                            master=patients_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        patients_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(patients_grid, text=patients_list[i]).pack()
+                        else:
+                            Label(patients_grid, text=patients[j-1][i]).pack()
+
             elif selection == "pharmacy":
-                call_analyse.read_pharmacy(id)
+                pharmacy = call_analyse.read_pharmacy(subject_id)
+                pharmacy_window = Tk()
+                pharmacy_window.title("Pharmacy")
+                pharmacy_window.geometry("800x600")
+
+                pharmacy_list = ["hadm_id", "pharmacy_id", "medication", "proc_type", "frequency", "starttime", "stoptime"]
+                for i in range(len(pharmacy_list)):
+                    for j in range(len(pharmacy)+1):
+                        pharmacy_grid = Frame(
+                            master=pharmacy_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        pharmacy_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(pharmacy_grid, text=pharmacy_list[i]).pack()
+                        else:
+                            Label(pharmacy_grid, text=pharmacy[j-1][i]).pack()
+
             elif selection == "procedures_icd":
-                call_analyse.read_procedures_icd(id)
-            elif selection == "d_icd_diagnoses":
-                call_analyse.read_d_icd_diagnoses()
-            elif selection == "d_icd_procedures":
-                call_analyse.read_d_icd_procedures()
+                procrdures_icd = call_analyse.read_procedures_icd(subject_id)
+                procedures_icd_window = Tk()
+                procedures_icd_window.title("Procedures ICD")
+                procedures_icd_window.geometry("800x600")
+
+                procedures_icd_list = ["hadm_id", "chartdate", "seq_num", "icd_code", "long_title", "icd_version"]
+                for i in range(len(procedures_icd_list)):
+                    for j in range(len(procrdures_icd)+1):
+                        procedures_icd_grid = Frame(
+                            master=procedures_icd_window,
+                            relief=RAISED,
+                            borderwidth=1,
+                            width=15
+                            )
+                        
+                        procedures_icd_grid.grid(
+                            row=i,
+                            column=j,
+                            padx=5,
+                            pady=5
+                            )
+                        if j == 0:
+                            Label(procedures_icd_grid, text=procedures_icd_list[i]).pack()
+                        else:
+                            Label(procedures_icd_grid, text=procrdures_icd[j-1][i]).pack()
 
         analyse_window = Tk()
         analyse_window.title("Analyse")

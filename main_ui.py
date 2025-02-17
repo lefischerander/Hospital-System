@@ -45,14 +45,14 @@ def login_action():
             login_action()
             login_window.destroy()
         else:
-            user_role = auth.users[0][4]
+            user_role = auth.users[0][2]
             if user_role == "Doctor":
                 ActionsUI.doktor_actions(global_username)
                 login_window.destroy()
             elif user_role == "Patient":
                 ActionsUI.patient_actions(global_username)
                 login_window.destroy()
-            elif user_role == "admin":
+            elif user_role == "Admin":
                 ActionsUI.admin_actions(global_username)
                 login_window.destroy()
             else:
