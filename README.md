@@ -72,7 +72,7 @@ Adjust [db.access](db_access.py) with your local instance's database information
 
 ## Timeline
 
-![screenshot](Timeline.png)
+![screenshot][timeline]
 
 ## Group Details
 
@@ -110,3 +110,5 @@ Adjust [db.access](db_access.py) with your local instance's database information
 - MIMIC-IV Clinical Database Demo <https://physionet.org/content/mimic-iv-demo/2.2/>
 - Johnson, A., Bulgarelli, L., Pollard, T., Gow, B., Moody, B., Horng, S., Celi, L. A., & Mark, R. (2024). MIMIC-IV (version 3.1). PhysioNet. <https://doi.org/10.13026/kpb9-mt58>
 - MIMIC Online Documentation <https://mimic.mit.edu/>
+
+[timeline]: Miscellaneous/Timeline.png
