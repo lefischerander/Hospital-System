@@ -102,6 +102,8 @@ Adjust [db.access](db_access.py) with your local instance's database information
       - Actions
   - Nantenaina Razafindraibe
     - User Management
+      - Database related functions
+      - Actions
   - Erik Schäfer
     - Interface
 
