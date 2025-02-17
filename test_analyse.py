@@ -94,7 +94,7 @@ class Analyse:
                 file.write(df.to_string(index=False))
                 print(f"\nYour Online Medical Record (OMR) is saved under {file_path}!")
 
-        return df.to_string(index=False)
+        return df
 
     def read_admissions(self, id):
         """This method is used to read the admissions table and plot the duration of stay in the hospital of all patients by gender,
@@ -159,7 +159,7 @@ class Analyse:
                 file.write(patient.to_string(index=False))
                 print(f"\nYour admission is saved under {file_path}!")
 
-        return patient.to_string(index=False)
+        return patient
 
     def read_diagnoses_icd(self, id):
         """This method is used to read the diagnoses_icd table, save the diagnoses of patient with entered subject_id as a text file and return it as a string.
@@ -193,7 +193,7 @@ class Analyse:
                 print(f"\nYour diagnoses are saved under {file_path}!")
 
         # Return the diagnoses of the patient as a string for better visualization
-        return df.to_string(index=False)
+        return df
 
     def read_drgcodes(self, id):
         """This method is used to read the drgcodes table and return the drg codes of the patient, save the data as a text file and return it as a string.
@@ -229,7 +229,7 @@ class Analyse:
                     f"\nYour diagnosis related group (DRG) codes for hospitalizations are saved under {file_path}!"
                 )
 
-        return df.to_string(index=False)
+        return df
 
     def read_emar(self, id):
         """This method is used to read the emar table and return the medication of the patient, save the data as a text file and return it as a string.
@@ -265,7 +265,7 @@ class Analyse:
                     f"\nYour Electronic Medicine Administration Record (eMAR) is saved under {file_path}!"
                 )
 
-        return df.to_string(index=False)
+        return df
 
     def read_patients(self, id):
         """This method is used to read the patients table and plot the distribution of patients by age
@@ -318,7 +318,7 @@ class Analyse:
 
         # Return the data of the patient as a string for better visualization
         patient = df[df["subject_id"] == id][["gender", "anchor_age", "dod"]]
-        return patient.to_string(index=False)
+        return patient
 
     def read_pharmacy(self, id):
         """This method is used to read the pharmacy table, return the pharmacy data of the patient with the entered subject_id
@@ -353,7 +353,7 @@ class Analyse:
                 file.write(df.to_string(index=False))
                 print(f"\nYour pharmacy is saved under {file_path}!")
 
-        return df.to_string(index=False)
+        return df
 
     def read_procedures_icd(self, id):
         """This method is used to read the procedures_icd table, save the procedures of patient with entered subject_id as a text file and return it as a string.
@@ -387,7 +387,7 @@ class Analyse:
                 print(f"\nYour procedures are saved under {file_path}!")
 
         # Return the diagnoses of the patient as a string for better visualization
-        return df.to_string(index=False)
+        return df
 
     def read_d_icd_diagnoses(self):
         """This method is used to read the d_icd_diagnoses table and return the data of the icd code entered by the user.
