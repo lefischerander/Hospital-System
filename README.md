@@ -6,55 +6,53 @@ A web-based project that simulates a hospital and its patients
 
 ### Data Sources and Retrieval
 
-- Retrieve data from an extensive, high-quality data set [MIMIC-IV](https://www.nature.com/articles/s41597-022-01899-x):
+- Retrieved data from the extensive, high-quality data set [MIMIC-IV](https://www.nature.com/articles/s41597-022-01899-x):
   - real data sourced from the electronic health record of the Beth Israel Deaconess Medical Center
-  - very extensive data set that required advanced data cleaning and evaluation based on our requirements
+  - very extensive data set that required data cleaning and evaluation based on our requirements
   - can be adjusted to our custom database architecture
-  - access is provided via PhysioNet
   - anonymised data set
-- Generate a data set for the doctors
 
 ### Data Storage and Handling
 
-- Store the data from the external source in an SQL database
-  - create a concept for the database architecture and necessary information required for the software
-- Store Log-In information by hashing passwords
-  - use built-in library [hashlib](https://docs.python.org/3/library/hashlib.html)
-  - because our passwords don't need to be moved or send to another server, hashing is a good choice to safeguard sensible information
+- The MIMIC-IV data is stored in an SQL database (SQL Server)
+- Log-In information stored securely by hashing passwords
+  - used built-in library [hashlib](https://docs.python.org/3/library/hashlib.html)
+  - because our passwords don't need to be moved or sent to another server, hashing is a good choice to safeguard sensible information
 
 ### User Management
 
 - Log-In system
+  - All users can
+    - view basic visualizations of analysis made on all patients
+    - change their password
   - Patients
     - [subject_id, gender, anchor_age, anchor_year, anchor_year_group, dod, firstname, surname]
-    - view and modify **only** their data
-    - view a doctors profile
+    - view and download **only** their data
   - Admins
     - [subject_id, firstname, surname, email]
     - view-only access to all profiles
-    - able to modify data upon user request
-    - also used for data analysis purposes
-    - Create/Delete accounts upon request
+    - view patients data
+    - create/delete accounts
   - Doctors
     - [subject_id, age, firstname, surname, department, dob]
-    - view **only** their patients data and add medical data to their profile (patients that are assigned to them)
-    - view a doctors profile
-    - view and modify their own profile
+    - view patients data and add medical data to their profiles
+    - view their profile
 - Timed Log-Out
   
 ### Interface
 
-- Create a GUI
-  - Log-In portal
-  - Home screen, view profile, help page, analysis page
+- Created a GUI
+  - log-In portal
+  - home screen, view profile, help page, analysis page, change password, delete/create user
   - depending on user the home screen and available functions change
-- Dashboard for results of data analysis
+- various visualizations of data can be accessed on the analysis page
 
 ### Statistical Analysis
 
 - Users can access a dashboard that displays analysed data
-  - Patients can view data regarding their own medical conditions and medications
-  - Doctors can view data about all patients
+  - patients can view data regarding their own medical conditions and medications
+  - doctors can view data about all patients
+  - all users can view non-identifying visualizations of analysis made on all patients
 
 ### Visualizations
 
@@ -64,11 +62,11 @@ A web-based project that simulates a hospital and its patients
 
 ### SQL Server Setup
 
-The system requires a working instance of our database running on your local machine. Install SQL Server and SQL Server Management Studio accoring to the offical [Installation guide](https://learn.microsoft.com/de-de/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16). After establishing a connection to your local database, restore the [database backup](database_final.zip) according to the official [Quickstart guide](https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/quickstart-backup-restore-database?view=sql-server-ver16&tabs=ssms).
+The system requires a working instance of our database running on your local machine. Install SQL Server and SQL Server Management Studio accoring to the offical [Installation guide](https://learn.microsoft.com/de-de/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16). After establishing a connection to your local database, restore the [database backup](Miscellaneous/database_final.zip) according to the official [Quickstart guide](https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/quickstart-backup-restore-database?view=sql-server-ver16&tabs=ssms).
 
 Go to the object explorer and right-click on your server to open the Property window. Move to the Security tab and allow SQL-Authentication. Then right click on the Security folder and create a New Login. Input your desired User name and password (Use "LANK_USER" as a User name and "Lank1." to mirror our setup) and unselect "Enforce password policy". Under Server Roles, give the user the public role. Under User Mapping, check the box next to your database (LANK) and grant the db_datareader and db_datawriter role to the user. Click on OK and restart your server.
 
-Adjust [db.access](Backend/Database/db_access.py) with your local instance's database information. The program will now use your local database.
+Adjust [db.access](Backend/Database/db_access.py) with your local instance's database information. The program will now use your local database. The program can now be started by running main.py.
 
 ## Timeline
 
@@ -87,21 +85,23 @@ Adjust [db.access](Backend/Database/db_access.py) with your local instance's dat
     - Data Source and Retrieval
     - Data Storage and Handling
     - User Management
-      - Database related functions
+      - database related functions
     - Statistical Analysis
-      - Data retrieval into pandas DataFrames
+      - data retrieval into pandas DataFrames
+    - Interface
+      - visualization of pandas DataFrames
   - Konstantin Kolbek
     - Statistical Analysis
     - Visualization
     - User Management
-      - Log-In
-      - Actions
+      - log-In
+      - user actions
   - Nantenaina Razafindraibe
     - User Management
-      - Database related functions
-      - Actions
+      - database related functions
+      - user actions
   - Erik Schäfer
-    - Interface
+    - User Interface
 
 ## Acknowledgements
 
