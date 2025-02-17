@@ -41,11 +41,12 @@ class Actions:
         
         print("Your possible actions: \n")
         print("1. View all users")
-        print("2. Delete an account")  # low priority
-        print("3. View patient's profile")
-        print("4. View doctor's profile")
-        print("5. Change password")
-        print("6. Logout\n")
+        print("2. Create an user account")
+        print("3. Delete an account")  # low priority
+        print("4. View patient's profile")
+        print("5. View doctor's profile")
+        print("6. Change password")
+        print("7. Logout\n")
 
         choice = input("Choose an action: \n")
         auth = AuthSystem()
@@ -57,34 +58,55 @@ class Actions:
             print("All users: ", user_service.view_all_users())
             # After tah
             Actions.admin_actions()
+        
+        
+        elif choice =="2":
+            try:
+                username = input ("Set the username (subject_id) of the user: ")
+                password_input = getpass.getpass("Set the password of the user: ")
+                password = User.hash_password(password_input)
+                role = input("Set the role of the user: ")
+                firstname = input("Set the firstname of the user: ")
+                surname = input("Set the surname of the user: ")
+                
+                user_service.create_user(username, password, role, firstname, surname)
+            except Exception as e:
+                print("Error: ", e)
+            
+            Actions.admin_actions()
+            
+
+
         # Nante
-        elif choice == "2":  # low priority
-            user_to_be_deleted = int(
-                int(input("Enter the subject_id of the user you want to delete: "))
-            )
-            answer = print("Are you sure you want to delete this user? (yes/no)")
-            if answer == "yes":
-                user_service.delete_user(user_to_be_deleted)
-                print("User deleted successfully")
-                subaction = print("Press 'menu' to go back to the main menu")
-                if subaction == "menu":
+        elif choice == "3":  # low priority
+            try:
+                answer = input("Are you sure you want to do delete an user? (yes/no)")
+                
+                if answer == "yes":
+                    
+                    user_to_be_deleted = int(
+                    input(
+                        "Enter the subject_id of the user you want to delete: "
+                         )
+                    )
+                    user_service.delete_user(user_to_be_deleted, config.subject_id_logged)
                     Actions.admin_actions()
+                
+                elif answer == "no":
+                    print("You changed your mind")
+                    Actions.admin_actions()
+
                 else:
                     print("Invalid input")
                     Actions.admin_actions()
-
-            else:
-                print("You changed your mind")
-                answer = print("Press 'menu' to go back to the main menu")
-                if subaction == "menu":
-                    Actions.admin_actions()
-
-                else:
-                    print("Invalid input")
-                    Actions.admin_actions()
-
+            
+            except Exception as e:
+                print("Oups error: " , e)
+                Actions.admin_actions()
+        
         # Nante
-        elif choice == "3":
+        
+        elif choice == "4":
             patient = int(
                 input("Enter the subject_id of the patient you want to view:  \n")
             )
@@ -94,7 +116,7 @@ class Actions:
             
             Actions.admin_actions()
         #Nante
-        elif choice == "4":
+        elif choice == "5":
             try:
                 doctor = str(
                     input(
@@ -109,14 +131,14 @@ class Actions:
                 print("Oups user not found: ", e)
            
         # Nante
-        elif choice == "5":
+        elif choice == "6":
             user = input("Enter your Subject_id: ").strip()
             pw = getpass.getpass("Your currend Password: ")
             pw = User.hash_password(pw)
             auth.reset_password(user, pw)
             Actions.admin_actions()  # Return to admin actions
         # Nante
-        elif choice == "6":
+        elif choice == "7":
             # auth_system.logout()
             Actions.admin_actions()  # Return to admin actions
         # Nante

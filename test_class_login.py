@@ -144,8 +144,10 @@ class AuthSystem:
                     )
                 if new_password.isdigit():
                     messagebox.showinfo("Password must contain at least one letter.")
+                
                 if new_password.isalpha():
                     messagebox.showinfo("Password must contain at least one number.")
+                
                 if new_password.isalnum():
                     messagebox.showinfo(
                         "Password must contain at least one special character."

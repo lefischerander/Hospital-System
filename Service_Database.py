@@ -65,7 +65,7 @@ class User_service:
 
         return df
 
-    def delete_user(self, user):  ##low priority
+    def delete_user(self, subject_id, caller_id):  ##low priority
         """Deletes a user from the database based on the user's subject ID
 
         Args:
@@ -76,21 +76,22 @@ class User_service:
             Exception: If the user is not found in the database or another error occurs
         """
         try:
-            if self.get_role_by_id(self.get_id()) != "admin":
+            if self.get_role_by_id(caller_id) != "admin":
                 raise Exception("Only admins can delete users")
 
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                "delete from ? where subject_id = ?",
-                LOGIN_DATA,
-                user.get_id(),
+                f"DELETE FROM {LOGIN_DATA} WHERE subject_id = ?",
+                
+               int(subject_id)
             )
 
             connection.commit()
 
             cursor.close()
             connection.close()
+            print(f"User: {subject_id} deleted successfully")
         except Exception as e:
             print("Error:", e)
 
@@ -216,76 +217,90 @@ class User_service:
             print("Error fetching profile: ", e)
             return None
 
-    def create_user(self, username, password, role):  ##low priority
-        try:
+    def create_user(self, subject_id, password, role, firstname, surname):  ##low priority
+        """Creates a new user in the database
+
+        Args:
+            subject_id (int): The subject ID of the new user
+            password (str): The password of the new user
+            role (str): The role of the new user (e.g., 'admin', 'doctor', 'patient')
+            firstname (str): The first name of the new user
+            surname (str): The surname of the new user
+
+        Raises:
+            Exception: If any error occurs during the process
+        """
+        try:            
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             cursor.execute(
-                "insert into ? (username, password, role) values (?, ?, ?)",
-                LOGIN_DATA,
-                username,
+                f"INSERT INTO {LOGIN_DATA} (subject_id, password, role, firstname, surname) VALUES (?, ?, ?, ?, ?)",
+                subject_id,
                 password,
                 role,
+                firstname,
+                surname
             )
             connection.commit()
             cursor.close()
             connection.close()
+            print(f"User {subject_id} created successfully")
         except Exception as e:
             print("Error creating user: ", e)
 
     def change_password(self, username, password):  #Not necessary
-        try:
-            connection = pyodbc.connect(self.connection_string)
-            cursor = connection.cursor()
-            cursor.execute(
-                "update ? set password = ? where username = ?",
-                LOGIN_DATA,
-                password,
-                username,
-            )
-            connection.commit()
-            cursor.close()
-            connection.close()
-        except Exception as e:
-            print("Error changing password: ", e)
+            try:
+                connection = pyodbc.connect(self.connection_string)
+                cursor = connection.cursor()
+                cursor.execute(
+                    "update ? set password = ? where username = ?",
+                    LOGIN_DATA,
+                    password,
+                    username,
+                )
+                connection.commit()
+                cursor.close()
+                connection.close()
+            except Exception as e:
+                print("Error changing password: ", e)
 
     def check_id(self, subject_id):  # just for patients
-        """ 
-            This method is used to verify if a input subject_id exists in the database based on the subject_id.
-            The patient user is most likely to be checked.
+            """ 
+                This method is used to verify if a input subject_id exists in the database based on the subject_id.
+                The patient user is most likely to be checked.
 
-            Args:
-                subject_id (int): the user's subject ID
-            
-            Returns:
-                none if the entered subject_id does not exist in the database
-            
-            Raises:
-                Exception: any database inconvenience
-        """
-        try:
-            connection = pyodbc.connect(self.connection_string)
-            cursor = connection.cursor()
+                Args:
+                    subject_id (int): the user's subject ID
+                
+                Returns:
+                    none if the entered subject_id does not exist in the database
+                
+                Raises:
+                    Exception: any database inconvenience
+            """
+            try:
+                connection = pyodbc.connect(self.connection_string)
+                cursor = connection.cursor()
 
-            cursor.execute(
-                f"select subject_id from {PATIENTS} where subject_id= ?",
-                subject_id,
-            )
+                cursor.execute(
+                    f"select subject_id from {PATIENTS} where subject_id= ?",
+                    subject_id,
+                )
 
-            checked_id = cursor.fetchone()
+                checked_id = cursor.fetchone()
 
-            if checked_id is None:
+                if checked_id is None:
+                    return None
+
+                connection.commit()
+                cursor.close()
+                connection.close()
+
+                return "Yay DB found the user!"
+
+            except Exception as e:
+                print("Oups error: ", e)
                 return None
-
-            connection.commit()
-            cursor.close()
-            connection.close()
-
-            return "Yay DB found the user!"
-
-        except Exception as e:
-            print("Oups error: ", e)
-            return None
 
     def read_d_icd_diagnoses(self, icd_code):
         """This method is used to read the d_icd_diagnoses table and return the long title of the icd code entered by the user.
@@ -331,7 +346,7 @@ class User_service:
             if check_id is None:
                 raise Exception(f"Patient with subject ID {patient_id} not found")
 
-           
+            
             diagnosis_added= self.read_sa_query(
                 f"SELECT * FROM {DIAGNOSES_DESC} WHERE icd_code = '{icd_code}'" 
                 )
@@ -380,18 +395,18 @@ class User_service:
 
     def get_patient_profile(self, subject_id):  # dod time must be string
         """Gets a patient's profile based on the patient's subject_id.
-           
-           Before making any connection with the database, the entered subject_id need to be checked first.
-           
-           Args:
-              entered subject_id
             
-           Returns:
+            Before making any connection with the database, the entered subject_id need to be checked first.
+            
+            Args:
+                entered subject_id
+            
+            Returns:
             pyodbc.row: the row containing the user's profile (pyodbc object)
-           
-           Raises:
-              Exception: if the checked subject_id does not exist on the database
-                         if the database could not fetch the patient profile
+            
+            Raises:
+                Exception: if the checked subject_id does not exist on the database
+                            if the database could not fetch the patient profile
 
         """
         try:
