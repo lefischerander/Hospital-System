@@ -42,33 +42,48 @@ class Analyse_ui:
                 admissions_window.title("Admissions")
                 admissions_window.geometry("800x600")
 
-                admissions_list = [
-                    "subject_id",
-                    "hadm_id",
-                    "admission_type",
-                    "admittime",
-                    "dischtime",
-                    "deathtime",
-                    "insurance",
-                    "edregtime",
-                    "edouttime",
-                    "gender",
-                    "hospital_expire_flag",
-                ]
-                for i in range(len(admissions_list)):
-                    for j in range(len(admissions) + 1):
-                        admissions_grid = Frame(
-                            master=admissions_window,
-                            relief=RAISED,
-                            borderwidth=1,
-                            width=15,
-                        )
+                tree = ttk.Treeview(admissions_window)
+                
 
-                        admissions_grid.grid(row=i, column=j, padx=5, pady=5)
-                        if j == 0:
-                            Label(admissions_grid, text=admissions_list[i]).pack()
-                        else:
-                            Label(admissions_grid, text=admissions[j - 1][i]).pack()
+                # admissions_list = [
+                #     "subject_id",
+                #     "hadm_id",
+                #     "admission_type",
+                #     "admittime",
+                #     "dischtime",
+                #     "deathtime",
+                #     "insurance",
+                #     "edregtime",
+                #     "edouttime",
+                #     "gender",
+                #     "hospital_expire_flag",
+                # ]
+                
+                tree["columns"] = list(admissions.columns)
+                tree["show"] = "headings"
+
+                for column in admissions.columns:
+                    tree.heading(column, text=column)
+
+                for index, row in admissions.iterrows():
+                    tree.insert("", "end", values=list(row))
+
+                tree.pack(expand=True, fill="both")
+
+                # for i in range(len(admissions_list)):
+                #     for j in range(len(admissions) + 1):
+                #         admissions_grid = Frame(
+                #             master=admissions_window,
+                #             relief=RAISED,
+                #             borderwidth=1,
+                #             width=15,
+                #         )
+
+                #         admissions_grid.grid(row=i, column=j, padx=5, pady=5)
+                #         if j == 0:
+                #             Label(admissions_grid, text=admissions_list[i]).pack()
+                #         else:
+                #             Label(admissions_grid, text=admissions[j - 1][i]).pack()
 
             elif selection == "diagnoses_icd":
                 diagnoses_icd = call_analyse.read_diagnoses_icd(subject_id)
