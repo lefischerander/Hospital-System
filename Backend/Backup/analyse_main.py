@@ -1,4 +1,4 @@
-from test_analyse import Analyse
+from Backend.analyse import Analyse
 import pandas as pd
 
 

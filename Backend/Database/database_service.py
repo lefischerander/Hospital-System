@@ -1,6 +1,5 @@
 import pyodbc
-from db_access import connection_string
-import config
+from Database.db_access import connection_string
 import sqlalchemy as sa
 import pandas as pd
 from tkinter import messagebox
@@ -683,30 +682,30 @@ class User_service:
 #         else:
 #             print("No procedures found or an error occurred.")
 
-    # elif action == '2':
-    #     subject_id = input("Enter subject ID: ")
-    #     patient_info = user_service.get_patient_information(subject_id)
-    #     if patient_info:
-    #         print("Patient information:", patient_info)
-    #     else:
-    #         print("No patient information found or an error occurred.")
-    # elif action == '3':
-    #     subject_id = input("Enter subject ID: ")
-    #     weight_record = user_service.get_most_recent_weight(subject_id)
-    #     if weight_record:
-    #         print("Most recent weight record:", weight_record)
-    #     else:
-    #         print("No weight record found or an error occurred.")
+# elif action == '2':
+#     subject_id = input("Enter subject ID: ")
+#     patient_info = user_service.get_patient_information(subject_id)
+#     if patient_info:
+#         print("Patient information:", patient_info)
+#     else:
+#         print("No patient information found or an error occurred.")
+# elif action == '3':
+#     subject_id = input("Enter subject ID: ")
+#     weight_record = user_service.get_most_recent_weight(subject_id)
+#     if weight_record:
+#         print("Most recent weight record:", weight_record)
+#     else:
+#         print("No weight record found or an error occurred.")
 
-    # elif action == '4':
-    #     subject_id= input("Enter subject Id: ")
-    #     heith_record= user_service.get_most_recent_height(subject_id)
-    #     if heith_record:
-    #         print("Most recent height record:", heith_record)
-    #     else:
-    #         print("No height record found or an error occurred.")
+# elif action == '4':
+#     subject_id= input("Enter subject Id: ")
+#     heith_record= user_service.get_most_recent_height(subject_id)
+#     if heith_record:
+#         print("Most recent height record:", heith_record)
+#     else:
+#         print("No height record found or an error occurred.")
 
-    ##def get_user_by_id(self, id):
-    # try:
-    # if self.get_role_by_id(self.get_id() != 'admin') or self.get_role_by_id(self.get_id() != 'doctor'):
-    # raise Exception("Only admins and doctors can view  patient data")
+##def get_user_by_id(self, id):
+# try:
+# if self.get_role_by_id(self.get_id() != 'admin') or self.get_role_by_id(self.get_id() != 'doctor'):
+# raise Exception("Only admins and doctors can view  patient data")

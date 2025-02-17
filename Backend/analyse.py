@@ -1,11 +1,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-import Service_Database as db
+import Database.database_service as db
 import os
 from pathlib import Path
 import sqlalchemy as sa
-from db_access import connection_string
+from Database.db_access import connection_string
 from tkinter import messagebox
 
 

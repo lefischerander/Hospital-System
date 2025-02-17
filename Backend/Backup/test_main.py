@@ -1,10 +1,9 @@
 import getpass
 import sys
-
-from test_class_actions import Actions
-from test_class_login import AuthSystem
-from user_test import User
-import config
+from Backend.class_actions import Actions
+from Backend.Database.login import AuthSystem
+from Backend.user import User
+import Database.config as config
 
 
 def main():
@@ -23,10 +22,8 @@ def main():
             if not auth.logged_in:
                 main()
             while auth.logged_in:
-                
                 user_role = auth.users[0][4]
                 config.subject_id_logged = int(auth.users[0][3])
-                
 
                 if user_role == "Doctor":
                     Actions.doktor_actions()

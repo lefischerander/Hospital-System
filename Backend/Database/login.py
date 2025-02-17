@@ -1,11 +1,7 @@
-# import getpass
 from tkinter import messagebox
 import pyodbc
-from user_test import User
-
-# import datetime
-# import threading
-from db_access import connection_string
+from Backend.user import User
+from Database.db_access import connection_string
 
 # database tables
 LOGIN_DATA = "login_data"

@@ -58,21 +58,17 @@ A web-based project that simulates a hospital and its patients
 
 ### Visualizations
 
-- Display the data from [Statistical Analysis](#statistical_analysis) with simple graphs
-  - add an interactive graph to filter for $${\color{pink}(Low \space priority)}$$
-    - patient profiles (age, gender, etc.)
-    - time periods
-    - medical conditions, medications, etc. 
+- Display the data from [Statistical Analysis](#statistical-analysis) with simple graphs
 
 ## Installation and Usage
 
 ### SQL Server Setup
 
-The system requires a working instance of our database running on your local machine. Install SQL Server and SQL Server Management Studio accoring to the offical [Installation guide](https://learn.microsoft.com/de-de/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16). After establishing a connection to your local database, restore the [database backup](database_final.zip) according to the official [Quickstart guide](https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/quickstart-backup-restore-database?view=sql-server-ver16&tabs=ssms). 
+The system requires a working instance of our database running on your local machine. Install SQL Server and SQL Server Management Studio accoring to the offical [Installation guide](https://learn.microsoft.com/de-de/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16). After establishing a connection to your local database, restore the [database backup](database_final.zip) according to the official [Quickstart guide](https://learn.microsoft.com/en-us/sql/relational-databases/backup-restore/quickstart-backup-restore-database?view=sql-server-ver16&tabs=ssms).
 
-Go to the object explorer and right-click on your server to open the Property window. Move to the Security tab and allow SQL-Authentication. Then right click on the Security folder and create a New Login. Input your desired User name and password (Use "LANK_USER" as a User name and "Lank1." to mirror our setup) and unselect "Enforce password policy". Under Server Roles, give the user the public role. Under User Mapping, check the box next to your database (LANK) and grant the db_datareader and db_datawriter role to the user. Click on OK and restart your server. 
+Go to the object explorer and right-click on your server to open the Property window. Move to the Security tab and allow SQL-Authentication. Then right click on the Security folder and create a New Login. Input your desired User name and password (Use "LANK_USER" as a User name and "Lank1." to mirror our setup) and unselect "Enforce password policy". Under Server Roles, give the user the public role. Under User Mapping, check the box next to your database (LANK) and grant the db_datareader and db_datawriter role to the user. Click on OK and restart your server.
 
-Adjust [db.access](db_access.py) with your local instance's database information. The program will now use your local database. 
+Adjust [db.access](db_access.py) with your local instance's database information. The program will now use your local database.
 
 ## Timeline
 

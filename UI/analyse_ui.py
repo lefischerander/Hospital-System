@@ -1,9 +1,9 @@
-from test_analyse import Analyse
+from Backend.analyse import Analyse
 from tkinter import Tk
 import tkinter.ttk as ttk
 
 
-class Analyse_ui:
+class AnalyseUI:
     """This class is responsible for the user interface of the Analyse class"""
 
     def analyse_action_main(subject_id):

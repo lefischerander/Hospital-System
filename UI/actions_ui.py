@@ -1,5 +1,3 @@
-"""import all dependencies"""
-
 from tkinter import (
     Tk,
     Button,
@@ -12,18 +10,16 @@ from tkinter import (
     RAISED,
     LEFT,
 )
-from test_class_login import AuthSystem
-from helppage import HelpPage
+from Backend.Database.login import AuthSystem
+from UI.helppage import HelpPage
 import sys
 import subprocess
-from user_test import User
-import Service_Database
-from Analyse_ui import Analyse_ui
-from test_analyse import Analyse
+from Backend.user import User
+import Backend.Database.database_service as database_service
+from UI.analyse_ui import AnalyseUI
+from Backend.analyse import Analyse
 
-user_service = (
-    Service_Database.User_service()
-)  # creating an instance of the class Userservice
+user_service = database_service.User_service()
 
 
 class ActionsUI:
@@ -147,7 +143,7 @@ class ActionsUI:
                 """This method is responsible for submitting the patient id"""
                 id = patient_id.get()
                 get_patient_id_window.destroy()
-                Analyse_ui.analyse_action_doctor(id)
+                AnalyseUI.analyse_action_doctor(id)
 
             def cancel_get_patient_id():
                 """This method is responsible for cancelling the patient id"""
@@ -454,7 +450,7 @@ class ActionsUI:
         def view_diagnosis():
             """This method is responsible for viewing the diagnosis of the patient"""
             patient_id = global_username
-            Analyse_ui.analyse_action_main(patient_id)
+            AnalyseUI.analyse_action_main(patient_id)
 
         def change_password():
             """This method is responsible for changing the password of the user"""
