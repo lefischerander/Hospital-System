@@ -153,38 +153,38 @@ class AuthSystem:
             ValueError: If the password doesn't meet the requirements
         """
         # Leander, Nante
+        user = self.check_user(subject_id, password)
+        if user is None:
+            messagebox.showerror("Error", "Wrong User ID")
+            return False
+
+        if new_password != confirm_new_password:
+            messagebox.showerror("Error", "Passwords do not match")
+            return False
+
+        h_new_password = User.hash_password(new_password)
+        if user[0] == h_new_password:
+            messagebox.showerror("Error", "New Password cannot be the same as the old one")
+            return False
+
+        # Konstantin
         try:
-            user = self.check_user(subject_id, password)
-            if user is None:
-                messagebox.showerror("Error", "Wrong User ID")
-                raise ValueError
-
-            if new_password != confirm_new_password:
-                messagebox.showerror("Error", "Passwords do not match")
-                raise ValueError
-
-            h_new_password = User.hash_password(new_password)
-            if user[0] == h_new_password:
-                messagebox.showerror("Error", "Wrong old password")
-                raise ValueError
-
-            # Konstantin
-            try:
-                connection = pyodbc.connect(connection_string)
-                cursor = connection.cursor()
-                cursor.execute(
-                    f"UPDATE {LOGIN_DATA} SET password = ? WHERE subject_id = ?",
-                    h_new_password,
-                    subject_id,
-                )
-                cursor.close()
-                connection.commit()
-                connection.close()
-                print("\nPassword reset successfull!\n")
-                # break
-            except ValueError as error:
-                print(error)
+            connection = pyodbc.connect(connection_string)
+            cursor = connection.cursor()
+            cursor.execute(
+                f"UPDATE {LOGIN_DATA} SET password = ? WHERE subject_id = ?",
+                h_new_password,
+                subject_id,
+            )
+            cursor.close()
+            connection.commit()
+            connection.close()
+            messagebox.showinfo("Success", "Password changed successfully!")
+            return True
+            # break
         except ValueError as error:
-            print(error)
+            messagebox.showerror(error, "Password has not been changed")
+            return False
+
 
     # def Autologout(self, timeout_minutes = 4):

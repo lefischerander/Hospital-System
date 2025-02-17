@@ -695,16 +695,14 @@ class ActionsUI:
                 new_password = new_password_entry.get()
                 confirm_new_password = confirm_new_password_entry.get()
                 hash_password = User.hash_password(old_password)
-                try:
-                    auth.reset_password(
-                        username, hash_password, new_password, confirm_new_password
-                    )
+                if auth.reset_password(
+                    username, hash_password, new_password, confirm_new_password
+                ):
                     messagebox.showinfo("Password Reset Successful!")
                     change_password_window.destroy()
                     actions_window.deiconify()
-
-                except ValueError:
-                    messagebox.showinfo("No!")
+                else:
+                    messagebox.showerror("Error", "Password reset failed")
                     change_password()
                     change_password_window.destroy()
 
