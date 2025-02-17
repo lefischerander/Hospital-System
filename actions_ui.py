@@ -80,8 +80,16 @@ class ActionsUI:
             view_patient_data_window.title("Patient Data")
             view_patient_data_window.geometry("800x600")
 
-            back_button = Button(text="Back", command=back_action)
-            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+            button_grid = Frame(
+                master=view_patient_data_window,
+                relief=RAISED,
+                borderwidth=1,
+                width=15,
+            )
+            button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
+
+            back_button = Button(button_grid, text="Back", command=back_action)
+            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="ne")
 
             patient_data = user_service.get_patient_profile(patient_id)
             patient_info = [
@@ -211,7 +219,7 @@ class ActionsUI:
             button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
 
             back_button = Button(button_grid, text="Back", command=back_action)
-            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="ne")
 
             for i in range(len(user_profile)):
                 for j in range(2):
@@ -374,7 +382,7 @@ class ActionsUI:
             button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
 
             back_button = Button(button_grid, text="Back", command=back_action)
-            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="ne")
 
             for i in range(len(user_profile)):
                 for j in range(2):
@@ -536,7 +544,7 @@ class ActionsUI:
             button_grid.grid(row=0, column=0, padx=0, pady=0, sticky="ne")
 
             back_button = Button(button_grid, text="Back", command=back_action)
-            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="w")
+            back_button.grid(row=0, column=0, padx=10, pady=10, sticky="ne")
 
             for i in range(len(all_users) + 1):
                 for j in range(len(row_list)):
@@ -663,7 +671,7 @@ class ActionsUI:
         def logout():
             """This method is responsible for logging out the user"""
             actions_window.destroy()
-            messagebox.showinfo(title=None, message="You have been logged out")
+            messagebox.showinfo(title=None, message="You have been logged out.")
             subprocess.run(["python", "main_ui.py"])
             sys.exit()
 

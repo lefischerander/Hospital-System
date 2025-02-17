@@ -1,4 +1,5 @@
 from tkinter import Tk, Button, Label
+from Service_Database import User_service
 
 
 class HelpPage:
@@ -7,6 +8,9 @@ class HelpPage:
         help_window = Tk()
         help_window.title("Help Page")
         help_window.geometry("800x600")
+
+        us = User_service()
+        admin_email = us.get_admin_email()
 
         Label(help_window, text="Help Page", font=("Arial", 20)).pack(pady=10)
         Label(help_window, text="Welcome to the Help Page", font=("Arial", 15)).pack(
@@ -19,7 +23,7 @@ class HelpPage:
         ).pack(pady=10)
         Label(
             help_window,
-            text="If you need help, please contact the system administrator",
+            text=f"If you need help, please contact the system administrator at: {admin_email}",
             font=("Arial", 15),
         ).pack(pady=10)
         Button(
