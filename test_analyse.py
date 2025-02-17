@@ -100,15 +100,11 @@ class Analyse:
 
         return df
 
-    def read_admissions(self, id):
-        """This method is used to read the admissions table and plot the duration of stay in the hospital of all patients by gender,
-        save the data of patient with entered subject_id as a text file and return it as a string.
-
-        Args:
-            id (int): The subject_id of the patient.
+    def admissions_all_patients(self):
+        """This method is used to read the admissions table and plot the duration of stay in the hospital of all patients by gender.
 
         Returns:
-            str: The data of the patient with the entered subject_id.
+            str: The data of all patients.
         """
         # Read the data from the admissions table and gender of the patient from the patients table
         engine = self.connect_to_db()
@@ -121,7 +117,7 @@ class Analyse:
                 conn,
             )
 
-        # Read the data from the admissions table and calculate the duration of stay in the hospital
+        # Read the data and calculate the duration of stay in the hospital
         adtime = df["admittime"]
         ditime = df["dischtime"]
         gender = df["gender"]
@@ -146,6 +142,28 @@ class Analyse:
         plt.yticks(np.arange(0, max(days) + 1, 2))
         plt.grid(True, linestyle="--", linewidth=1.5, alpha=0.7)
         plt.show()
+
+        return df
+
+    def read_admissions(self, id):
+        """This method is used to read the admissions table, save the data of the patient with the entered subject_id as a text file and return it as a string.
+
+        Args:
+            id (int): The subject_id of the patient.
+
+        Returns:
+            str: The data of the patient with the entered subject_id.
+        """
+        # Read the data from the admissions table and gender of the patient from the patients table
+        engine = self.connect_to_db()
+        query = """select a.subject_id, a.hadm_id, a.admission_type , a.admittime, a.dischtime, a.deathtime, a.insurance, a.edregtime, a.edouttime, p.gender, a.hospital_expire_flag from admissions as a
+                inner join patients as p ON a.subject_id = p.subject_id order by a.hadm_id"""
+
+        with engine.begin() as conn:
+            df = pd.read_sql_query(
+                sa.text(query),
+                conn,
+            )
 
         # Save the data of the patient as a text file and return it as a string for better visualization
         patient = df[df["subject_id"] == id][
@@ -283,15 +301,11 @@ class Analyse:
 
         return df
 
-    def read_patients(self, id):
-        """This method is used to read the patients table and plot the distribution of patients by age
-        and return the data of the patient with the entered subject_id.
-
-        Args:
-            id (int): The subject_id of the patient.
+    def all_patients(self):
+        """This method is used to read the patients table and plot the distribution of patients by age.
 
         Returns:
-            str: The data of the patient with the entered subject_id.
+            str: The data of all patients.
         """
         # Read the data from the patients table
         engine = self.connect_to_db()
@@ -331,6 +345,27 @@ class Analyse:
         ax.legend(loc="upper right")
 
         plt.show()
+
+        return df
+
+    def read_patients(self, id):
+        """This method is used to read the patients table, return the data of the patient with the entered subject_id and save the data as a text file.
+
+        Args:
+            id (int): The subject_id of the patient.
+
+        Returns:
+            str: The data of the patient with the entered subject_id.
+        """
+        # Read the data from the patients table
+        engine = self.connect_to_db()
+        query = """select p.subject_id, p.gender, p.anchor_age, p.dod from patients as p order by anchor_age"""
+
+        with engine.begin() as conn:
+            df = pd.read_sql_query(
+                sa.text(query),
+                conn,
+            )
 
         # Return the data of the patient as a string for better visualization
         patient = df[df["subject_id"] == id][["gender", "anchor_age", "dod"]]
