@@ -19,6 +19,7 @@ import subprocess
 from user_test import User
 import Service_Database
 from Analyse_ui import Analyse_ui
+from test_analyse import Analyse
 
 user_service = (
     Service_Database.User_service()
@@ -122,8 +123,6 @@ class ActionsUI:
                 )
                 cancel_button.pack(pady=5, side=RIGHT)
 
-            
-
             get_patient_id()
 
         def view_patient_diagnosis():
@@ -200,6 +199,16 @@ class ActionsUI:
                 get_patient_id_window, text="Cancel", command=cancel_get_patient_id
             )
             cancel_button.pack(pady=5, side=RIGHT)
+
+        def view_all_patient_addmissions():
+            """This method is responsible for viewing all patient admissions"""
+            analyse_user = Analyse()
+            analyse_user.admissions_all_patients()
+
+        def all_patient_info():
+            """This method is responsible for viewing all patient information"""
+            analyse_user = Analyse()
+            analyse_user.all_patients()
 
         def view_profile():
             """This method is responsible for viewing the profile of the user"""
@@ -349,6 +358,20 @@ class ActionsUI:
         )
         create_diagnostic_report_button.pack(side=RIGHT, padx=5)
 
+        view_all_patient_addmissions_button = Button(
+            button_frame,
+            text="All Admissions",
+            command=view_all_patient_addmissions,
+        )
+        view_all_patient_addmissions_button.pack(side=RIGHT, padx=5)
+
+        all_patient_info_button = Button(
+            button_frame, 
+            text="All Patients", 
+            command=all_patient_info
+        )
+        all_patient_info_button.pack(side=RIGHT, padx=5)
+
         change_password_button = Button(
             button_frame, text="Change Password", command=change_password
         )
@@ -387,8 +410,8 @@ class ActionsUI:
 
             def back_action():
                 """This method is responsible for going back to the actions window"""
-                action_window.deiconify
                 view_profile_window.destroy()
+                action_window.deiconify
 
             button_grid = Frame(
                 master=view_profile_window,
