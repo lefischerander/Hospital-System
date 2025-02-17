@@ -154,8 +154,6 @@ class ActionsUI:
 
         def create_diagnostic_report():
             """This method is responsible for creating a diagnostic report"""
-            actions_window.withdraw()
-
             get_patient_id_window = Toplevel(actions_window)
             get_patient_id_window.title("Patient ID")
 
