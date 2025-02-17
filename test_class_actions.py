@@ -80,15 +80,16 @@ class Actions:
         # Nante
         elif choice == "3":  # low priority
             try:
-                answer = input("Are you sure you want to do delete an user? (yes/no)")
+                user_to_be_deleted = int(
+                input(
+                    "Enter the subject_id of the user you want to delete: "
+                        )
+                )
                 
+            
+                answer = input("Are you sure you want to do delete an user? (yes/no)")
+            
                 if answer == "yes":
-                    
-                    user_to_be_deleted = int(
-                    input(
-                        "Enter the subject_id of the user you want to delete: "
-                         )
-                    )
                     user_service.delete_user(user_to_be_deleted, config.subject_id_logged)
                     Actions.admin_actions()
                 
@@ -99,7 +100,7 @@ class Actions:
                 else:
                     print("Invalid input")
                     Actions.admin_actions()
-            
+                
             except Exception as e:
                 print("Oups error: " , e)
                 Actions.admin_actions()

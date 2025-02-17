@@ -77,13 +77,13 @@ class User_service:
         """
         try:
             if self.get_role_by_id(caller_id) != "admin":
-                raise Exception("Only admins can delete users")
+               messagebox.showinfo("Only admin can perform this action")
             
             checked_id= self.check_id(subject_id)
 
             if checked_id is None:
-                raise Exception("Please make sure to input the correct subject_id")
-
+                messagebox.showinfo("User not found")
+            
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
             cursor.execute(
@@ -124,30 +124,30 @@ class User_service:
         except Exception as e:
             print("Error: user not found", e)
 
-    def get_id(self, surname):
-        """Gets a user's subject ID based on the user's surname
+    # def get_id(self, surname):
+    #     """Gets a user's subject ID based on the user's surname
 
-        Args:
-            surname (str): The user's surname
+    #     Args:
+    #         surname (str): The user's surname
 
-        Returns:
-            int: The user's subject ID
+    #     Returns:
+    #         int: The user's subject ID
 
-        Raises:
-            Exception: If the user is not found in the database or another error occurs
-        """
-        try:
-            connection = pyodbc.connect(self.connection_string)
-            cursor = connection.cursor()
-            cursor.execute(
-                f"select subject_id from {LOGIN_DATA} where surname = ?", surname
-            )
-            id = cursor.fetchone()[0]
-            cursor.close()
-            connection.close()
-            return id
-        except Exception as e:
-            print("Error: user not found ", e)
+    #     Raises:
+    #         Exception: If the user is not found in the database or another error occurs
+    #     """
+    #     try:
+    #         connection = pyodbc.connect(self.connection_string)
+    #         cursor = connection.cursor()
+    #         cursor.execute(
+    #             f"select subject_id from {LOGIN_DATA} where surname = ?", surname
+    #         )
+    #         id = cursor.fetchone()[0]
+    #         cursor.close()
+    #         connection.close()
+    #         return id
+    #     except Exception as e:
+    #         print("Error: user not found ", e)
 
     def get_doctor_by_name(self, surname):
         """Gets a doctor's information based on the doctor's surname
@@ -288,7 +288,7 @@ class User_service:
                 cursor = connection.cursor()
 
                 cursor.execute(
-                    f"select subject_id from {PATIENTS} where subject_id= ?",
+                    f"select subject_id from {LOGIN_DATA} where subject_id= ?",
                     subject_id,
                 )
 
@@ -511,62 +511,62 @@ class User_service:
             print("Error fetching procedures: ", e)
             return None
 
-    def get_most_recent_weight(self, subject_id):
-        try:
-            connection = pyodbc.connect(self.connection_string)
-            cursor = connection.cursor()
-            query = """
-                SELECT TOP 1 * 
-                FROM ?
-                WHERE subject_id = ? AND result_name LIKE 'Weight%'
-                ORDER BY chartdate DESC
-            """
-            cursor.execute(query, OMR, subject_id)
-            result = cursor.fetchone()
-            cursor.close()
-            connection.close()
-            return result
-        except Exception as e:
-            print("Error fetching most recent weight: ", e)
-            return None
+    # def get_most_recent_weight(self, subject_id):
+    #     try:
+    #         connection = pyodbc.connect(self.connection_string)
+    #         cursor = connection.cursor()
+    #         query = """
+    #             SELECT TOP 1 * 
+    #             FROM ?
+    #             WHERE subject_id = ? AND result_name LIKE 'Weight%'
+    #             ORDER BY chartdate DESC
+    #         """
+    #         cursor.execute(query, OMR, subject_id)
+    #         result = cursor.fetchone()
+    #         cursor.close()
+    #         connection.close()
+    #         return result
+    #     except Exception as e:
+    #         print("Error fetching most recent weight: ", e)
+    #         return None
 
-    def get_most_recent_height(self, subject_id):
-        try:
-            connection = pyodbc.connect(self.connection_string)
-            cursor = connection.cursor()
-            query = """
-                SELECT TOP 1 * 
-                FROM ?
-                WHERE subject_id = ? AND result_name LIKE 'Height%'
-                ORDER BY chartdate DESC
-            """
-            cursor.execute(query, OMR, subject_id)
-            result = cursor.fetchone()
-            cursor.close()
-            connection.close()
-            return result
-        except Exception as e:
-            print("Error fetching most recent height: ", e)
-            return None
+    # def get_most_recent_height(self, subject_id):
+    #     try:
+    #         connection = pyodbc.connect(self.connection_string)
+    #         cursor = connection.cursor()
+    #         query = """
+    #             SELECT TOP 1 * 
+    #             FROM ?
+    #             WHERE subject_id = ? AND result_name LIKE 'Height%'
+    #             ORDER BY chartdate DESC
+    #         """
+    #         cursor.execute(query, OMR, subject_id)
+    #         result = cursor.fetchone()
+    #         cursor.close()
+    #         connection.close()
+    #         return result
+    #     except Exception as e:
+    #         print("Error fetching most recent height: ", e)
+    #         return None
 
-    def get_most_recent_bmi(self, subject_id):
-        try:
-            connection = pyodbc.connect(self.connection_string)
-            cursor = connection.cursor()
-            query = """
-                SELECT TOP 1 * 
-                FROM ?
-                WHERE subject_id = ? AND result_name LIKE 'BMI%'
-                ORDER BY chartdate DESC
-            """
-            cursor.execute(query, OMR, subject_id)
-            result = cursor.fetchone()
-            cursor.close()
-            connection.close()
-            return result
-        except Exception as e:
-            print("Error fetching most recent BMI: ", e)
-            return None
+    # def get_most_recent_bmi(self, subject_id):
+    #     try:
+    #         connection = pyodbc.connect(self.connection_string)
+    #         cursor = connection.cursor()
+    #         query = """
+    #             SELECT TOP 1 * 
+    #             FROM ?
+    #             WHERE subject_id = ? AND result_name LIKE 'BMI%'
+    #             ORDER BY chartdate DESC
+    #         """
+    #         cursor.execute(query, OMR, subject_id)
+    #         result = cursor.fetchone()
+    #         cursor.close()
+    #         connection.close()
+    #         return result
+    #     except Exception as e:
+    #         print("Error fetching most recent BMI: ", e)
+    #         return None'
 
     def view_all_users(self):
         """ Sees all the users present in the database.
@@ -589,19 +589,19 @@ class User_service:
             print("Error fetching all users: ", database_error)
             return None
 
-    def get_password(self, subject_id):  # low priority
-        try:
-            connection = pyodbc.connect(self.connection_string)
-            cursor = connection.cursor()
-            cursor.execute(
-                "select password from ? where subject_id = ?", LOGIN_DATA, subject_id
-            )
-            password = cursor.fetchone()[0]
-            cursor.close()
-            connection.close()
-            return password
-        except Exception as e:
-            print("Error: ", e)
+    # def get_password(self, subject_id):  # low priority
+    #     try:
+    #         connection = pyodbc.connect(self.connection_string)
+    #         cursor = connection.cursor()
+    #         cursor.execute(
+    #             "select password from ? where subject_id = ?", LOGIN_DATA, subject_id
+    #         )
+    #         password = cursor.fetchone()[0]
+    #         cursor.close()
+    #         connection.close()
+    #         return password
+    #     except Exception as e:
+    #         print("Error: ", e)
 
     # def login(self, subject_id, password):
     #     try:
