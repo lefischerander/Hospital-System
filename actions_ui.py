@@ -457,7 +457,7 @@ class ActionsUI:
                 new_password = new_password_entry.get()
                 confirm_new_password = confirm_new_password_entry.get()
                 hash_password = User.hash_password(old_password)
-                auth.reset_password(username, hash_password)
+                # auth.reset_password(username, hash_password)
                 messagebox.showinfo(
                     "Reset Password Info",
                     f"Username: {username}\nPassword: {old_password}",
@@ -549,7 +549,7 @@ class ActionsUI:
             user_table.title("All Users")
             user_table.geometry("800x600")
 
-            row_list = ["User ID", "Name", "Surname", "Role"]
+            row_list = ["User ID", "Role"]
             all_users = user_service.view_all_users()
 
             def back_action():
