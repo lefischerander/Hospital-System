@@ -164,7 +164,9 @@ class AuthSystem:
 
         h_new_password = User.hash_password(new_password)
         if user[0] == h_new_password:
-            messagebox.showerror("Error", "New Password cannot be the same as the old one")
+            messagebox.showerror(
+                "Error", "New Password cannot be the same as the old one"
+            )
             return False
 
         # Konstantin
@@ -185,6 +187,5 @@ class AuthSystem:
         except ValueError as error:
             messagebox.showerror(error, "Password has not been changed")
             return False
-
 
     # def Autologout(self, timeout_minutes = 4):

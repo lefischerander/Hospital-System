@@ -698,7 +698,6 @@ class ActionsUI:
                 if auth.reset_password(
                     username, hash_password, new_password, confirm_new_password
                 ):
-                    messagebox.showinfo("Password Reset Successful!")
                     change_password_window.destroy()
                     actions_window.deiconify()
                 else:
