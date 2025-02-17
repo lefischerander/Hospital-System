@@ -1,6 +1,6 @@
 # Description
 
-A web-based project that simulates a hospital and its patients
+A GUI-based project that simulates a hospital and its patients
 
 ## Functionalities
 
@@ -78,30 +78,13 @@ Adjust [db.access](Backend/Database/db_access.py) with your local instance's dat
 - Group code: G12
 - Group repository: <https://github.com/lefischerander/Lank>
 - Tutor responsible: Jonas Rieling
-- Group team leader: Leander Fischer
-- Group members: Konstantin Kolbek, Erik Schäfer, Nantenaina Razafindraibe
+- Group team leader: Leander Fischer <em(subsequently L)/em>
+- Group members: Konstantin Kolbek <em(subsequenly K)/em>, Erik Schäfer <em(subsequenly E)/em>, Nantenaina Razafindraibe <em(subsequenly N)/em>
 - Contributions
-  - Leander Fischer:
-    - Data Source and Retrieval
-    - Data Storage and Handling
-    - User Management
-      - database related functions
-    - Statistical Analysis
-      - data retrieval into pandas DataFrames
-    - Interface
-      - visualization of pandas DataFrames
-  - Konstantin Kolbek
-    - Statistical Analysis
-    - Visualization
-    - User Management
-      - log-In
-      - user actions
-  - Nantenaina Razafindraibe
-    - User Management
-      - database related functions
-      - user actions
-  - Erik Schäfer
-    - User Interface
+  - Leander Fischer: Sourced and cleaned the data from PhysioNet and developed the storage solution. Helped K and N by providing SQL queries for their functions accessing the database. Supported K and N by writing some utility functions in database_service and analyse. Helped E fix Interface bugs when accessing and displaying data from the database. Refactored the entire project to adhere to the final project structure. Developed unit tests.
+  - Konstantin Kolbek: Supported L to determine what data should be sourced from MIMIC-IV. Worked with N on the login functionalities. Developed the data analysis and visualization. 
+  - Nantenaina Razafindraibe: Developed the interface between the program and database. Worked with K on the login functionalities. Helped L develop the unit tests.
+  - Erik Schäfer: Developed the Interface.
 
 ## Acknowledgements
 
