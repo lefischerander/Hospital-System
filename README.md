@@ -87,7 +87,7 @@ Adjust [db.access](Backend/Database/db_access.py) with your local instance's dat
   - Leander Fischer: Sourced and cleaned the data from PhysioNet and developed the storage solution. Helped K and N by providing SQL queries for their functions accessing the database. Supported K and N by writing some utility functions in database_service and analyse. Helped E fix Interface bugs when accessing and displaying data from the database. Refactored the entire project to adhere to the final project structure. Developed unit tests.
   - Konstantin Kolbek: Supported L to determine what data should be sourced from MIMIC-IV. Worked with N on the login functionalities. Developed the data analysis and visualization. 
   - Nantenaina Razafindraibe: Developed the interface between the program and database (database_service). Worked with K on the login functionalities. Helped L develop the unit tests.
-  - Erik Schäfer: Developed the User Interface.
+  - Erik Schäfer: Developed the User Interface. Edited Backend code to make it compatible with user inputs.
 
 ## Acknowledgements
 
