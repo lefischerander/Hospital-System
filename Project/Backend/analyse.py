@@ -274,7 +274,7 @@ class Analyse:
         # Read the data from the emar table
         engine = self.connect_to_db()
         query = f"""select e.hadm_id, e.pharmacy_id, e.medication, e.charttime, e.scheduletime, e.event_txt from emar as e 
-                    where subject_id = {id} order by e.hadm_id"""
+                    where subject_id = {id} order by e.hadm_id, e.charttime desc"""
 
         with engine.begin() as conn:
             df = pd.read_sql_query(
@@ -359,7 +359,7 @@ class Analyse:
         """
         # Read the data from the patients table
         engine = self.connect_to_db()
-        query = f"""select p.subject_id, p.gender, p.anchor_age, p.dod from patients as p where subject_id = {id}"""
+        query = f"""select p.subject_id, p, firstname, p.surname, p.gender, p.anchor_age, p.dod from patients as p where subject_id = {id}"""
 
         with engine.begin() as conn:
             df = pd.read_sql_query(
