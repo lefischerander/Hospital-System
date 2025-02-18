@@ -3,6 +3,7 @@ import pandas as pd
 
 
 def analyse_main():
+    """This function is used to read functions in the Analyse class"""
     analyse = Analyse()
     try:
         test = input("Enter the name of the file you want to read: ")
