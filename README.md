@@ -81,8 +81,8 @@ Adjust [db.access](Backend/Database/db_access.py) with your local instance's dat
 - Group code: G12
 - Group repository: <https://github.com/lefischerander/Lank>
 - Tutor responsible: Jonas Rieling
-- Group team leader: Leander Fischer <em(subsequently L)/em>
-- Group members: Konstantin Kolbek <em(subsequenly K)/em>, Erik Schäfer <em(subsequenly E)/em>, Nantenaina Razafindraibe <em(subsequenly N)/em>
+- Group team leader: Leander Fischer (subsequently L)
+- Group members: Konstantin Kolbek (subsequenly K), Erik Schäfer (subsequenly E), Nantenaina Razafindraibe (subsequenly N)
 - Contributions
   - Leander Fischer: Sourced and cleaned the data from PhysioNet and developed the storage solution. Helped K and N by providing SQL queries for their functions accessing the database. Supported K and N by writing some utility functions in database_service and analyse. Helped E fix Interface bugs when accessing and displaying data from the database. Refactored the entire project to adhere to the final project structure. Developed unit tests.
   - Konstantin Kolbek: Supported L to determine what data should be sourced from MIMIC-IV. Worked with N on the login functionalities. Developed the data analysis and visualization. 
