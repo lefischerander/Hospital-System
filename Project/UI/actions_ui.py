@@ -34,6 +34,8 @@ class ActionsUI:
         Args:
             global_username (str): The username of the user
         """
+
+        """Create a new window for the actions of the doctor"""
         actions_window = Tk()
         actions_window.title("Hospital Management System")
         actions_window.geometry("800x600")
@@ -44,9 +46,10 @@ class ActionsUI:
                 actions_window.destroy()
                 sys.exit()
 
+        """handles closing the application"""
         actions_window.protocol("WM_DELETE_WINDOW", on_closing)
 
-        # get name and surname of user
+        """get name and surname of user"""
         user = user_service.get_your_profile(global_username)
         name = user[1]
         surname = user[2]
@@ -157,8 +160,10 @@ class ActionsUI:
                 actions_window.deiconify()
                 view_profile_window.destroy()
 
+            """handles closing the view profile window"""
             view_profile_window.protocol("WM_DELETE_WINDOW", actions_window.deiconify)
 
+            """Create a grid for the user profile"""
             button_grid = Frame(
                 master=view_profile_window,
                 relief=RAISED,
@@ -170,6 +175,7 @@ class ActionsUI:
             back_button = Button(button_grid, text="Back", command=back_action)
             back_button.grid(row=0, column=0, padx=10, pady=10, sticky="ne")
 
+            """Create a table for the users profile"""
             for i in range(len(user_profile)):
                 for j in range(2):
                     user_grid = Frame(
@@ -194,9 +200,7 @@ class ActionsUI:
             change_password_window.title("Change Password")
             change_password_window.geometry("500x300")
 
-            change_password_window.protocol(
-                "WM_DELETE_WINDOW", actions_window.deiconify
-            )
+            change_password_window.protocol("WM_DELETE_WINDOW", actions_window.deiconify)
 
             Label(change_password_window, text="Username:").pack(pady=5)
             username_entry = Entry(change_password_window)
@@ -304,7 +308,7 @@ class ActionsUI:
 
         view_diagnosis = Button(
             button_frame,
-            text="View Patient analysis",
+            text="View Patient Data",
             command=view_patient_diagnosis,
         )
         view_diagnosis.pack(side=RIGHT, padx=5)

@@ -10,9 +10,6 @@ global_password = None
 
 
 def run():
-    def home_action():
-        root.deiconify()
-
     def login_action():
         """Create a login window to authenticate users."""
         global global_username, global_password
@@ -28,8 +25,10 @@ def run():
                 login_window.destroy()
                 sys.exit()
 
+        """handles closing the application"""
         login_window.protocol("WM_DELETE_WINDOW", on_closing)
 
+        """The Labels and Entries for the login window"""
         Label(login_window, text="Username:").pack(pady=5)
         username_entry = Entry(login_window)
         username_entry.pack(pady=5)
@@ -46,12 +45,14 @@ def run():
             global_username = username
             hash_password = User.hash_password(password)
             auth.login(username, hash_password)
+            """check if the login was successful"""
             if not auth.logged_in:
                 messagebox.showerror("Login Error", "Invalid username or password")
                 global_username = None
                 login_action()
                 login_window.destroy()
             else:
+                """If the login is successful check what role the user has and redirect to the actions window."""
                 user_role = auth.users[0][2]
                 if user_role == "Doctor":
                     ActionsUI.doktor_actions(global_username)
@@ -63,14 +64,17 @@ def run():
                     ActionsUI.admin_actions(global_username)
                     login_window.destroy()
                 else:
+                    """If the user has no role, an error message is displayed and the user is prompted to try again."""
                     messagebox.showerror("No role given\n")
                     root.deiconify()
                     login_window.destroy()
 
         def cancel_login():
+            """Cancel the login form and return to the main window."""
             login_window.destroy()
             root.deiconify()
 
+        """The buttons for the login window"""
         button_frame = Frame(login_window)
         button_frame.pack(pady=10)
 
@@ -82,14 +86,18 @@ def run():
 
     def reset_password():
         """This method is responsible for changing the password of the user"""
+
+        """Create the change password window to change the password of the user."""
         root.withdraw()
         auth = AuthSystem()
         change_password_window = Toplevel(root)
         change_password_window.title("Change Password")
         change_password_window.geometry("500x300")
 
+        """handles closing the application"""
         change_password_window.protocol("WM_DELETE_WINDOW", root.deiconify)
-
+        
+        """The Labels and Entries for the change password window"""
         Label(change_password_window, text="Username:").pack(pady=5)
         username_entry = Entry(change_password_window)
         username_entry.pack(pady=5)
@@ -113,12 +121,17 @@ def run():
             new_password = new_password_entry.get()
             confirm_new_password = confirm_new_password_entry.get()
             hash_password = User.hash_password(old_password)
+            """
+            checks if the password reset was successful
+            if the password reset was not successful, the user is prompted to try again
+            """
             if auth.reset_password(
                 username, hash_password, new_password, confirm_new_password
             ):
                 change_password_window.destroy()
                 root.deiconify()
-            else:
+            else:   
+                
                 reset_password()
                 change_password_window.destroy()
 
@@ -127,6 +140,7 @@ def run():
             change_password_window.destroy()
             root.deiconify()
 
+        """The buttons for the change password window"""
         button_frame = Frame(change_password_window)
         button_frame.pack(pady=10)
 
@@ -141,19 +155,26 @@ def run():
         cancel_button.pack(side=RIGHT, padx=5)
 
     def exit_action():
+        """This method is responsible for exiting the application"""
         root.quit()
-
-    # Main program
-    root = Tk()
-    root.title("Hospital Management")
-    root.geometry("800x600")
 
     def on_closing():
         """This method is responsible for handling the window close event"""
         if messagebox.askokcancel("Quit", "Do you want to quit?"):
             root.destroy()
             sys.exit()
+    
+    """
+    This part of the code is responsible for creating the main window of the application
+    
+    The main window is the first window that the user sees when the application is started.
+    It contains buttons for login, reset password, exit and help.
+    """
+    root = Tk()
+    root.title("Hospital Management")
+    root.geometry("800x600")
 
+    """handles closing the application"""
     root.protocol("WM_DELETE_WINDOW", on_closing)
 
     login_button = Button(root, text="Login", command=login_action)
