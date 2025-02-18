@@ -618,62 +618,6 @@ class ActionsUI:
             )
             cancel_button.pack(pady=5, side=RIGHT)
 
-        def create_user():
-            """This method is responsible for creating a new user"""
-            actions_window.withdraw()
-            create_user_window = Toplevel(actions_window)
-            create_user_window.title("Create User")
-            create_user_window.geometry("500x300")
-
-            create_user_window.protocol("WM_DELETE_WINDOW", actions_window.deiconify)
-
-            Label(create_user_window, text="Username:").pack(pady=5)
-            username_entry = Entry(create_user_window)
-            username_entry.pack(pady=5)
-
-            Label(create_user_window, text="Password:").pack(pady=5)
-            password_entry = Entry(create_user_window, show="*")
-            password_entry.pack(pady=5)
-
-            Label(create_user_window, text="Role:").pack(pady=5)
-            role_entry = Entry(create_user_window)
-            role_entry.pack(pady=5)
-
-            Label(create_user_window, text="Name:").pack(pady=5)
-            name_entry = Entry(create_user_window)
-            name_entry.pack(pady=5)
-
-            Label(create_user_window, text="Surname:").pack(pady=5)
-            surname_entry = Entry(create_user_window)
-            surname_entry.pack(pady=5)
-
-            def submit_create_user():
-                """This method is responsible for submitting the new user"""
-                username = username_entry.get()
-                password = password_entry.get()
-                role = role_entry.get()
-                name = name_entry.get()
-                surname = surname_entry.get()
-                user_service.create_user(username, password, role, name, surname)
-                create_user_window.destroy()
-
-            def cancel_create_user():
-                """This method is responsible for cancelling the new user"""
-                create_user_window.destroy()
-
-            button_frame = Frame(create_user_window)
-            button_frame.pack(pady=10)
-
-            submit_button = Button(
-                button_frame, text="Submit", command=submit_create_user
-            )
-            submit_button.pack(side=RIGHT, padx=5)
-
-            cancel_button = Button(
-                button_frame, text="Cancel", command=cancel_create_user
-            )
-            cancel_button.pack(side=RIGHT, padx=5)
-
         def change_password():
             """This method is responsible for changing the password of the user"""
             actions_window.withdraw()
@@ -767,11 +711,6 @@ class ActionsUI:
             button_frame, text="Delete a user", command=delete_user
         )
         delete_user_button.pack(side=RIGHT, padx=5)
-
-        create_user_button = Button(
-            button_frame, text="Create a user", command=create_user
-        )
-        create_user_button.pack(side=RIGHT, padx=5)
 
         view_all_users_button = Button(
             button_frame, text="View all users", command=view_all_users
