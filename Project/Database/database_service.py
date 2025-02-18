@@ -141,8 +141,6 @@ class User_service:
         except Exception as e:
             print("Error: user not found", e)
 
-   
-
     def get_doctor_by_name(self, surname):
         """Gets a doctor's information based on the doctor's surname
 
@@ -269,7 +267,7 @@ class User_service:
             cursor = connection.cursor()
 
             cursor.execute(
-                f"select subject_id from {LOGIN_DATA} where subject_id= ?",
+                f"select subject_id from {PATIENTS} where subject_id= ?",
                 subject_id,
             )
 
@@ -287,7 +285,7 @@ class User_service:
         except Exception as e:
             print("Oups error: ", e)
             return None
-
+    #unused
     def read_d_icd_diagnoses(self, icd_code):
         """This method is used to read the d_icd_diagnoses table and return the long title of the icd code entered by the user.
 
@@ -343,12 +341,16 @@ class User_service:
             if diagnosis_added.empty:
                 messagebox.showerror("Error", "This ICD Code doesn't exist.")
                 return False
+            
 
+            # the function finds the most recent hospital admission (hadm_id) for the given patient_id then,
+            #it queries the ADMISSIONS table, ordering by hadm_id in descending order, and retrieves the latest hadm_id.
             hadm_id = cursor.execute(
                 f"select hadm_id from {ADMISSIONS} where subject_id = ? order by hadm_id desc",
                 patient_id,
             ).fetchone()[0]
             try:
+                
                 seq_num = (
                     cursor.execute(
                         "select max(seq_num) from diagnoses_icd where subject_id = ? and hadm_id = ?",
@@ -357,10 +359,12 @@ class User_service:
                     ).fetchone()[0]
                     + 1
                 )
+            #If no previous diagnosis exists, it sets seq_num = 1.
             except pyodbc.Error:
                 seq_num = 1
-
-            icd_code = str(diagnosis_added.iloc[0]["icd_code"])
+            
+            #  these new variable store the selected first row of the DataFrame and s
+            icd_code = str(diagnosis_added.iloc[0]["icd_code"]) 
             icd_version = str(diagnosis_added.iloc[0]["icd_version"])
 
             cursor.execute(
@@ -406,8 +410,7 @@ class User_service:
 
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            query = "SELECT * FROM patients WHERE p.subject_id = ?"
-            cursor.execute(query, subject_id)
+            cursor.execute(f"SELECT * FROM {PATIENTS} WHERE subject_id = ?", subject_id)
             result = cursor.fetchone()[0]
             cursor.close()
             connection.close()
@@ -490,8 +493,6 @@ class User_service:
             print("Error fetching procedures: ", e)
             return None
 
-   
-
     def view_all_users(self):
         """Sees all the users present in the database.
 
@@ -502,7 +503,7 @@ class User_service:
         try:
             connection = pyodbc.connect(self.connection_string)
             cursor = connection.cursor()
-            cursor.execute(f"select subject_id, role from {LOGIN_DATA}")
+            cursor.execute(f"select subject_id, role from {LOGIN_DATA} order by role")
             users = cursor.fetchall()
             cursor.close()
             connection.close()
@@ -510,5 +511,3 @@ class User_service:
         except pyodbc as database_error:
             print("Error fetching all users: ", database_error)
             return None
-
-   

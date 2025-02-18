@@ -200,7 +200,9 @@ class ActionsUI:
             change_password_window.title("Change Password")
             change_password_window.geometry("500x300")
 
-            change_password_window.protocol("WM_DELETE_WINDOW", actions_window.deiconify)
+            change_password_window.protocol(
+                "WM_DELETE_WINDOW", actions_window.deiconify
+            )
 
             Label(change_password_window, text="Username:").pack(pady=5)
             username_entry = Entry(change_password_window)
@@ -308,7 +310,7 @@ class ActionsUI:
 
         view_diagnosis = Button(
             button_frame,
-            text="View Patient Data",
+            text="View patient's health records",
             command=view_patient_diagnosis,
         )
         view_diagnosis.pack(side=RIGHT, padx=5)
@@ -346,7 +348,7 @@ class ActionsUI:
 
         def view_profile():
             """This method is responsible for viewing the profile of the user"""
-            action_window.withdraw()
+            # action_window.withdraw()
             view_profile_window = Toplevel(action_window)
             view_profile_window.title("Profile")
             view_profile_window.geometry("800x600")
@@ -357,7 +359,7 @@ class ActionsUI:
             def back_action():
                 """This method is responsible for going back to the actions window"""
                 view_profile_window.destroy()
-                action_window.deiconify
+                # action_window.deiconify
 
             view_profile_window.protocol("WM_DELETE_WINDOW", action_window.deiconify)
 
@@ -496,7 +498,7 @@ class ActionsUI:
         button_frame.pack(pady=10)
 
         view_diagnosis_button = Button(
-            button_frame, text="View your diagnosis", command=view_diagnosis
+            button_frame, text="View your health records", command=view_diagnosis
         )
         view_diagnosis_button.pack(side=LEFT, padx=5)
 
