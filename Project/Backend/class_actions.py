@@ -1,8 +1,5 @@
-# This is a backup file. We created this file right from the start, because we were having problems with the user interface.
-# But as the interface is currently working, this file is used as a Backup
-# This file is imported by the test
-
-from Backend.Database.login import AuthSystem
+# This is a backup file
+from Database.login import AuthSystem
 import getpass
 
 

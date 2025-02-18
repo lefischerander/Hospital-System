@@ -249,22 +249,7 @@ class User_service:
         except Exception as e:
             print("Error creating user: ", e)
 
-    def change_password(self, username, password):  # Not necessary
-        try:
-            connection = pyodbc.connect(self.connection_string)
-            cursor = connection.cursor()
-            cursor.execute(
-                "update ? set password = ? where username = ?",
-                LOGIN_DATA,
-                password,
-                username,
-            )
-            connection.commit()
-            cursor.close()
-            connection.close()
-        except Exception as e:
-            print("Error changing password: ", e)
-
+    
     def check_id(self, subject_id):  # just for patients
         """
         This method is used to verify if a input subject_id exists in the database based on the subject_id.
